@@ -4,6 +4,8 @@ import 'package:clube/ui/widgets/CustomTextFormField.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import 'RegisterPage.dart';
+
 class LoginPage extends StatefulWidget{
   @override
   State<StatefulWidget> createState() => LoginPageState();
@@ -29,6 +31,7 @@ class LoginPageState extends State<LoginPage>{
               ]
             ),
           ),
+          const SizedBox(height: 10,),
           Text("Bem-vindo ao clube!",
             style: TextStyle(
               color: Theme.of(context).colorScheme.primary,
@@ -39,7 +42,7 @@ class LoginPageState extends State<LoginPage>{
           Text("Faça login para gerenciar suas atividades esportivas.",
             style: TextStyle(
               color: Theme.of(context).colorScheme.tertiary,
-              fontSize: 14,
+              fontSize: 16,
             ),
           ),
           const SizedBox(height: 30,),
@@ -51,7 +54,7 @@ class LoginPageState extends State<LoginPage>{
           const SizedBox(height: 10,),
           const Row(
             children: [
-              Expanded(child: CustomPasswordFormField(labelText: "Password"),),
+              Expanded(child: CustomPasswordFormField(labelText: "Senha"),),
             ],
           ),
           const SizedBox(height: 5,),
@@ -73,7 +76,11 @@ class LoginPageState extends State<LoginPage>{
             ),
           ),
           Align(
-            child:TextButton(onPressed: notNull,
+            child:TextButton(
+              onPressed: (){
+              Navigator.push(context,
+              MaterialPageRoute(builder: (context)=> RegisterPage()));
+              },
               child: Text("Criar conta",
                 style: TextStyle(
                   fontSize: 16,

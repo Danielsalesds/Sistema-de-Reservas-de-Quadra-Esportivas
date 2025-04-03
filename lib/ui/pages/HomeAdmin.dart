@@ -1,3 +1,4 @@
+import 'package:clube/ui/pages/ReservaQuadraScreen.dart';
 import 'package:clube/ui/widgets/CardAdmin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,13 @@ class HomeAdmin extends StatefulWidget{
 
 }
 class HomeAdminState extends State<HomeAdmin>{
+
+  void _navigateToReserva(BuildContext context) {
+  Navigator.push(
+    context,
+    MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
+  );
+}
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -99,14 +107,29 @@ class HomeAdminState extends State<HomeAdmin>{
         child: const Icon(Icons.add, color: Colors.white,),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: const Column(
-        children: [
-          const SizedBox(height: 5,),
-          CardAdmin(titulo: "Fechar quadras", text1: "Feche quadras para manutenção.", icon: Icons.lock_outline_rounded),
-          CardAdmin(titulo: "Gerenciar associados", text1: "Adicione ou remova associados.", icon: Icons.person_add_outlined),
-          CardAdmin(titulo: "Fazer reserva", text1: "Reserve quadras sem restrições.", icon: Icons.sports_soccer_outlined),
-        ],
+      body: Column(
+  children: [
+    const SizedBox(height: 5),
+    CardAdmin(
+      titulo: "Fechar quadras", 
+      text1: "Feche quadras para manutenção.", 
+      icon: Icons.lock_outline_rounded
+    ),
+    CardAdmin(
+      titulo: "Gerenciar associados", 
+      text1: "Adicione ou remova associados.", 
+      icon: Icons.person_add_outlined
+    ),
+    GestureDetector(
+      onTap: () => _navigateToReserva(context),
+      child: const CardAdmin(
+        titulo: "Fazer reserva", 
+        text1: "Reserve quadras sem restrições.", 
+        icon: Icons.sports_soccer_outlined
       ),
+    ),
+  ],
+),
     );
   }
 

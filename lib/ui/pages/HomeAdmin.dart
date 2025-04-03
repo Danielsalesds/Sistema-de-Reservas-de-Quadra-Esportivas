@@ -1,6 +1,10 @@
+import 'package:clube/ui/pages/ReservaQuadraScreen.dart';
 import 'package:clube/ui/widgets/CardAdmin.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+
+import 'HomeMembro2.dart';
+import 'home_membro.dart';
 
 class HomeAdmin extends StatefulWidget{
   @override
@@ -58,7 +62,7 @@ class HomeAdminState extends State<HomeAdmin>{
                     ),
                     IconButton(
                         onPressed: () {
-                          debugPrint("Gerenciar quadras");
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>ReservaQuadraScreen()));
                         },
                         icon: const Icon(Icons.sports_soccer_outlined)),
                   ],
@@ -67,7 +71,7 @@ class HomeAdminState extends State<HomeAdmin>{
                   children: [
                     IconButton(
                         onPressed: () {
-                          debugPrint("History Pressed");
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeMembro2()));
                         },
                         icon: const Icon(Icons.schedule_outlined)),
                     const SizedBox(
@@ -75,7 +79,7 @@ class HomeAdminState extends State<HomeAdmin>{
                     ),
                     IconButton(
                         onPressed: () {
-                          debugPrint("Profile Pressed");
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeMembro()));
                         },
                         icon: const Icon(Icons.person_outline,)),
                   ],

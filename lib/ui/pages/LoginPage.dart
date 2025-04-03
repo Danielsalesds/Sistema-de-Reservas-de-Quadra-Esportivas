@@ -1,3 +1,4 @@
+import 'package:clube/ui/pages/HomeAdmin.dart';
 import 'package:clube/ui/widgets/CustomButton.dart';
 import 'package:clube/ui/widgets/CustomPasswordFormField.dart';
 import 'package:clube/ui/widgets/CustomTextFormField.dart';
@@ -39,12 +40,6 @@ class LoginPageState extends State<LoginPage>{
               fontSize: 20
             ),
           ),
-          Text("Faça login para gerenciar suas atividades esportivas.",
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.tertiary,
-              fontSize: 16,
-            ),
-          ),
           const SizedBox(height: 30,),
           const Row(
             children: [
@@ -67,7 +62,9 @@ class LoginPageState extends State<LoginPage>{
             ),
           ),
           const SizedBox(height: 10,),
-          CustomButton(height: 85, width: 250, text: "Entrar", onclick: notNull,),
+          CustomButton(height: 85, width: 250, text: "Entrar", onclick: (){
+            Navigator.push(context, MaterialPageRoute(builder:(context)=> HomeAdmin()));
+          },),
           const SizedBox(height: 30,),
           Text("Não possui uma conta?",
             style: TextStyle(

@@ -1,21 +1,37 @@
+import 'package:clube/firebase_options.dart';
 import 'package:clube/theme/theme.dart';
+import 'package:clube/ui/pages/AuthChecker.dart';
 import 'package:clube/ui/pages/LoginPage.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
+import 'core/ConfigureProviders.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  FirebaseAuth.instance.setLanguageCode("pt");
+  final data = await ConfigureProviders.createDependencyTree();
+  runApp(MyApp(data: data));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  const MyApp({super.key, required this.data});
+  final ConfigureProviders data;
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return MultiProvider(
+    providers: data.providers,
+    child:MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Clube',
-      theme: MaterialTheme(TextTheme()).light(),
-      home: LoginPage(),
+      theme: const MaterialTheme(TextTheme()).light(),
+      home: AuthChecker(),
+    )
     );
   }
 }

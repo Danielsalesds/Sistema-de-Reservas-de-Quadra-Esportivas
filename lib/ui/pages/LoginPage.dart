@@ -1,20 +1,35 @@
+import 'package:clube/services/AuthService.dart';
 import 'package:clube/ui/pages/HomeAdmin.dart';
 import 'package:clube/ui/widgets/CustomButton.dart';
 import 'package:clube/ui/widgets/CustomPasswordFormField.dart';
 import 'package:clube/ui/widgets/CustomTextFormField.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import 'RegisterPage.dart';
 
 class LoginPage extends StatefulWidget{
+  const LoginPage({super.key, this.onTap});
+  final void Function()? onTap;
+
   @override
   State<StatefulWidget> createState() => LoginPageState();
 
 }
 class LoginPageState extends State<LoginPage>{
-  void notNull(){
-    print("NotNull!");
+  final emailTextController = TextEditingController();
+  final senhaTextController = TextEditingController();
+
+  void signIn() async{
+    final auth = Provider.of<AuthService>(context, listen: false);
+    try{
+      await auth.signIn(emailTextController.value.text, senhaTextController.value.text);
+    }catch(e){
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString()))
+      );
+    }
   }
   @override
   Widget build(BuildContext context) {
@@ -41,30 +56,28 @@ class LoginPageState extends State<LoginPage>{
             ),
           ),
           const SizedBox(height: 30,),
-          const Row(
+          Row(
             children: [
-              Expanded(child: CustomTextFormField(label: "Email"),),
+              Expanded(child: CustomTextFormField(label: "Email", controller: emailTextController,),),
             ],
           ),
           const SizedBox(height: 10,),
-          const Row(
+          Row(
             children: [
-              Expanded(child: CustomPasswordFormField(labelText: "Senha"),),
+              Expanded(child: CustomPasswordFormField(labelText: "Senha", controller: senhaTextController,),),
             ],
           ),
           const SizedBox(height: 5,),
-          Padding(padding: const EdgeInsets.only(right: 25),
+          const Padding(padding: EdgeInsets.only(right: 25),
             child:  Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                  onPressed: notNull,
+                  onPressed: null,
                   child: Text("Esqueceu a senha?", style: TextStyle(fontSize: 16,),),),
             ),
           ),
           const SizedBox(height: 10,),
-          CustomButton(height: 85, width: 250, text: "Entrar", onclick: (){
-            Navigator.push(context, MaterialPageRoute(builder:(context)=> HomeAdmin()));
-          },),
+          CustomButton(height: 85, width: 250, text: "Entrar", onclick: signIn),
           const SizedBox(height: 30,),
           Text("Não possui uma conta?",
             style: TextStyle(
@@ -74,10 +87,7 @@ class LoginPageState extends State<LoginPage>{
           ),
           Align(
             child:TextButton(
-              onPressed: (){
-              Navigator.push(context,
-              MaterialPageRoute(builder: (context)=> RegisterPage()));
-              },
+              onPressed: widget.onTap,
               child: Text("Criar conta",
                 style: TextStyle(
                   fontSize: 16,

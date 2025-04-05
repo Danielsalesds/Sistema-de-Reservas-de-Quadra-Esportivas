@@ -1,5 +1,7 @@
+import 'package:clube/services/AuthService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../widgets/CustomButton.dart';
 import '../widgets/CustomPasswordFormField.dart';
@@ -7,14 +9,34 @@ import '../widgets/CustomTextFormField.dart';
 import 'LoginPage.dart';
 
 class RegisterPage extends StatefulWidget{
+  final void Function()? onTap;
+
+  const RegisterPage({super.key, this.onTap});
   @override
   State<StatefulWidget> createState() => RegisterPageState();
 
 }
 class RegisterPageState extends State<RegisterPage>{
-  void notNull(){
-    print("NotNull!");
+  final emailTextController = TextEditingController();
+  final senhaTextController = TextEditingController();
+  final repSenhaTextController = TextEditingController();
+  void signUp() async{
+    if(senhaTextController.value.text != repSenhaTextController.value.text){
+    ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text("Certifique-se de que os campos de senha sejam iguais."))
+    );
+    return;
   }
+  final authService = Provider.of<AuthService>(context, listen:false);
+  try{
+    await authService.signUp(emailTextController.value.text, senhaTextController.value.text);
+  }catch(e){
+    ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString()))
+    );
+  }
+  }
+
   String? _selecionado = 'admin';
   @override
   Widget build(BuildContext context) {
@@ -56,21 +78,21 @@ class RegisterPageState extends State<RegisterPage>{
                   ],
                 ),
                 const SizedBox(height: 10,),
-                const Row(
+                Row(
                   children: [
-                    Expanded(child: CustomTextFormField(label: "Email"),),
+                    Expanded(child: CustomTextFormField(label: "Email", controller: emailTextController), ),
                   ],
                 ),
                 const SizedBox(height: 10,),
-                const Row(
+                Row(
                   children: [
-                    Expanded(child: CustomPasswordFormField(labelText: "Senha"),),
+                    Expanded(child: CustomPasswordFormField(labelText: "Senha", controller:senhaTextController),),
                   ],
                 ),
                 const SizedBox(height: 10,),
-                const Row(
+                Row(
                   children: [
-                    Expanded(child: CustomPasswordFormField(labelText: "Confirmar senha"),),
+                    Expanded(child: CustomPasswordFormField(labelText: "Confirmar senha", controller: repSenhaTextController,),),
                   ],
                 ),
                 const SizedBox(height: 10,),
@@ -102,7 +124,7 @@ class RegisterPageState extends State<RegisterPage>{
                   ],
                 ),
                 const SizedBox(height: 30,),
-                CustomButton(height: 85, width: 250, text: "Criar conta", onclick: notNull,),
+                CustomButton(height: 85, width: 250, text: "Criar conta", onclick: signUp),
                 const SizedBox(height: 20,),
                 Text("Já possui uma conta?",
                   style: TextStyle(
@@ -112,10 +134,7 @@ class RegisterPageState extends State<RegisterPage>{
                 ),
                 Align(
                   child:TextButton(
-                    onPressed: (){
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context)=> LoginPage()));
-                    },
+                    onPressed: widget.onTap,
                     child: Text("Login",
                       style: TextStyle(
                         fontSize: 16,

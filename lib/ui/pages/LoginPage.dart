@@ -1,5 +1,6 @@
 import 'package:clube/services/AuthService.dart';
 import 'package:clube/ui/pages/HomeAdmin.dart';
+import 'package:clube/ui/pages/ResetPasswordPage.dart';
 import 'package:clube/ui/widgets/CustomButton.dart';
 import 'package:clube/ui/widgets/CustomPasswordFormField.dart';
 import 'package:clube/ui/widgets/CustomTextFormField.dart';
@@ -31,6 +32,7 @@ class LoginPageState extends State<LoginPage>{
       );
     }
   }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -68,12 +70,14 @@ class LoginPageState extends State<LoginPage>{
             ],
           ),
           const SizedBox(height: 5,),
-          const Padding(padding: EdgeInsets.only(right: 25),
+          Padding(padding: const EdgeInsets.only(right: 25),
             child:  Align(
               alignment: Alignment.centerRight,
               child: TextButton(
-                  onPressed: null,
-                  child: Text("Esqueceu a senha?", style: TextStyle(fontSize: 16,),),),
+                  onPressed:(){
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ResetPasswordPage()));
+                  },
+                  child: const Text("Esqueceu a senha?", style: TextStyle(fontSize: 16,),),),
             ),
           ),
           const SizedBox(height: 10,),
@@ -97,8 +101,6 @@ class LoginPageState extends State<LoginPage>{
                 ,)
               ,),
           ),
-
-
         ],
       )
     );

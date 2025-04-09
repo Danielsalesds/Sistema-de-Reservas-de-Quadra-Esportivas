@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "10134507064",
+    "project_id": "gerenciamento-clube",
+    "storage_bucket": "gerenciamento-clube.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:10134507064:android:c31fa4c82df243b18220cd",
+        "android_client_info": {
+          "package_name": "com.ufrn.clube"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3T3aZgbQc-wjVnSo_1rtXWh9ujVcRTSE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

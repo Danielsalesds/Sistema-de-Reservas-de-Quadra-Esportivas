@@ -1,4 +1,5 @@
 import 'package:clube/services/AuthService.dart';
+import 'package:clube/services/FirestoreService.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,33 +18,48 @@ class RegisterPage extends StatefulWidget{
 
 }
 class RegisterPageState extends State<RegisterPage>{
+  bool _isLoading = false;
   final emailTextController = TextEditingController();
   final senhaTextController = TextEditingController();
   final repSenhaTextController = TextEditingController();
+  final nomeTextController = TextEditingController();
+  final telefoneTextController = TextEditingController();
+  String _selecionado = 'admin';
   void signUp() async{
-    if(senhaTextController.value.text != repSenhaTextController.value.text){
-    ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text("Certifique-se de que os campos de senha sejam iguais."))
-    );
-    return;
-  }
-  final authService = Provider.of<AuthService>(context, listen:false);
-  try{
-    await authService.signUp(emailTextController.value.text, senhaTextController.value.text);
-  }catch(e){
-    ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(e.toString()))
-    );
-  }
+    if(senhaTextController.text != repSenhaTextController.text){
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text("Certifique-se de que os campos de senha sejam iguais."))
+      );
+      return;
+    }
+    final authService = Provider.of<AuthService>(context, listen:false);
+    final firestore = Provider.of<FirestoreService>(context, listen:false);
+    setState(() {
+      _isLoading = true;
+    });
+    try{
+      await authService.signUp(emailTextController.text, senhaTextController.text);
+      await firestore.createUser(nomeTextController.text,
+          emailTextController.text, telefoneTextController.text, _selecionado);
+    }catch(e){
+      ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text(e.toString()))
+      );
+    } finally {
+      setState(() {
+        _isLoading = false;
+      });
+    }
   }
 
-  String? _selecionado = 'admin';
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body:
-          SingleChildScrollView(
+      body: _isLoading
+          ? const Center(child: CircularProgressIndicator(),)
+          : SingleChildScrollView(
             child: Column( mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 const SizedBox(height: 30,),
@@ -66,15 +82,15 @@ class RegisterPageState extends State<RegisterPage>{
                   ),
                 ),
                 const SizedBox(height: 20,),
-                const Row(
+                Row(
                   children: [
-                    Expanded(child: CustomTextFormField(label: "Nome completo"),),
+                    Expanded(child: CustomTextFormField(label: "Nome completo", controller: nomeTextController,),),
                   ],
                 ),
                 const SizedBox(height: 10,),
-                const Row(
+                Row(
                   children: [
-                    Expanded(child: CustomTextFormField(label: "Telefone"),),
+                    Expanded(child: CustomTextFormField(label: "Telefone", controller: telefoneTextController),),
                   ],
                 ),
                 const SizedBox(height: 10,),

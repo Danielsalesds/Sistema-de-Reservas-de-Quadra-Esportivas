@@ -1,3 +1,4 @@
+import 'package:clube/ui/pages/ProfilePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -38,7 +39,7 @@ class CustomBottomBar extends StatelessWidget{
                   ),
                   IconButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ReservaQuadraScreen()));
+
                       },
                       icon: const Icon(Icons.sports_soccer_outlined)),
                 ],
@@ -55,7 +56,7 @@ class CustomBottomBar extends StatelessWidget{
                   ),
                   IconButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeMembro()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage()));
                       },
                       icon: const Icon(Icons.person_outline,)),
                 ],

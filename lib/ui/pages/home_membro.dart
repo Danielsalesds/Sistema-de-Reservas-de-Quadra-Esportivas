@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import '../widgets/CustomAppBar.dart';
+import '../widgets/CustomBottomBar.dart';
+import 'ReservaQuadraScreen.dart';
+
 class HomeMembro extends StatefulWidget {
   @override
   _HomeMembroState createState() => _HomeMembroState();
@@ -22,39 +26,22 @@ class _HomeMembroState extends State<HomeMembro> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Home Membro'),
-        backgroundColor: const Color(0xffa7c7e7),
-      ),
-      drawer: Drawer(
-        child: ListView(
-          padding: EdgeInsets.zero,
-          children: <Widget>[
-            UserAccountsDrawerHeader(
-              accountName: Text("Nome do Membro"),
-              accountEmail: Text("email@example.com"),
-              currentAccountPicture: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Icon(Icons.person, size: 50, color: Colors.blueAccent),
-              ),
-            ),
-            ListTile(
-              leading: Icon(Icons.info),
-              title: Text("Sobre"),
-              onTap: () {
-                // Implementar navegação para a tela de Sobre
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.exit_to_app),
-              title: Text("Sair"),
-              onTap: () {
-                // Implementar lógica de logout
-              },
-            ),
-          ],
+      appBar: const CustomAppBar(title: 'Painel de Associado',),
+      bottomNavigationBar: const CustomBottomBar(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>const ReservaQuadraScreen()));
+        },
+        elevation: 6,
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        shape: ShapeBorder.lerp(
+          const CircleBorder(),
+          const StadiumBorder(),
+          0.5,
         ),
+        child: const Icon(Icons.add, color: Colors.white,),
       ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

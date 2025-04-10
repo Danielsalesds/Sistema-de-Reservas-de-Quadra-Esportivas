@@ -20,4 +20,23 @@ class FirestoreService{
       print("Falha ao criar cadastro: $error");
     });
   }
+
+  Future<String> getRole() async {
+    final userId = auth.getCurrentUser();
+    final DocumentSnapshot userDoc =
+    await _firestore.collection('usuarios').doc(userId).get();
+    return userDoc.get('role').toString();
+  }
+
+  Future<String> getData(String field) async {
+    final userId = auth.getCurrentUser();
+    final DocumentSnapshot userDoc =
+    await _firestore.collection('usuarios').doc(userId).get();
+    return userDoc.get(field).toString();
+  }
+
+  Future<void> updateProfile(Map<String, dynamic> updates)async{
+    final userId = auth.getCurrentUser();
+    await _firestore.collection('usuarios').doc(userId).update(updates);
+  }
 }

@@ -12,7 +12,7 @@ class CardAdmin extends StatefulWidget {
     required this.titulo,
     required this.text1,
     required this.icon,
-    this.onTap, 
+    this.onTap,
   });
 
   @override

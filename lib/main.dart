@@ -2,6 +2,7 @@ import 'package:clube/firebase_options.dart';
 import 'package:clube/theme/theme.dart';
 import 'package:clube/ui/pages/AuthChecker.dart';
 import 'package:clube/ui/pages/LoginPage.dart';
+import 'package:clube/ui/pages/cadastro_membro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -25,13 +26,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MultiProvider(
-    providers: data.providers,
-    child:MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Clube',
-      theme: const MaterialTheme(TextTheme()).light(),
-      home: AuthChecker(),
-    )
+      providers: data.providers,
+      child:MaterialApp(
+        debugShowCheckedModeBanner: false,
+        title: 'Clube',
+        theme: const MaterialTheme(TextTheme()).light(),
+        home: AuthChecker(),
+      )
     );
   }
 }

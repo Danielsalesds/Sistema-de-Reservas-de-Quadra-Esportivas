@@ -48,7 +48,7 @@ class CustomBottomBar extends StatelessWidget{
                 children: [
                   IconButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeMembro2()));
+
                       },
                       icon: const Icon(Icons.schedule_outlined)),
                   const SizedBox(

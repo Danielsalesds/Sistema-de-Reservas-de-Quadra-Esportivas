@@ -1,9 +1,11 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:clube/services/FirestoreService.dart';
+import 'package:clube/ui/widgets/CustomAppBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/CustomBottomBar.dart';
 import '../widgets/CustomButton.dart';
 import '../widgets/CustomTextFormField.dart';
 
@@ -70,7 +72,22 @@ class ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: const CustomAppBar(title: 'Perfil'),
+      bottomNavigationBar: const CustomBottomBar(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          debugPrint("Floating Action Button Pressed");
+        },
+        elevation: 6,
+        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        shape: ShapeBorder.lerp(
+          const CircleBorder(),
+          const StadiumBorder(),
+          0.5,
+        ),
+        child: const Icon(Icons.add, color: Colors.white,),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SingleChildScrollView(
         child: Column(
           children: [

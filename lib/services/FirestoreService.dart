@@ -25,6 +25,7 @@ class FirestoreService {
       'nome': nome,
       'telefone': telefone,
       'role': role,
+      'ativo': true,
     });
   }
 
@@ -64,6 +65,7 @@ class FirestoreService {
         'telefone': telefone,
         'tipo': tipo,
         'idAdministrador': adminUid,
+        'ativo': true,
         'criadoEm': Timestamp.now(),
       });
       print('Membro cadastrado com sucesso!');
@@ -74,5 +76,25 @@ class FirestoreService {
     } catch (e) {
       print('Erro ao criar membro: $e');
     }
+  }
+  //Listar todos os membros 
+  Stream<QuerySnapshot> getMembrosStream() {
+    return _firestore.collection('membros').snapshots();
+  }
+  //Listar de membros associado ao administrador
+  Stream<QuerySnapshot> getMembrosDoAdmin(String adminUid) {
+  return _firestore
+      .collection('membros')
+      .where('idAdministrador', isEqualTo: adminUid)
+      .snapshots();
+}
+  //deletar membro
+    Future<void> deletarMembro(String id) async {
+    await _firestore.collection('membros').doc(id).delete();
+  }
+
+  // Se quiser atualizar membro:
+  Future<void> atualizarMembro(String id, Map<String, dynamic> data) async {
+    await _firestore.collection('membros').doc(id).update(data);
   }
 }

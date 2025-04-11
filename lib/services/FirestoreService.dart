@@ -86,6 +86,7 @@ class FirestoreService {
   return _firestore
       .collection('membros')
       .where('idAdministrador', isEqualTo: adminUid)
+      .where('ativo', isEqualTo: true)
       .snapshots();
 }
   //deletar membro

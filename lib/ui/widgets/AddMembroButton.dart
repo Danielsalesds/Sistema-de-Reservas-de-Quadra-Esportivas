@@ -10,7 +10,7 @@ class AddButton extends StatelessWidget {
     return FloatingActionButton(
       onPressed: onTap,
       backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-      child: const Icon(Icons.add, color: Color(0xFF6B9AC4)),
+      child: const Icon(Icons.person_add, color: Color(0xFFEFF0F1)),
       shape: const CircleBorder(),
       elevation: 6,
     );

@@ -26,7 +26,7 @@ class _HomeMembroState extends State<HomeMembro> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Painel de Associado',),
+      appBar: const CustomAppBar(title: 'Home',),
       bottomNavigationBar: const CustomBottomBar(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {

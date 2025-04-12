@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:clube/services/AuthService.dart';
 import 'package:clube/services/FirestoreService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -26,7 +27,8 @@ class CadastroMembroPageState extends State<CadastroMembro>{
   final repSenhaTextController = TextEditingController();
   final nomeTextController = TextEditingController();
   final telefoneTextController = TextEditingController();
-  final String tipo = 'Membro';
+  String _selecionado = 'Admin';
+  // final String tipo = 'Membro';
   //função fazer login
   void signUp() async{
     if(senhaTextController.text != repSenhaTextController.text){
@@ -39,32 +41,28 @@ class CadastroMembroPageState extends State<CadastroMembro>{
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Preencha todos os campos.")));
       return;
     }
-    final authService = Provider.of<AuthService>(context, listen:false);
     final firestore = Provider.of<FirestoreService>(context, listen:false);
     setState(() {
       _isLoading = true;
     });
     try{
        //final adminUid = FirebaseAuth.instance.currentUser!.uid; // <- Salva o UID do admin
-       
       //await authService.signUp(emailTextController.text, senhaTextController.text);
-      await firestore.createMembro(nomeTextController.text,
-          emailTextController.text, telefoneTextController.text, tipo, senhaTextController.text);
-
-          nomeTextController.clear();
-          telefoneTextController.clear();
-          emailTextController.clear();
-          senhaTextController.clear();
-          repSenhaTextController.clear();
+          await firestore.createMembro(nomeTextController.text,
+          emailTextController.text, telefoneTextController.text, _selecionado, senhaTextController.text);
     }catch(e){
       ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text(e.toString()))
       );
-      print(e.toString());
     } finally {
       setState(() {
         _isLoading = false;
       });
+      nomeTextController.clear();
+      telefoneTextController.clear();
+      emailTextController.clear();
+      senhaTextController.clear();
+      repSenhaTextController.clear();
     }
   }
 
@@ -128,14 +126,42 @@ class CadastroMembroPageState extends State<CadastroMembro>{
                   ],
                 ),
                 const SizedBox(height: 10,),
-                
+                Row( mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Radio<String>(value:  'Admin', groupValue: _selecionado, onChanged:(value){
+                      setState(() {
+                        _selecionado = value!;
+                      });
+                    }),
+                    Text("Admin",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ),
+                    ),
+                    const SizedBox(width: 50,),
+                    Radio<String>(value: 'Membro', groupValue: _selecionado, onChanged:(value){
+                      setState(() {
+                        _selecionado = value!;
+                      });
+                    }),
+                    Text("Membro",
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Theme.of(context).colorScheme.tertiary,
+                      ),
+                    ),
+                  ],
+                ),
                 const SizedBox(height: 30,),
                 CustomButton(height: 85, width: 250, text: "Cadastrar Membro", onclick: signUp),
                 const SizedBox(height: 20,),
                 
                 Align(
                   child:TextButton(
-                    onPressed: (){print("CLICADO");},
+                    onPressed: (){Navigator.pop(context);},
                     child: Text("<< Voltar >>",
                       style: TextStyle(
                         fontSize: 16,

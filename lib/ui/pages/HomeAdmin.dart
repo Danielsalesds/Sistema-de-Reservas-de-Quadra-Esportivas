@@ -1,6 +1,6 @@
 import 'package:clube/ui/pages/ReservaQuadraScreen.dart';
 import 'package:clube/ui/pages/cadastro_membro.dart';
-import 'package:clube/ui/pages/llistar_membro.dart';
+import 'package:clube/ui/pages/listar_membro.dart';
 import 'package:clube/ui/widgets/CardAdmin.dart';
 import 'package:clube/ui/widgets/CustomAppBar.dart';
 import 'package:clube/ui/widgets/CustomBottomBar.dart';
@@ -23,7 +23,7 @@ class HomeAdminState extends State<HomeAdmin>{
       bottomNavigationBar: const CustomBottomBar(),
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          debugPrint("Floating Action Button Pressed");
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>const ReservaQuadraScreen()));
         },
         elevation: 6,
         backgroundColor: Theme.of(context).colorScheme.primaryContainer,

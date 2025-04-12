@@ -77,21 +77,27 @@ class FirestoreService {
       await secondaryAuth.signOut();
       await secondaryApp.delete();
     } catch (e) {
-      print('Erro ao criar membro: $e');
+      throw Exception('Erro ao criar membro: $e');
     }
   }
-    Future<String> getRole() async {
+    Future<String> getTipo() async {
       final userId = auth.getCurrentUser();
       final DocumentSnapshot userDoc =
-      await _firestore.collection('usuarios').doc(userId).get();
-      return userDoc.get('role').toString();
+      await _firestore.collection('membros').doc(userId).get();
+      return userDoc.get('tipo').toString();
     }
 
     Future<String> getData(String field) async {
       final userId = auth.getCurrentUser();
       final DocumentSnapshot userDoc =
-      await _firestore.collection('usuarios').doc(userId).get();
+      await _firestore.collection('membros').doc(userId).get();
       return userDoc.get(field).toString();
+    }
+
+    Future<Map<String, dynamic>> getUserData()async{
+      final userId = auth.getCurrentUser();
+      final doc = await _firestore.collection('membros').doc(userId).get();
+      return doc.data()!;
     }
 
     Future<void> updateProfile(Map<String, dynamic> updates) async {

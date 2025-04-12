@@ -83,24 +83,24 @@ class LoginPageState extends State<LoginPage>{
           const SizedBox(height: 10,),
           CustomButton(height: 85, width: 250, text: "Entrar", onclick: signIn),
           const SizedBox(height: 30,),
-          Text("Não possui uma conta?",
-            style: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).colorScheme.tertiary,
-            ),
-          ),
-          Align(
-            child:TextButton(
-              onPressed: widget.onTap,
-              child: Text("Criar conta",
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Theme.of(context).colorScheme.primary,
-                  fontWeight: FontWeight.bold,
-                )
-                ,)
-              ,),
-          ),
+          // Text("Não possui uma conta?",
+          //   style: TextStyle(
+          //     fontSize: 16,
+          //     color: Theme.of(context).colorScheme.tertiary,
+          //   ),
+          // ),
+          // Align(
+          //   child:TextButton(
+          //     onPressed: widget.onTap,
+          //     child: Text("Criar conta",
+          //       style: TextStyle(
+          //         fontSize: 16,
+          //         color: Theme.of(context).colorScheme.primary,
+          //         fontWeight: FontWeight.bold,
+          //       )
+          //       ,)
+          //     ,),
+          // ),
         ],
       )
     );

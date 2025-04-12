@@ -7,8 +7,9 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'core/ConfigureProviders.dart';
+import 'package:overlay_support/overlay_support.dart';
+
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -17,7 +18,11 @@ Future<void> main() async {
   );
   FirebaseAuth.instance.setLanguageCode("pt");
   final data = await ConfigureProviders.createDependencyTree();
-  runApp(MyApp(data: data));
+  runApp(
+    OverlaySupport.global(
+      child: MyApp(data: data), // Aqui você envolve seu app normal
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -31,7 +36,12 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: 'Clube',
         theme: const MaterialTheme(TextTheme()).light(),
-        home: AuthChecker(),
+        initialRoute: '/',
+        routes: {
+          '/': (context) => const AuthChecker(),
+          '/CadastroMembro': (context) => const CadastroMembro(), 
+        },
+        //home: AuthChecker(),
       )
     );
   }

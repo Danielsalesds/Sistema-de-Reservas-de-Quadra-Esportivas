@@ -1,5 +1,6 @@
 import 'package:clube/ui/pages/ReservaQuadraScreen.dart';
 import 'package:clube/ui/pages/cadastro_membro.dart';
+import 'package:clube/ui/pages/llistar_membro.dart';
 import 'package:clube/ui/widgets/CardAdmin.dart';
 import 'package:clube/ui/widgets/CustomAppBar.dart';
 import 'package:clube/ui/widgets/CustomBottomBar.dart';
@@ -58,7 +59,7 @@ class HomeAdminState extends State<HomeAdmin>{
             onTap: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const CadastroMembro()),
+                MaterialPageRoute(builder: (context) => const ListarMembro()),
               );
             },
           ),

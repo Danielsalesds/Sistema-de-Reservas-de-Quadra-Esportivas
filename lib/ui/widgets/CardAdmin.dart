@@ -20,6 +20,8 @@ class CardAdmin extends StatefulWidget {
 }
 
 class CardAdminState extends State<CardAdmin> {
+  Color textColor = const Color(0xFF0A2F4F);
+  Color textColor2 = const Color(0xFF333333);
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -41,10 +43,11 @@ class CardAdminState extends State<CardAdmin> {
                           fontWeight: FontWeight.bold,
                           fontSize: 20,
                           color: Theme.of(context).colorScheme.onPrimary,
+                          // color: textColor,
                         ),
                       ),
                       const SizedBox(width: 10),
-                      Icon(widget.icon, color: Colors.white, size: 30),
+                      Icon(widget.icon, color:  Theme.of(context).colorScheme.onPrimary, size: 30),
                     ],
                   ),
                   const SizedBox(height: 5),
@@ -59,8 +62,8 @@ class CardAdminState extends State<CardAdmin> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 20),
-                  const Icon(Icons.arrow_forward, color: Colors.white),
+                  const SizedBox(height: 50),
+                  // const Icon(Icons.arrow_forward, color: Colors.white),
                 ],
               ),
             ),

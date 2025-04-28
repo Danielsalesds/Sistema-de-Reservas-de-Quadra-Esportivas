@@ -4,6 +4,7 @@ import 'package:clube/ui/pages/listar_membro.dart';
 import 'package:clube/ui/widgets/CardAdmin.dart';
 import 'package:clube/ui/widgets/CustomAppBar.dart';
 import 'package:clube/ui/widgets/CustomBottomBar.dart';
+import 'package:clube/ui/widgets/CustomFAB.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -16,64 +17,68 @@ class HomeAdmin extends StatefulWidget{
 
 }
 class HomeAdminState extends State<HomeAdmin>{
+  final double padding_card = 10;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Home',),
       bottomNavigationBar: const CustomBottomBar(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>const ReservaQuadraScreen()));
-        },
-        elevation: 6,
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        shape: ShapeBorder.lerp(
-          const CircleBorder(),
-          const StadiumBorder(),
-          0.5,
-        ),
-        child: const Icon(Icons.add, color: Colors.white,),
+      floatingActionButton: CustomFAB(
+          onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
+            );
+          }
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Column(
         children: [
           const SizedBox(height: 5),
-          
-          CardAdmin(
-            titulo: "Fechar quadras",
-            text1: "Feche quadras para manutenção.",
-            icon: Icons.lock_outline_rounded,
-            onTap: () {
-              // Exemplo de rota
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ReservaQuadraScreen()), // ou outra tela
-              );
-            },
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: padding_card),
+            child: CardAdmin(
+              titulo: "Fechar quadras",
+              text1: "Feche quadras para manutenção.",
+              icon: Icons.lock_outline_rounded,
+              onTap: () {
+                // Exemplo de rota
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => ReservaQuadraScreen()), // ou outra tela
+                );
+              },
+            ),
           ),
-          
-          CardAdmin(
-            titulo: "Gerenciar associados",
-            text1: "Adicione ou remova associados.",
-            icon: Icons.person_add_outlined,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ListarMembro()),
-              );
-            },
+
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: padding_card),
+            child: CardAdmin(
+              titulo: "Gerenciar associados",
+              text1: "Adicione ou remova associados.",
+              icon: Icons.person_add_outlined,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const ListarMembro()),
+                );
+              },
+            ),
           ),
-          
-          CardAdmin(
-            titulo: "Fazer reserva",
-            text1: "Reserve quadras sem restrições.",
-            icon: Icons.sports_soccer_outlined,
-            onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => ReservaQuadraScreen()),
-              );
-            },
+
+          Padding(
+              padding: EdgeInsets.symmetric(horizontal: padding_card),
+              child:CardAdmin(
+                titulo: "Fazer reserva",
+                text1: "Reserve quadras sem restrições.",
+                icon: Icons.sports_soccer_outlined,
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => ReservaQuadraScreen()),
+                  );
+                },
+              ),
           ),
         ],
       ),

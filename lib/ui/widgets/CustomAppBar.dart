@@ -1,4 +1,6 @@
 import 'package:clube/services/AuthService.dart';
+import 'package:clube/ui/pages/AuthChecker.dart';
+import 'package:clube/ui/pages/LoginPage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -26,11 +28,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
       ),
       actions: [
         IconButton(
-
-            onPressed:(){
+            onPressed:() async {
               final auth = Provider.of<AuthService>(context,listen:false);
               try{
-                auth.signOut();
+                await auth.signOut();
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> const AuthChecker()));
               }catch(e){
                 ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(content: Text(e.toString()))

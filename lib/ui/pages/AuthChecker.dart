@@ -21,7 +21,6 @@ class AuthChecker extends StatefulWidget{
 
 class _AuthCheckerState extends State<AuthChecker> {
   String? role;
-  @override
     @override
     Widget build(BuildContext context) {
     final firestore = Provider.of<FirestoreService>(context, listen:false);

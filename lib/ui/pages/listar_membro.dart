@@ -1,3 +1,4 @@
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:clube/ui/widgets/AddMembroButton.dart';
 import 'package:clube/ui/widgets/AletMessage.dart';
 import 'package:clube/ui/widgets/CustomAppBar.dart';
@@ -7,6 +8,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/FirestoreService.dart';
+import '../widgets/CustomFAB.dart';
+import 'ReservaQuadraScreen.dart';
 
 class ListarMembro extends StatefulWidget {
   const ListarMembro({super.key});
@@ -26,18 +29,13 @@ class _ListarMembroState extends State<ListarMembro> {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Gerenciar Membros',),
       bottomNavigationBar: const CustomBottomBar(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          debugPrint("Floating Action Button Pressed");
-        },
-        elevation: 6,
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        shape: ShapeBorder.lerp(
-          const CircleBorder(),
-          const StadiumBorder(),
-          0.5,
-        ),
-        child: const Icon(Icons.add, color: Colors.white,),
+      floatingActionButton: CustomFAB(
+          onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
+            );
+          }
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
      body: Stack(
@@ -75,17 +73,41 @@ class _ListarMembroState extends State<ListarMembro> {
                             },
                           ),
                           IconButton(
-                            icon: Icon(Icons.delete, color: Colors.red),
+                            icon: const Icon(Icons.delete, color: Colors.red),
                             onPressed: () async {
-                              await firestore.atualizarMembro(doc.id, {
-                                'ativo': false,
-                              });
-                               AlertaFlutuante.mostrar(
+                              AwesomeDialog(
                                 context: context,
-                                mensagem: 'Membro desativado com sucesso!',
-                                cor: Colors.red,
-                                alinhamento: Alignment.topCenter, // ou bottomCenter, center...
-                              );
+                                dialogType: DialogType.warning,
+                                animType: AnimType.scale,
+                                title: "Alerta!",
+                                desc:"Tem certeza que deseja desativar este usuário?",
+                                btnOkText: "SIM",
+                                btnOkColor: Theme.of(context).colorScheme.primaryContainer,
+                                btnOkOnPress: () async {
+                                  await firestore.atualizarMembro(doc.id, {
+                                    'ativo': false,
+                                  });
+                                  AlertaFlutuante.mostrar(
+                                    context: context,
+                                    mensagem: 'Membro desativado com sucesso!',
+                                    cor: Colors.red,
+                                    alinhamento: Alignment.topCenter, // ou bottomCenter, center...
+                                  );
+                                },
+                                btnCancelColor: Theme.of(context).colorScheme.errorContainer,
+                                btnCancelText: "NÃO",
+                                btnCancelOnPress: (){
+                                },
+                                titleTextStyle: TextStyle(
+                                    color: Theme.of(context).colorScheme.primary,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 22
+                                ),
+                                descTextStyle: TextStyle(
+                                  fontSize: 16,
+                                  color: Theme.of(context).colorScheme.tertiary,
+                                ),
+                              ).show();
                             },
                           ),
                         ],

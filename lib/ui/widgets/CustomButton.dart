@@ -6,7 +6,7 @@ class CustomButton extends StatelessWidget{
   final double width;
   final String text;
   final void Function()? onclick;
-  const CustomButton({required this.height, required this.width, required this.text, this.onclick});
+  const CustomButton({super.key, required this.height, required this.width, required this.text, this.onclick});
   @override
   Widget build(BuildContext context) {
     return SizedBox(

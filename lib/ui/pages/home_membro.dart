@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../widgets/CustomAppBar.dart';
 import '../widgets/CustomBottomBar.dart';
+import '../widgets/CustomFAB.dart';
 import 'ReservaQuadraScreen.dart';
 
 class HomeMembro extends StatefulWidget {
@@ -28,18 +29,13 @@ class _HomeMembroState extends State<HomeMembro> {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Home',),
       bottomNavigationBar: const CustomBottomBar(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>const ReservaQuadraScreen()));
-        },
-        elevation: 6,
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        shape: ShapeBorder.lerp(
-          const CircleBorder(),
-          const StadiumBorder(),
-          0.5,
-        ),
-        child: const Icon(Icons.add, color: Colors.white,),
+      floatingActionButton: CustomFAB(
+          onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
+            );
+          }
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Padding(

@@ -1,15 +1,16 @@
+
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:clube/services/AuthService.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clube/services/FirestoreService.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../widgets/CustomAppBar.dart';
 import '../widgets/CustomButton.dart';
 import '../widgets/CustomPasswordFormField.dart';
 import '../widgets/CustomTextFormField.dart';
-import 'LoginPage.dart';
 
 class CadastroMembro extends StatefulWidget{
   
@@ -27,18 +28,18 @@ class CadastroMembroPageState extends State<CadastroMembro>{
   final repSenhaTextController = TextEditingController();
   final nomeTextController = TextEditingController();
   final telefoneTextController = TextEditingController();
-  String _selecionado = 'Admin';
+  String _selecionado = 'Membro';
   // final String tipo = 'Membro';
   //função fazer login
   void signUp() async{
-    if(senhaTextController.text != repSenhaTextController.text){
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text("Certifique-se de que os campos de senha sejam iguais."))
-      );
-      return;
-    }
+    // if(senhaTextController.text != repSenhaTextController.text){
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //       const SnackBar(content: Text("Certifique-se de que os campos de senha sejam iguais."))
+    //   );
+    //   return;
+    // }
     if (nomeTextController.text.isEmpty || emailTextController.text.isEmpty || telefoneTextController.text.isEmpty || senhaTextController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text("Preencha todos os campos.")));
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Preencha todos os campos.")));
       return;
     }
     final firestore = Provider.of<FirestoreService>(context, listen:false);
@@ -50,19 +51,60 @@ class CadastroMembroPageState extends State<CadastroMembro>{
       //await authService.signUp(emailTextController.text, senhaTextController.text);
           await firestore.createMembro(nomeTextController.text,
           emailTextController.text, telefoneTextController.text, _selecionado, senhaTextController.text);
+          AwesomeDialog(
+            context: context,
+            dialogType: DialogType.success,
+            animType: AnimType.scale,
+            title: "Sucesso!",
+            desc:"O usuário ${nomeTextController.text} foi cadastrado com sucesso",
+            btnOkText: "Ok",
+            btnOkColor: Theme.of(context).colorScheme.primary,
+            btnOkOnPress: () {
+              Navigator.pop(context);
+            },
+            titleTextStyle: TextStyle(
+                color: Theme.of(context).colorScheme.primary,
+                fontWeight: FontWeight.bold,
+                fontSize: 22
+            ),
+            descTextStyle: TextStyle(
+              fontSize: 16,
+              color: Theme.of(context).colorScheme.tertiary,
+            ),
+          ).show();
     }catch(e){
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString()))
-      );
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.error,
+        animType: AnimType.scale,
+        title: "Erro!",
+        desc: e.toString(),
+        btnOkText: "Ok",
+        btnOkColor: Theme.of(context).colorScheme.primary,
+        btnOkOnPress: () {
+        },
+        titleTextStyle: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+            fontWeight: FontWeight.bold,
+            fontSize: 22
+        ),
+        descTextStyle: TextStyle(
+          fontSize: 16,
+          color: Theme.of(context).colorScheme.tertiary,
+        ),
+      ).show();
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(content: Text(e.toString()))
+      // );
     } finally {
       setState(() {
         _isLoading = false;
       });
-      nomeTextController.clear();
-      telefoneTextController.clear();
-      emailTextController.clear();
-      senhaTextController.clear();
-      repSenhaTextController.clear();
+      // nomeTextController.clear();
+      // telefoneTextController.clear();
+      // emailTextController.clear();
+      // senhaTextController.clear();
+      // repSenhaTextController.clear();
     }
   }
 
@@ -70,6 +112,7 @@ class CadastroMembroPageState extends State<CadastroMembro>{
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+        appBar: const CustomAppBar(title: 'Cadastrar',),
       resizeToAvoidBottomInset: true,
       body: _isLoading
           ? const Center(child: CircularProgressIndicator(),)
@@ -120,11 +163,11 @@ class CadastroMembroPageState extends State<CadastroMembro>{
                   ],
                 ),
                 const SizedBox(height: 10,),
-                Row(
-                  children: [
-                    Expanded(child: CustomPasswordFormField(labelText: "Confirmar senha", controller: repSenhaTextController,),),
-                  ],
-                ),
+                // Row(
+                //   children: [
+                //     Expanded(child: CustomPasswordFormField(labelText: "Confirmar senha", controller: repSenhaTextController,),),
+                //   ],
+                // ),
                 const SizedBox(height: 10,),
                 Row( mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -156,21 +199,21 @@ class CadastroMembroPageState extends State<CadastroMembro>{
                   ],
                 ),
                 const SizedBox(height: 30,),
-                CustomButton(height: 85, width: 250, text: "Cadastrar Membro", onclick: signUp),
+                CustomButton(height: 85, width: 250, text: "Cadastrar", onclick: signUp),
                 const SizedBox(height: 20,),
                 
-                Align(
-                  child:TextButton(
-                    onPressed: (){Navigator.pop(context);},
-                    child: Text("<< Voltar >>",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Theme.of(context).colorScheme.primary,
-                        fontWeight: FontWeight.bold,
-                      )
-                      ,)
-                    ,),
-                ),
+                // Align(
+                //   child:TextButton(
+                //     onPressed: (){Navigator.pop(context);},
+                //     child: Text("<< Voltar >>",
+                //       style: TextStyle(
+                //         fontSize: 16,
+                //         color: Theme.of(context).colorScheme.primary,
+                //         fontWeight: FontWeight.bold,
+                //       )
+                //       ,)
+                //     ,),
+                // ),
               ],
             ),
           )

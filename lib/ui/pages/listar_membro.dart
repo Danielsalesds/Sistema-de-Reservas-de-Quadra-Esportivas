@@ -42,7 +42,7 @@ class _ListarMembroState extends State<ListarMembro> {
         children: [
           // Conteúdo principal (o StreamBuilder que já existe)
           StreamBuilder(
-            stream: firestore.getMembrosDoAdmin(uid!),
+            stream: firestore.getMembrosAtivos(),
             builder: (context, snapshot) {
               print("UID do admin logado: $uid");
 

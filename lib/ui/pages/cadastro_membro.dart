@@ -1,4 +1,6 @@
 
+import 'dart:math';
+
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clube/services/FirestoreService.dart';
@@ -10,6 +12,7 @@ import 'package:provider/provider.dart';
 import '../widgets/CustomAppBar.dart';
 import '../widgets/CustomButton.dart';
 import '../widgets/CustomPasswordFormField.dart';
+import '../widgets/CustomTelFormField.dart';
 import '../widgets/CustomTextFormField.dart';
 
 class CadastroMembro extends StatefulWidget{
@@ -25,7 +28,7 @@ class CadastroMembroPageState extends State<CadastroMembro>{
   bool _isLoading = false;
   final emailTextController = TextEditingController();
   final senhaTextController = TextEditingController();
-  final repSenhaTextController = TextEditingController();
+  // final repSenhaTextController = TextEditingController();
   final nomeTextController = TextEditingController();
   final telefoneTextController = TextEditingController();
   String _selecionado = 'Membro';
@@ -38,14 +41,27 @@ class CadastroMembroPageState extends State<CadastroMembro>{
     //   );
     //   return;
     // }
-    if (nomeTextController.text.isEmpty || emailTextController.text.isEmpty || telefoneTextController.text.isEmpty || senhaTextController.text.isEmpty) {
+
+    // if(senhaTextController.text.isEmpty){
+    //       int tamanho = 8;
+    //       const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#\$*_.';
+    //       final random = Random();
+    //       String senha = List.generate(tamanho, (index) {
+    //         return caracteres[random.nextInt(caracteres.length)];
+    //       }).join();
+    //       senhaTextController.text = senha;
+    // }
+
+    if (nomeTextController.text.isEmpty || emailTextController.text.isEmpty || telefoneTextController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Preencha todos os campos.")));
       return;
     }
+
     final firestore = Provider.of<FirestoreService>(context, listen:false);
     setState(() {
       _isLoading = true;
     });
+
     try{
        //final adminUid = FirebaseAuth.instance.currentUser!.uid; // <- Salva o UID do admin
       //await authService.signUp(emailTextController.text, senhaTextController.text);
@@ -147,7 +163,8 @@ class CadastroMembroPageState extends State<CadastroMembro>{
                 const SizedBox(height: 10,),
                 Row(
                   children: [
-                    Expanded(child: CustomTextFormField(label: "Telefone", controller: telefoneTextController),),
+                    Expanded(child: CustomTelFormField(label: "Telefone", controller: telefoneTextController),),
+
                   ],
                 ),
                 const SizedBox(height: 10,),
@@ -163,6 +180,21 @@ class CadastroMembroPageState extends State<CadastroMembro>{
                   ],
                 ),
                 const SizedBox(height: 10,),
+
+                IconButton.filledTonal(
+                  onPressed: (){
+                    int tamanho = 8;
+                    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#\$*_.';
+                    final random = Random();
+                    String senha = List.generate(tamanho, (index) {
+                      return caracteres[random.nextInt(caracteres.length)];
+                    }).join();
+                    senhaTextController.text = senha;
+                  },
+                  color: Theme.of(context).colorScheme.primaryContainer,
+                  padding: EdgeInsets.all(10),
+                  icon: Icon(Icons.shuffle,size: 30,color: Theme.of(context).colorScheme.primary),
+                ),
                 // Row(
                 //   children: [
                 //     Expanded(child: CustomPasswordFormField(labelText: "Confirmar senha", controller: repSenhaTextController,),),

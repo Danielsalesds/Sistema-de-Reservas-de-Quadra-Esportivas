@@ -31,7 +31,7 @@ class CardAdminState extends State<CardAdmin> {
         child: Row(
           children: [
             Padding(
-              padding: const EdgeInsets.all(10),
+              padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -62,8 +62,13 @@ class CardAdminState extends State<CardAdmin> {
                       ),
                     ],
                   ),
-                  const SizedBox(height: 50),
-                  // const Icon(Icons.arrow_forward, color: Colors.white),
+                  const SizedBox(height: 5),
+                  const Row(
+                    children: [
+                      SizedBox(width: 300,),
+                      Icon(Icons.arrow_right_alt, color: Colors.white, size: 40)
+                    ],
+                  )
                 ],
               ),
             ),

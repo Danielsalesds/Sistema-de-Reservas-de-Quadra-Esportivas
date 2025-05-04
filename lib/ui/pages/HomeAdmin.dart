@@ -17,7 +17,9 @@ class HomeAdmin extends StatefulWidget{
 
 }
 class HomeAdminState extends State<HomeAdmin>{
-  final double padding_card = 10;
+  final double padding_card_h = 14;
+  final double padding_card_v = 5;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -36,7 +38,7 @@ class HomeAdminState extends State<HomeAdmin>{
         children: [
           const SizedBox(height: 5),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: padding_card),
+            padding: EdgeInsets.symmetric(horizontal: padding_card_h, vertical: padding_card_v),
             child: CardAdmin(
               titulo: "Fechar quadras",
               text1: "Feche quadras para manutenção.",
@@ -52,7 +54,7 @@ class HomeAdminState extends State<HomeAdmin>{
           ),
 
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: padding_card),
+            padding: EdgeInsets.symmetric(horizontal: padding_card_h, vertical:padding_card_v),
             child: CardAdmin(
               titulo: "Gerenciar associados",
               text1: "Adicione ou remova associados.",
@@ -67,7 +69,7 @@ class HomeAdminState extends State<HomeAdmin>{
           ),
 
           Padding(
-              padding: EdgeInsets.symmetric(horizontal: padding_card),
+              padding: EdgeInsets.symmetric(horizontal: padding_card_h,vertical:  padding_card_v),
               child:CardAdmin(
                 titulo: "Fazer reserva",
                 text1: "Reserve quadras sem restrições.",

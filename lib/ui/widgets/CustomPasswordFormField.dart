@@ -47,9 +47,10 @@ class _CustomPassordFormFieldState extends State<CustomPasswordFormField> {
                 obscured = !obscured;
               })
             },
-            child: obscured
-                ? const Icon(Icons.remove_red_eye_rounded,)
-                : const Icon(Icons.remove_red_eye_outlined),
+            child:
+                obscured
+                  ? const Icon(Icons.remove_red_eye_rounded,)
+                  : const Icon(Icons.remove_red_eye_outlined),
           ),
           labelText: widget.labelText,
           labelStyle: TextStyle(

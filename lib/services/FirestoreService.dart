@@ -117,6 +117,14 @@ class FirestoreService {
       .where('ativo', isEqualTo: true)
       .snapshots();
 }
+  Stream<QuerySnapshot> getMembrosAtivos() {
+    return _firestore
+        .collection('membros')
+        .where('ativo', isEqualTo: true)
+        .where("tipo",isEqualTo: "Membro")
+        .orderBy("nome")
+        .snapshots();
+  }
   //deletar membro
     Future<void> deletarMembro(String id) async {
     await _firestore.collection('membros').doc(id).delete();

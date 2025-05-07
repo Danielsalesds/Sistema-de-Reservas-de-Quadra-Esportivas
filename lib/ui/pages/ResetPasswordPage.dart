@@ -56,7 +56,7 @@ class ResetPasswordPageState extends State<ResetPasswordPage> {
     return Scaffold(
       body: SingleChildScrollView(child: Column(
         children: [
-          Padding(padding: EdgeInsets.symmetric(vertical: 70),
+          Padding(padding: const EdgeInsets.symmetric(vertical: 70),
             child: Flexible(child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [

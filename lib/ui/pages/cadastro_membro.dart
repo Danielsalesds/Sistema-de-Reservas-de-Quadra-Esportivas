@@ -28,30 +28,12 @@ class CadastroMembroPageState extends State<CadastroMembro>{
   bool _isLoading = false;
   final emailTextController = TextEditingController();
   final senhaTextController = TextEditingController();
-  // final repSenhaTextController = TextEditingController();
   final nomeTextController = TextEditingController();
   final telefoneTextController = TextEditingController();
+
   String _selecionado = 'Membro';
-  // final String tipo = 'Membro';
   //função fazer login
   void signUp() async{
-    // if(senhaTextController.text != repSenhaTextController.text){
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //       const SnackBar(content: Text("Certifique-se de que os campos de senha sejam iguais."))
-    //   );
-    //   return;
-    // }
-
-    // if(senhaTextController.text.isEmpty){
-    //       int tamanho = 8;
-    //       const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#\$*_.';
-    //       final random = Random();
-    //       String senha = List.generate(tamanho, (index) {
-    //         return caracteres[random.nextInt(caracteres.length)];
-    //       }).join();
-    //       senhaTextController.text = senha;
-    // }
-
     if (nomeTextController.text.isEmpty || emailTextController.text.isEmpty || telefoneTextController.text.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Preencha todos os campos.")));
       return;
@@ -184,7 +166,7 @@ class CadastroMembroPageState extends State<CadastroMembro>{
                 IconButton.filledTonal(
                   onPressed: (){
                     int tamanho = 8;
-                    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789!@#\$*_.';
+                    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
                     final random = Random();
                     String senha = List.generate(tamanho, (index) {
                       return caracteres[random.nextInt(caracteres.length)];

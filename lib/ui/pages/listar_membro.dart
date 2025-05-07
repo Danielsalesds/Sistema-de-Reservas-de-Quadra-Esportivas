@@ -1,4 +1,5 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
+import 'package:clube/ui/pages/EditUser.dart';
 import 'package:clube/ui/widgets/AddMembroButton.dart';
 import 'package:clube/ui/widgets/AletMessage.dart';
 import 'package:clube/ui/widgets/CustomAppBar.dart';
@@ -46,20 +47,20 @@ class _ListarMembroState extends State<ListarMembro> {
             builder: (context, snapshot) {
               print("UID do admin logado: $uid");
 
-              if (!snapshot.hasData) return Center(child: CircularProgressIndicator());
+              if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
 
               final membros = snapshot.data!.docs;
 
-              if (membros.isEmpty) return Center(child: Text('Nenhum membro cadastrado.'));
+              if (membros.isEmpty) return const Center(child: Text('Nenhum membro cadastrado.'));
 
               return ListView.builder(
                 itemCount: membros.length,
                 itemBuilder: (context, index) {
                   final doc = membros[index];
+                  final id = doc.id;
                   final data = doc.data() as Map<String, dynamic>;
-
                   return Card(
-                    margin: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                     child: ListTile(
                       title: Text(data['nome'] ?? ''),
                       subtitle: Text(data['email'] ?? ''),
@@ -67,9 +68,18 @@ class _ListarMembroState extends State<ListarMembro> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           IconButton(
-                            icon: Icon(Icons.edit, color: Colors.orange),
+                            icon: const Icon(Icons.edit, color: Colors.orange),
                             onPressed: () {
-                              print("Em desenvolvimento!");
+                              Navigator.push(context,
+                                MaterialPageRoute(builder: (context)=>EditUserPage(
+                                    nome: data['nome'] ?? '',
+                                    email: data['email'] ?? '',
+                                    telefone: data['telefone'] ?? '',
+                                    tipo: data['tipo'] ?? '',
+                                    id: id,
+                                )
+                                )
+                              );
                             },
                           ),
                           IconButton(

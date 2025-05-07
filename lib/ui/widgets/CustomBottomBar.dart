@@ -2,6 +2,7 @@ import 'package:clube/ui/pages/ProfilePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../pages/AuthChecker.dart';
 import '../pages/HomeMembro2.dart';
 import '../pages/ReservaQuadraScreen.dart';
 import '../pages/home_membro.dart';
@@ -31,7 +32,7 @@ class CustomBottomBar extends StatelessWidget{
                 children: [
                   IconButton(
                       onPressed: () {
-                        debugPrint("Menu Pressed");
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const AuthChecker()));
                       },
                       icon: const Icon(Icons.menu)),
                   const SizedBox(

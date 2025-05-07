@@ -3,11 +3,16 @@ import 'package:clube/services/FirestoreService.dart';
 import 'package:clube/ui/widgets/CustomAppBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/CustomBottomBar.dart';
 import '../widgets/CustomButton.dart';
+import '../widgets/CustomFAB.dart';
+import '../widgets/CustomTelFormField.dart';
 import '../widgets/CustomTextFormField.dart';
+import 'EditProfilePage.dart';
+import 'ReservaQuadraScreen.dart';
 
 class ProfilePage extends StatefulWidget{
   @override
@@ -16,9 +21,7 @@ class ProfilePage extends StatefulWidget{
 }
 
 class ProfilePageState extends State<ProfilePage> {
-  final nomeTextController =  TextEditingController();
-  final emailTextController =  TextEditingController();
-  final telefoneTextController =  TextEditingController();
+  String nome=" ", email=" ", telefone=" ";
   @override
   void initState() {
     super.initState();
@@ -30,116 +33,149 @@ class ProfilePageState extends State<ProfilePage> {
     final email = await firebase.getData('email');
     final telefone = await firebase.getData('telefone');
     setState(() {
-      nomeTextController.text = nome;
-      emailTextController.text = email;
-      telefoneTextController.text = telefone;
+      this.nome = nome;
+      this.email = email;
+      this.telefone = telefone;
     });
   }
-  void update()async{
-    final firebase = Provider.of<FirestoreService>(context,listen:false);
-    try{
-      await firebase.updateProfile({'nome':nomeTextController.text,
-        'email':emailTextController.text, 'telefone': telefoneTextController.text});
-    }catch(e){
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString()))
-      );
-    }finally{
-      if(!mounted) return;
-      AwesomeDialog(
-        context: context,
-        dialogType: DialogType.success,
-        animType: AnimType.scale,
-        title: "Suas informações foram atualizadas!",
-        btnOkText: "Ok",
-        btnOkColor: Theme.of(context).colorScheme.primary,
-        btnOkOnPress: () {
-          Navigator.pop(context);
-        },
-        titleTextStyle: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-            fontWeight: FontWeight.bold,
-            fontSize: 22
-        ),
-        descTextStyle: TextStyle(
-          fontSize: 16,
-          color: Theme.of(context).colorScheme.tertiary,
-        ),
-      ).show();
-    }
-
+  void push(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EditProfilePage()),
+    );
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Perfil'),
       bottomNavigationBar: const CustomBottomBar(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          debugPrint("Floating Action Button Pressed");
-        },
-        elevation: 6,
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
-        shape: ShapeBorder.lerp(
-          const CircleBorder(),
-          const StadiumBorder(),
-          0.5,
-        ),
-        child: const Icon(Icons.add, color: Colors.white,),
+      floatingActionButton: CustomFAB(
+          onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
+            );
+          }
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(padding: EdgeInsets.only(top: 50, left: 35),
-              child:Row(mainAxisAlignment: MainAxisAlignment.start,
+            // Padding(padding: const EdgeInsets.only(top: 20, left: 35, right: 35),
+            //   child:Row(
+            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //     children: [
+            //       Text("Perfil",
+            //         style: TextStyle(
+            //           color: Theme.of(context).colorScheme.primary,
+            //           fontWeight: FontWeight.bold,
+            //           fontSize: 26,
+            //         ),
+            //       ),
+            //       // IconButton(
+            //       //   onPressed: (){
+            //       //     Navigator.push(context, MaterialPageRoute(builder: (context)=>EditProfilePage()));
+            //       //   },
+            //       //   padding: EdgeInsets.all(10),
+            //       //   icon: Icon(Icons.edit,size: 30,color: Theme.of(context).colorScheme.primary),
+            //       // ),
+            //     ],
+            //   ),
+            // ),
+            Padding(padding: const EdgeInsets.only(top: 30, bottom: 10),
+              child: Flexible(
+                child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(0),
+                        ),
+                        child:SvgPicture.asset('assets/profile.svg', width: 250,height: 200),
+                      ),
+                    ]
+                ),
+              ),
+            ),
+
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text("Informações da conta",
+                  Text(nome,
                     style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
                       fontWeight: FontWeight.bold,
-                      fontSize: 22,
+                      fontSize: 26,
                     ),
                   ),
+                  // IconButton(
+                  //   onPressed: (){
+                  //     Navigator.push(context, MaterialPageRoute(builder: (context)=>EditProfilePage()));
+                  //   },
+                  //   icon: Icon(Icons.edit,size: 25,color: Theme.of(context).colorScheme.primary),
+                  // ),
                 ],
               ),
-            ),
-            Padding(padding: EdgeInsets.only(top: 5, left: 35),
-              child:Row( mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Flexible(child: Text("Gerencie seu perfil e configurações da conta abaixo.",
-                    style: TextStyle(
-                      fontSize: 16,
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),)
-                ],
-            ),
-            ),
-            const SizedBox(height: 50,),
-            Row(
-              children: [
-                Expanded(child: CustomTextFormField(label: "Nome completo", controller: nomeTextController,),),
-              ],
-            ),
-            const SizedBox(height: 10,),
-            Row(
-              children: [
-                Expanded(child: CustomTextFormField(label: "Telefone", controller: telefoneTextController),),
-              ],
-            ),
-            const SizedBox(height: 10,),
-            Row(
-              children: [
-                Expanded(child: CustomTextFormField(label: "Email", controller: emailTextController), ),
-              ],
-            ),
-            const SizedBox(height: 70,),
-            CustomButton(height: 85, width: 250, text: "Atualizar", onclick: update),
+
+            const SizedBox(height: 5,),
+            // buildPadding(context,"Nome"),
+            // buildCont(context,nome,Icons.person),
+            const SizedBox(height: 15,),
+            buildPadding(context,"E-mail"),
+            buildCont(context,email,Icons.email),
+            const SizedBox(height: 15,),
+            buildPadding(context,"Telefone"),
+            buildCont(context,telefone,Icons.phone),
+            const SizedBox(height: 30,),
+            CustomButton(height: 80, width: 200, text: "Editar perfil", onclick: push),
           ],
         ),
       ),
     );
+  }
+
+  Padding buildCont(BuildContext context, String inf, IconData iconData) {
+    return Padding(padding: const EdgeInsets.only(top: 5, left: 30, right: 30),
+            child: Container(
+              decoration: BoxDecoration(
+                color: Theme.of(context).colorScheme.secondaryContainer,
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child:
+                  Padding(padding: const EdgeInsets.all(10),
+                    child:Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Flexible(
+                          child: Text(inf,
+                            style: TextStyle(
+                              color: Theme.of(context).colorScheme.onSecondaryContainer,
+                              fontSize: 18,
+                            ),
+                          ),
+                        ),
+                        Icon(iconData, color: Theme.of(context).colorScheme.onSecondaryContainer),
+                      ],
+                    )
+                  )
+
+            )
+            );
+  }
+
+  Padding buildPadding(BuildContext context,String text) {
+    return Padding(padding: const EdgeInsets.only(top: 5, left: 35),
+            child:Row(mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text("$text ",
+                  style: TextStyle(
+                    color: Theme.of(context).colorScheme.tertiary,
+                    fontSize: 20,
+                  ),
+                ),
+              ],
+            ),
+          );
   }
 
 }

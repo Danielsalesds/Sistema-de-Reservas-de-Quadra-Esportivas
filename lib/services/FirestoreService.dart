@@ -20,7 +20,7 @@ class FirestoreService {
       throw Exception("Usuário não autenticado!");
     }
 
-    final userDoc = _firestore.collection('usuarios').doc(userId);
+    final userDoc = _firestore.collection('membros').doc(userId);
     await userDoc.set({
       'email': email,
       'nome': nome,
@@ -102,8 +102,12 @@ class FirestoreService {
 
     Future<void> updateProfile(Map<String, dynamic> updates) async {
       final userId = auth.getCurrentUser();
-      await _firestore.collection('usuarios').doc(userId).update(updates);
+      await _firestore.collection('membros').doc(userId).update(updates);
     }
+  Future<void> updateUserProfile(Map<String, dynamic> updates, String id) async {
+    final userId = id;
+    await _firestore.collection('membros').doc(userId).update(updates);
+  }
 
   //Listar todos os membros 
   Stream<QuerySnapshot> getMembrosStream() {

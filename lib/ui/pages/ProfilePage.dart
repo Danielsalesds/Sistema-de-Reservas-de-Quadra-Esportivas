@@ -29,9 +29,9 @@ class ProfilePageState extends State<ProfilePage> {
   }
   void init() async{
     final firebase = Provider.of<FirestoreService>(context,listen:false);
-    final nome = await firebase.getData('nome');
-    final email = await firebase.getData('email');
-    final telefone = await firebase.getData('telefone');
+    final nome = await firebase.getUserField('nome');
+    final email = await firebase.getUserField('email');
+    final telefone = await firebase.getUserField('telefone');
     setState(() {
       this.nome = nome;
       this.email = email;

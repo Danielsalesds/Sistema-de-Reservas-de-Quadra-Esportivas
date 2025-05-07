@@ -30,6 +30,49 @@ class FirestoreService {
     });
   }
 
+  Future<void> createQuadra(String localizacao, bool status, int capacidade,String tipoQuadraId )async {
+    try{
+      final quadraDoc = _firestore.collection('quadras').doc();
+      await quadraDoc.set({
+        'capacidade': capacidade,
+        'localizacao': localizacao,
+        'status': status,
+        'id': quadraDoc.id,
+        'tipoQuadraId': tipoQuadraId
+      });
+    }catch(e){
+      throw Exception(e);
+    }
+  }
+  Future<void> createTipoQuadra(String nome)async {
+    try{
+      final tipoDoc = _firestore.collection('tipoQuadra').doc();
+      await tipoDoc.set({
+        'nome': nome,
+        'id': tipoDoc.id
+      });
+    }catch(e){
+      throw Exception(e);
+    }
+  }
+  Stream<QuerySnapshot> getTipoQuadra() {
+    return FirebaseFirestore.instance.collection('tipoQuadra').snapshots();
+  }
+  Future<void> editQuadra(Map<String, dynamic> updates, String id) async{
+    await _firestore.collection('quadras').doc(id).update(updates);
+  }
+
+  Future<void> setStatusQuadra(String id) async{
+    bool status = await getStatusQuadra(id);
+    await _firestore.collection('quadras').doc(id).update({'status':!status});
+  }
+
+  Future<bool> getStatusQuadra(String id) async{
+    final DocumentSnapshot quadraDoc =
+    await _firestore.collection('quadras').doc(id).get();
+    return quadraDoc.get('status');
+  }
+
   Future<void> createMembro (String nome, String email, String telefone, String tipo, String senha ) async {
     try {
       final admin = FirebaseAuth.instance.currentUser;
@@ -87,7 +130,13 @@ class FirestoreService {
       return userDoc.get('tipo').toString();
     }
 
-    Future<String> getData(String field) async {
+    Future<String> getData(String collection,String id,String field) async {
+      final DocumentSnapshot userDoc =
+      await _firestore.collection(collection).doc(id).get();
+      return userDoc.get(field).toString();
+    }
+
+    Future<String> getUserField(String field) async {
       final userId = auth.getCurrentUser();
       final DocumentSnapshot userDoc =
       await _firestore.collection('membros').doc(userId).get();

@@ -1,3 +1,4 @@
+import 'package:clube/ui/pages/GerenciarQuadra.dart';
 import 'package:clube/ui/pages/ReservaQuadraScreen.dart';
 import 'package:clube/ui/pages/cadastro_membro.dart';
 import 'package:clube/ui/pages/listar_membro.dart';
@@ -47,7 +48,7 @@ class HomeAdminState extends State<HomeAdmin>{
                 // Exemplo de rota
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => ReservaQuadraScreen()), // ou outra tela
+                  MaterialPageRoute(builder: (context) => GerenciarQuadra()), // ou outra tela
                 );
               },
             ),

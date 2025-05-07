@@ -5,8 +5,9 @@ class CustomTextFormField extends StatelessWidget{
   final String label;
   final String? Function(String?)? validateFunction;
   final TextEditingController? controller;
+  final TextInputType? keyboardType;
 
-  const CustomTextFormField({super.key, required this.label, this.validateFunction, this.controller});
+  const CustomTextFormField({super.key, required this.label, this.validateFunction, this.controller, this.keyboardType});
 
 
 
@@ -15,6 +16,7 @@ class CustomTextFormField extends StatelessWidget{
     return Padding(
       padding: const EdgeInsets.only(left: 35, right: 35),
       child: TextFormField(
+          keyboardType: keyboardType,
           controller: controller,
           validator: validateFunction,
           style:TextStyle(

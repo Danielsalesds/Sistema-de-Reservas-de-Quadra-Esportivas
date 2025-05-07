@@ -20,13 +20,12 @@ class GerenciarQuadra extends StatefulWidget{
 class GerenciarQuadraState extends State<GerenciarQuadra>{
   final capacidadeTextController = TextEditingController();
   final localizacaoTextController = TextEditingController();
-  String tipoQuadraId = "0001";
+  String? tipoQuadraId;
   bool status = false;
-  String? tipoSelecionado;
   void create(){
     final firestore = Provider.of<FirestoreService>(context, listen:false);
     try{
-      firestore.createQuadra(localizacaoTextController.text, status, int.parse(capacidadeTextController.text), tipoQuadraId);
+      firestore.createQuadra(localizacaoTextController.text, status, int.parse(capacidadeTextController.text), tipoQuadraId!);
     }catch (e){
       throw Exception(e);
     }
@@ -72,14 +71,35 @@ class GerenciarQuadraState extends State<GerenciarQuadra>{
                       }
                       var tipos = snapshot.data!.docs;
                       return DropdownButton<String>(
-                      value: tipoSelecionado,hint: Text('Selecione o tipo de quadra'),items: tipos.map((DocumentSnapshot doc) {
+                        value: tipoQuadraId,hint: Text('Selecione o tipo de quadra'),items: tipos.map((DocumentSnapshot doc) {
                         String nome = doc['nome'];
-                        return DropdownMenuItem<String>(value: nome,child: Text(nome),);}).toList(),onChanged: (String? novoTipo) {
-                        setState(() {
-                          tipoSelecionado = novoTipo;
-                        });
+                        String id = doc['id'];
+                        return DropdownMenuItem<String>(
+                          value: id,child: Text(nome),);}).toList(),
+                          onChanged: (String? novoTipo) {
+                          setState(() {
+                            tipoQuadraId = novoTipo;
+                          });
                         },);
                     }),
+            Row(
+              children: [
+                Text('Status',
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontSize: 20,
+                ),
+                ),
+                Switch(
+                  value: status,
+                  onChanged: (bool value) {
+                    setState(() {
+                      status = value;
+                    });
+                  },
+                )
+              ],
+            ),
             const SizedBox(height: 30,),
             CustomButton(height: 85, width: 250, text: "Cadastrar", onclick: create),
             CustomButton(height: 85, width: 250, text: "Tipo",onclick: tipo,)

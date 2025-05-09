@@ -10,6 +10,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import 'HomeMembro2.dart';
+import 'ListarQuadras.dart';
 import 'home_membro.dart';
 
 class HomeAdmin extends StatefulWidget{
@@ -48,12 +49,26 @@ class HomeAdminState extends State<HomeAdmin>{
                 // Exemplo de rota
                 Navigator.push(
                   context,
+                  MaterialPageRoute(builder: (context) => ListarQuadras()), // ou outra tela
+                );
+              },
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: padding_card_h, vertical: padding_card_v),
+            child: CardAdmin(
+              titulo: "Gerenciar quadras",
+              text1: "Editar e criar novas quadras",
+              icon: Icons.lock_outline_rounded,
+              onTap: () {
+                // Exemplo de rota
+                Navigator.push(
+                  context,
                   MaterialPageRoute(builder: (context) => GerenciarQuadra()), // ou outra tela
                 );
               },
             ),
           ),
-
           Padding(
             padding: EdgeInsets.symmetric(horizontal: padding_card_h, vertical:padding_card_v),
             child: CardAdmin(
@@ -78,7 +93,7 @@ class HomeAdminState extends State<HomeAdmin>{
                 onTap: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => ReservaQuadraScreen()),
+                    MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
                   );
                 },
               ),

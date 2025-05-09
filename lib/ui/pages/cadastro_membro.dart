@@ -2,9 +2,7 @@
 import 'dart:math';
 
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clube/services/FirestoreService.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -183,7 +181,7 @@ class CadastroMembroPageState extends State<CadastroMembro>{
                 //   ],
                 // ),
                 const SizedBox(height: 10,),
-                Row( mainAxisAlignment: MainAxisAlignment.center,
+                Row(mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Radio<String>(value:  'Admin', groupValue: _selecionado, onChanged:(value){
                       setState(() {

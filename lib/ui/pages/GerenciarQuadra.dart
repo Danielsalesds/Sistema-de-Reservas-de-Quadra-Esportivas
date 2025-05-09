@@ -20,12 +20,13 @@ class GerenciarQuadra extends StatefulWidget{
 class GerenciarQuadraState extends State<GerenciarQuadra>{
   final capacidadeTextController = TextEditingController();
   final localizacaoTextController = TextEditingController();
+  final nomeTextController = TextEditingController();
   String? tipoQuadraId;
   bool status = false;
   void create(){
     final firestore = Provider.of<FirestoreService>(context, listen:false);
     try{
-      firestore.createQuadra(localizacaoTextController.text, status, int.parse(capacidadeTextController.text), tipoQuadraId!);
+      firestore.createQuadra(nomeTextController.text,localizacaoTextController.text, status, int.parse(capacidadeTextController.text), tipoQuadraId!);
     }catch (e){
       throw Exception(e);
     }
@@ -53,7 +54,12 @@ class GerenciarQuadraState extends State<GerenciarQuadra>{
           children: [
             Row(
               children: [
-                Expanded(child: CustomTextFormField(label: "Localização:", controller: localizacaoTextController,),),
+                Expanded(child: CustomTextFormField(label: "Nome", controller: nomeTextController,),),
+              ],
+            ),
+            Row(
+              children: [
+                Expanded(child: CustomTextFormField(label: "Localização", controller: localizacaoTextController,),),
               ],
             ),
             const SizedBox(height: 10,),
@@ -62,34 +68,52 @@ class GerenciarQuadraState extends State<GerenciarQuadra>{
                 Expanded(child: CustomTextFormField(label: "Capacidade", controller: capacidadeTextController, keyboardType: const TextInputType.numberWithOptions(signed: false),), ),
               ],
             ),
-            const SizedBox(height: 10,),
-            StreamBuilder<QuerySnapshot>(
-                    stream: firestore.getTipoQuadra(),
+            const SizedBox(height: 20,),
+            Row(children: [
+              Padding(padding: EdgeInsets.only(left:  35),
+                child:StreamBuilder<QuerySnapshot>(
+                    stream: firestore.geAllTipoQuadra(),
                     builder:  (context, snapshot) {
                       if (!snapshot.hasData) {
                         return const Center(child: CircularProgressIndicator(),);
                       }
                       var tipos = snapshot.data!.docs;
-                      return DropdownButton<String>(
-                        value: tipoQuadraId,hint: Text('Selecione o tipo de quadra'),items: tipos.map((DocumentSnapshot doc) {
-                        String nome = doc['nome'];
-                        String id = doc['id'];
-                        return DropdownMenuItem<String>(
-                          value: id,child: Text(nome),);}).toList(),
+                      return SizedBox(width: 300,
+                        child: DropdownButton<String>(
+                          value: tipoQuadraId,hint: Text('Selecione o tipo de quadra'), items: tipos.map((DocumentSnapshot doc) {
+                          String nome = doc['nome'];
+                          String id = doc['id'];
+                          return DropdownMenuItem<String>(
+                            value: id,child: Text(nome,
+                              style: TextStyle(
+                              color: Theme.of(context).colorScheme.primary,
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w500
+                              ),
+                          ),);}).toList(),
                           onChanged: (String? novoTipo) {
-                          setState(() {
-                            tipoQuadraId = novoTipo;
-                          });
-                        },);
+                            setState(() {
+                              tipoQuadraId = novoTipo;
+                            });
+                          },
+                        isExpanded: true,),);
                     }),
+              ),
+              Icon(Icons.add),
+            ],),
+            const SizedBox(height: 20,),
             Row(
               children: [
-                Text('Status',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
-                  fontSize: 20,
+                Padding(padding: const EdgeInsets.only(left: 35,),
+                  child: Text('Status',
+                    style: TextStyle(
+                        color: Theme.of(context).colorScheme.primary,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500
+                    ),
+                  ),
                 ),
-                ),
+                const SizedBox(width: 10,),
                 Switch(
                   value: status,
                   onChanged: (bool value) {

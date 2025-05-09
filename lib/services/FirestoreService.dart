@@ -30,10 +30,11 @@ class FirestoreService {
     });
   }
 
-  Future<void> createQuadra(String localizacao, bool status, int capacidade,String tipoQuadraId )async {
+  Future<void> createQuadra(String nome,String localizacao, bool status, int capacidade,String tipoQuadraId )async {
     try{
       final quadraDoc = _firestore.collection('quadras').doc();
       await quadraDoc.set({
+        'nome':nome,
         'capacidade': capacidade,
         'localizacao': localizacao,
         'status': status,
@@ -55,12 +56,31 @@ class FirestoreService {
       throw Exception(e);
     }
   }
-  Stream<QuerySnapshot> getTipoQuadra() {
+  Stream<QuerySnapshot> geAllTipoQuadra() {
     return FirebaseFirestore.instance.collection('tipoQuadra').snapshots();
+  }
+  Future<String> getTipoQuadra(String id)async {
+    final doc = await _firestore.collection('tipoQuadra').doc(id).get();
+    return doc.get('nome');
+  }
+  Future<Map<String, String>> getAllTipoQuadraMap() async {
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('tipoQuadra')
+        .get();
+
+    Map<String, String> tipos = {};
+    for (var doc in snapshot.docs) {
+      tipos[doc.id] = doc['nome'];
+    }
+    return tipos;
+  }
+  Stream<QuerySnapshot> getQuadras() {
+    return FirebaseFirestore.instance.collection('quadras').snapshots();
   }
   Future<void> editQuadra(Map<String, dynamic> updates, String id) async{
     await _firestore.collection('quadras').doc(id).update(updates);
   }
+
 
   Future<void> setStatusQuadra(String id) async{
     bool status = await getStatusQuadra(id);

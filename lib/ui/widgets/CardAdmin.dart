@@ -19,8 +19,12 @@ class CardAdmin extends StatefulWidget {
 }
 
 class _CardAdminState extends State<CardAdmin> {
-  static const Color textColor = Color(0xFFFFFAFA); // Branco suave
+  static const Color textColor = Color(0xFF1A1A1A); // Branco suave
+  Color descColor = const Color.fromARGB(255, 58, 58, 58);
   static const Color cardColor = Color(0xFF4A90E2); // Azul principal
+  Color backgroundTela = const Color(0xFFF5F7FA);
+  Color uberBlack = const Color(0xFF1C1C1E);
+  Color iconeColor = const Color(0xFF1A1A1A);
 
   @override
   Widget build(BuildContext context) {
@@ -40,14 +44,14 @@ class _CardAdminState extends State<CardAdmin> {
                   Expanded(
                     child: Text(
                       widget.titulo,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
-                        color: textColor,
+                        color: uberBlack,
                       ),
                     ),
                   ),
-                  Icon(widget.icon, color: textColor, size: 30),
+                  Icon(widget.icon, color: const Color(0xFFF5F7FA), size: 30),
                 ],
               ),
               const SizedBox(height: 8),
@@ -57,13 +61,13 @@ class _CardAdminState extends State<CardAdmin> {
                   Expanded(
                     child: Text(
                       widget.text1,
-                      style: const TextStyle(
+                      style: TextStyle(
                         fontSize: 16,
-                        color: textColor,
+                        color: descColor,
                       ),
                     ),
                   ),
-                  const Icon(Icons.arrow_right_alt, color: Colors.white, size: 35),
+                  Icon(Icons.arrow_right_alt, color: iconeColor, size: 35),
                 ],
               ),
             ],

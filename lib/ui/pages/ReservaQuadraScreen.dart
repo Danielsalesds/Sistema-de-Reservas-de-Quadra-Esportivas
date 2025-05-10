@@ -1,3 +1,4 @@
+import 'package:clube/ui/widgets/CustomAppBar.dart';
 import 'package:flutter/material.dart';
 import 'package:clube/theme/theme.dart';
 
@@ -33,12 +34,18 @@ class _ReservaQuadraScreenState extends State<ReservaQuadraScreen> {
     final theme = Theme.of(context);
     final colors = theme.colorScheme;
 
+    Color baseColor = const Color(0xFF4A90E2);
+    Color cardColor2 = const Color(0xFF5A9BD4);
+    Color buttonColor = const Color(0xFF2F80ED);
+
+    Color backgroundTela = const Color(0xFFF5F7FA);
+    Color uberBlack = const Color(0xFF1C1C1E);
+    Color iconeColor = const Color(0xFF1A1A1A);
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Reservar quadra', style: TextStyle(color: colors.onPrimary)),
-        flexibleSpace: _buildAppBarGradient(),
-        actions: [_buildLogoutButton(colors)],
-      ),
+      backgroundColor: backgroundTela,
+      appBar: const CustomAppBar(title: 'Reservar Quadra'),
+
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

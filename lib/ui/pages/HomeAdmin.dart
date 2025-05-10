@@ -22,15 +22,20 @@ class HomeAdmin extends StatefulWidget{
 class HomeAdminState extends State<HomeAdmin>{
   final double padding_card_h = 14;
   final double padding_card_v = 5;
-  Color textColor = const Color(0xFFFFFAFA);//F5F5F5
-  Color textColor2 = const Color(0xFF333333);
+  Color textColor = const Color(0xFF1A1A1A);//F5F5F5
+  Color descColor = const Color(0xFF3A3A3A);
   Color baseColor = const Color(0xFF4A90E2);
   Color cardColor2 = const Color(0xFF5A9BD4);
-  Color buttonColoer = const Color(0xFF2F80ED);
+  Color buttonColor = const Color(0xFF2F80ED);
+
+  Color backgroundTela = const Color(0xFFF5F7FA);
+  Color uberBlack = const Color(0xFF1C1C1E);
+  Color iconeColor = const Color(0xFF1A1A1A);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: backgroundTela,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(40), // Altura menor que o padrão (56)
         child: AppBar(

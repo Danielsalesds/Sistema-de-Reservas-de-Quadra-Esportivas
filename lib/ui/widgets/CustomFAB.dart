@@ -12,11 +12,16 @@ class CustomFAB extends StatelessWidget{
   }) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    Color textColor = const Color(0xFFFFFAFA);//F5F5F5
+    Color textColor2 = const Color(0xFF333333);
+    Color baseColor = const Color(0xFF4A90E2);
+    Color cardColor2 = const Color(0xFF5A9BD4);
+    Color buttonColor = const Color(0xFF2F80ED);
       return FloatingActionButton(
         heroTag: null,
         onPressed: onPressed,
         elevation: 6,
-        backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+        backgroundColor: buttonColor,
         shape: ShapeBorder.lerp(
           const CircleBorder(),
           const StadiumBorder(),

@@ -6,6 +6,7 @@ import 'package:clube/ui/widgets/CardAdmin.dart';
 import 'package:clube/ui/widgets/CustomAppBar.dart';
 import 'package:clube/ui/widgets/CustomBottomBar.dart';
 import 'package:clube/ui/widgets/CustomFAB.dart';
+import 'package:clube/ui/widgets/boasVindasCarde.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -21,11 +22,24 @@ class HomeAdmin extends StatefulWidget{
 class HomeAdminState extends State<HomeAdmin>{
   final double padding_card_h = 14;
   final double padding_card_v = 5;
+  Color textColor = const Color(0xFFFFFAFA);//F5F5F5
+  Color textColor2 = const Color(0xFF333333);
+  Color baseColor = const Color(0xFF4A90E2);
+  Color cardColor2 = const Color(0xFF5A9BD4);
+  Color buttonColoer = const Color(0xFF2F80ED);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Home',),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(40), // Altura menor que o padrão (56)
+        child: AppBar(
+          backgroundColor: baseColor,
+          elevation: 0, // opcional: remove a sombra
+          title: null, // sem título
+          automaticallyImplyLeading: false, // opcional: remove ícone de voltar, se não quiser
+        ),
+      ),
       bottomNavigationBar: const CustomBottomBar(),
       floatingActionButton: CustomFAB(
           onPressed: (){
@@ -38,6 +52,7 @@ class HomeAdminState extends State<HomeAdmin>{
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Column(
         children: [
+          WelcomeCard(),
           const SizedBox(height: 5),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: padding_card_h, vertical: padding_card_v),
@@ -46,7 +61,6 @@ class HomeAdminState extends State<HomeAdmin>{
               text1: "Feche quadras para manutenção.",
               icon: Icons.lock_outline_rounded,
               onTap: () {
-                // Exemplo de rota
                 Navigator.push(
                   context,
                   MaterialPageRoute(builder: (context) => ListarQuadras()), // ou outra tela

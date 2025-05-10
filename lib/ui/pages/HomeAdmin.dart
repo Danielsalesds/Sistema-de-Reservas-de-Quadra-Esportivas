@@ -6,6 +6,7 @@ import 'package:clube/ui/widgets/CardAdmin.dart';
 import 'package:clube/ui/widgets/CustomAppBar.dart';
 import 'package:clube/ui/widgets/CustomBottomBar.dart';
 import 'package:clube/ui/widgets/CustomFAB.dart';
+import 'package:clube/ui/widgets/boasVindasCarde.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -19,13 +20,31 @@ class HomeAdmin extends StatefulWidget{
 
 }
 class HomeAdminState extends State<HomeAdmin>{
-  final double paddingCardH = 14;
-  final double paddingCardV = 5;
+  final double padding_card_h = 14;
+  final double padding_card_v = 5;
+  Color textColor = const Color(0xFF1A1A1A);//F5F5F5
+  Color descColor = const Color(0xFF3A3A3A);
+  Color baseColor = const Color(0xFF4A90E2);
+  Color cardColor2 = const Color(0xFF5A9BD4);
+  Color buttonColor = const Color(0xFF2F80ED);
+
+  Color backgroundTela = const Color(0xFFF5F7FA);
+  Color uberBlack = const Color(0xFF1C1C1E);
+  Color iconeColor = const Color(0xFF1A1A1A);
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Home',),
+      backgroundColor: backgroundTela,
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(40), // Altura menor que o padrão (56)
+        child: AppBar(
+          backgroundColor: baseColor,
+          elevation: 0, // opcional: remove a sombra
+          title: null, // sem título
+          automaticallyImplyLeading: false, // opcional: remove ícone de voltar, se não quiser
+        ),
+      ),
       bottomNavigationBar: const CustomBottomBar(),
       floatingActionButton: CustomFAB(
           onPressed: (){
@@ -38,6 +57,7 @@ class HomeAdminState extends State<HomeAdmin>{
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Column(
         children: [
+          WelcomeCard(),
           const SizedBox(height: 5),
           buildCardAdmin(
               context,

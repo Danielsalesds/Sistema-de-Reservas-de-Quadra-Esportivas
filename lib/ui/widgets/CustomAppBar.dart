@@ -13,13 +13,23 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
   Size get preferredSize => const Size.fromHeight(kToolbarHeight);
   @override
   Widget build(BuildContext context) {
+    Color textColor = const Color(0xFF1A1A1A);//F5F5F5
+    Color descColor = const Color(0xFF3A3A3A);
+    Color baseColor = const Color(0xFF4A90E2);
+    Color cardColor2 = const Color(0xFF5A9BD4);
+    Color buttonColor = const Color(0xFF2F80ED);
+
+    Color backgroundTela = const Color(0xFFF5F7FA);
+    Color uberBlack = const Color(0xFF1C1C1E);
+    Color iconeColor = const Color(0xFF1A1A1A);
 
     return AppBar(
-      title: Text(title, style: TextStyle(color: Theme.of(context).colorScheme.onPrimary,),),
+      backgroundColor: baseColor,
+      title: Text(title, style: TextStyle(color:textColor,),),
       flexibleSpace: Container(
-        decoration: const BoxDecoration(
+        decoration:  BoxDecoration(
             gradient: LinearGradient(
-              colors: [Color(0xFFA7C7E7),Color(0xFF6B9AC4)],
+              colors: [baseColor,baseColor],
               stops: [0, 1],
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
@@ -40,7 +50,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget{
               }
             },
             icon: const Icon(Icons.logout),
-            color: Theme.of(context).colorScheme.onPrimary)
+            color: iconeColor)
       ],
     );
   }

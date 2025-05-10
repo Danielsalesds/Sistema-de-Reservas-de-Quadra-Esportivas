@@ -12,8 +12,18 @@ class CustomBottomBar extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
+    Color textColor = const Color(0xFF1A1A1A);//F5F5F5
+    Color descColor = const Color(0xFF3A3A3A);
+    Color baseColor = const Color(0xFF4A90E2);
+    Color cardColor2 = const Color(0xFF5A9BD4);
+    Color buttonColor = const Color(0xFF2F80ED);
+
+    Color backgroundTela = const Color(0xFFF5F7FA);
+    Color uberBlack = const Color(0xFF1C1C1E);
+    Color iconeColor = const Color(0xFF1A1A1A);
+    
     return BottomAppBar(
-      color: Theme.of(context).colorScheme.primaryContainer,
+      color: baseColor,
       notchMargin: 6.0,
       shape: const AutomaticNotchedShape(
         RoundedRectangleBorder(
@@ -34,7 +44,7 @@ class CustomBottomBar extends StatelessWidget{
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context)=> const AuthChecker()));
                       },
-                      icon: const Icon(Icons.menu)),
+                      icon: Icon(Icons.menu, color: iconeColor,)),
                   const SizedBox(
                     width: 10,
                   ),
@@ -42,7 +52,7 @@ class CustomBottomBar extends StatelessWidget{
                       onPressed: () {
 
                       },
-                      icon: const Icon(Icons.sports_soccer_outlined)),
+                      icon:  Icon(Icons.sports_soccer_outlined, color: iconeColor,)),
                 ],
               ),
               Row(
@@ -51,7 +61,7 @@ class CustomBottomBar extends StatelessWidget{
                       onPressed: () {
 
                       },
-                      icon: const Icon(Icons.schedule_outlined)),
+                      icon:  Icon(Icons.schedule_outlined, color: iconeColor,)),
                   const SizedBox(
                     width: 10,
                   ),
@@ -59,7 +69,7 @@ class CustomBottomBar extends StatelessWidget{
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage()));
                       },
-                      icon: const Icon(Icons.person_outline,)),
+                      icon:  Icon(Icons.person_outline, color: iconeColor,)),
                 ],
               )
             ],

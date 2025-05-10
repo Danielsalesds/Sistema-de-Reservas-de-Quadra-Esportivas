@@ -38,7 +38,8 @@ class HomeAdminState extends State<HomeAdmin>{
       backgroundColor: backgroundTela,
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(40), // Altura menor que o padrão (56)
-        child: AppBar(
+        child:
+        AppBar(
           backgroundColor: baseColor,
           elevation: 0, // opcional: remove a sombra
           title: null, // sem título
@@ -88,7 +89,7 @@ class HomeAdminState extends State<HomeAdmin>{
 
   Padding buildCardAdmin(BuildContext context, String title, String text,IconData icon, Widget classe) {
     return Padding(
-          padding: EdgeInsets.symmetric(horizontal: paddingCardH, vertical: paddingCardV),
+          padding: EdgeInsets.symmetric(horizontal: padding_card_h, vertical: padding_card_v),
           child: CardAdmin(
             titulo: title,
             text1: text,

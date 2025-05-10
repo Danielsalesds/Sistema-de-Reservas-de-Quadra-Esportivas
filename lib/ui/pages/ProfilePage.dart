@@ -81,8 +81,7 @@ class ProfilePageState extends State<ProfilePage> {
         child: Column(
           children: [
             Padding(padding: const EdgeInsets.only(top: 30, bottom: 10),
-              child: Flexible(
-                child: Row(
+              child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Container(
@@ -92,7 +91,7 @@ class ProfilePageState extends State<ProfilePage> {
                       ),
                     ]
                 ),
-              ),
+
             ),
 
             Row(

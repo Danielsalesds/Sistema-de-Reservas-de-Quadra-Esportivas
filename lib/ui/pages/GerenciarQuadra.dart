@@ -12,12 +12,14 @@ import '../widgets/CustomFAB.dart';
 import '../widgets/CustomTextFormField.dart';
 import 'ReservaQuadraScreen.dart';
 
-class GerenciarQuadra extends StatefulWidget{
+class CadastrarQuadra extends StatefulWidget{
+  const CadastrarQuadra({super.key});
+
   @override
-  State<StatefulWidget> createState() => GerenciarQuadraState();
+  State<StatefulWidget> createState() => CadastrarQuadraState();
 }
 
-class GerenciarQuadraState extends State<GerenciarQuadra>{
+class CadastrarQuadraState extends State<CadastrarQuadra>{
   final capacidadeTextController = TextEditingController();
   final localizacaoTextController = TextEditingController();
   final nomeTextController = TextEditingController();

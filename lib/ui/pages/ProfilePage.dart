@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:clube/services/FirestoreService.dart';
+import 'package:clube/ui/pages/EditarSenha.dart';
 import 'package:clube/ui/widgets/CustomAppBar.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -38,10 +39,16 @@ class ProfilePageState extends State<ProfilePage> {
       this.telefone = telefone;
     });
   }
-  void push(){
+  void pushEditar(){
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => EditProfilePage()),
+    );
+  }
+  void pushSenha(){
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => EditarSenha()),
     );
   }
 
@@ -62,27 +69,6 @@ class ProfilePageState extends State<ProfilePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Padding(padding: const EdgeInsets.only(top: 20, left: 35, right: 35),
-            //   child:Row(
-            //     mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            //     children: [
-            //       Text("Perfil",
-            //         style: TextStyle(
-            //           color: Theme.of(context).colorScheme.primary,
-            //           fontWeight: FontWeight.bold,
-            //           fontSize: 26,
-            //         ),
-            //       ),
-            //       // IconButton(
-            //       //   onPressed: (){
-            //       //     Navigator.push(context, MaterialPageRoute(builder: (context)=>EditProfilePage()));
-            //       //   },
-            //       //   padding: EdgeInsets.all(10),
-            //       //   icon: Icon(Icons.edit,size: 30,color: Theme.of(context).colorScheme.primary),
-            //       // ),
-            //     ],
-            //   ),
-            // ),
             Padding(padding: const EdgeInsets.only(top: 30, bottom: 10),
               child: Flexible(
                 child: Row(
@@ -98,24 +84,17 @@ class ProfilePageState extends State<ProfilePage> {
               ),
             ),
 
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(nome,
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 26,
-                    ),
-                  ),
-                  // IconButton(
-                  //   onPressed: (){
-                  //     Navigator.push(context, MaterialPageRoute(builder: (context)=>EditProfilePage()));
-                  //   },
-                  //   icon: Icon(Icons.edit,size: 25,color: Theme.of(context).colorScheme.primary),
-                  // ),
-                ],
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+              Text(nome, style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 26,
+                ),
               ),
+              ],
+            ),
 
             const SizedBox(height: 5,),
             // buildPadding(context,"Nome"),
@@ -127,7 +106,13 @@ class ProfilePageState extends State<ProfilePage> {
             buildPadding(context,"Telefone"),
             buildCont(context,telefone,Icons.phone),
             const SizedBox(height: 30,),
-            CustomButton(height: 80, width: 200, text: "Editar perfil", onclick: push),
+            Row(
+              children: [
+                CustomButton(height: 80, width: 200, text: "Editar perfil", onclick: pushEditar),
+                CustomButton(height: 80, width: 200, text: "Editar senha", onclick: pushSenha),
+              ],
+            )
+
           ],
         ),
       ),

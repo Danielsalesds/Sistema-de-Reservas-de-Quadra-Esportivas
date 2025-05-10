@@ -44,24 +44,16 @@ class EditUserPageState extends State<EditUserPage> {
     try{
       await firebase.updateUserProfile({'nome':nomeTextController.text,
         'email':emailTextController.text, 'telefone': telefoneTextController.text}, widget.id);
-    }catch(e){
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString()))
-      );
-    }finally{
       if(!mounted) return;
       AwesomeDialog(
         context: context,
         dialogType: DialogType.success,
         animType: AnimType.scale,
-        title: "As informações do usuário ${widget.nome} foram atualizadas!",
+        title: "Sucesso!",
+        desc: "As informações do usuário ${widget.nome} foram atualizadas!",
         btnOkText: "Ok",
         btnOkColor: Theme.of(context).colorScheme.primary,
         btnOkOnPress: () {
-          // Navigator.push(
-          //   context,
-          //   MaterialPageRoute(builder: (context) => ProfilePage()),
-          // );
           Navigator.pop(context);
         },
         titleTextStyle: TextStyle(
@@ -74,8 +66,28 @@ class EditUserPageState extends State<EditUserPage> {
           color: Theme.of(context).colorScheme.tertiary,
         ),
       ).show();
+    }catch(e){
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.error,
+        animType: AnimType.scale,
+        title: "Erro!",
+        desc: e.toString(),
+        btnOkText: "Ok",
+        btnOkColor: Theme.of(context).colorScheme.primary,
+        btnOkOnPress: () {
+        },
+        titleTextStyle: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+            fontWeight: FontWeight.bold,
+            fontSize: 22
+        ),
+        descTextStyle: TextStyle(
+          fontSize: 16,
+          color: Theme.of(context).colorScheme.tertiary,
+        ),
+      ).show();
     }
-
   }
   @override
   Widget build(BuildContext context) {

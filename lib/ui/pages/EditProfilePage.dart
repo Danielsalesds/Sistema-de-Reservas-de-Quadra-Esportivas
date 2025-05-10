@@ -44,17 +44,13 @@ class EditProfilePageState extends State<EditProfilePage> {
     try{
       await firebase.updateProfile({'nome':nomeTextController.text,
         'email':emailTextController.text, 'telefone': telefoneTextController.text});
-    }catch(e){
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString()))
-      );
-    }finally{
       if(!mounted) return;
       AwesomeDialog(
         context: context,
         dialogType: DialogType.success,
         animType: AnimType.scale,
-        title: "Suas informações foram atualizadas!",
+        title: "Sucesso!",
+        desc: "Suas informações foram atualizadas!",
         btnOkText: "Ok",
         btnOkColor: Theme.of(context).colorScheme.primary,
         btnOkOnPress: () {
@@ -73,8 +69,28 @@ class EditProfilePageState extends State<EditProfilePage> {
           color: Theme.of(context).colorScheme.tertiary,
         ),
       ).show();
+    }catch(e){
+      AwesomeDialog(
+        context: context,
+        dialogType: DialogType.error,
+        animType: AnimType.scale,
+        title: "Erro!",
+        desc: e.toString(),
+        btnOkText: "Ok",
+        btnOkColor: Theme.of(context).colorScheme.primary,
+        btnOkOnPress: () {
+        },
+        titleTextStyle: TextStyle(
+            color: Theme.of(context).colorScheme.primary,
+            fontWeight: FontWeight.bold,
+            fontSize: 22
+        ),
+        descTextStyle: TextStyle(
+          fontSize: 16,
+          color: Theme.of(context).colorScheme.tertiary,
+        ),
+      ).show();
     }
-
   }
   @override
   Widget build(BuildContext context) {

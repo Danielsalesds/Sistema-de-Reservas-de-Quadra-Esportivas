@@ -28,9 +28,8 @@ class CardAdminState extends State<CardAdmin> {
       onTap: widget.onTap, 
       child: Card.filled(
         color: Theme.of(context).colorScheme.primaryContainer,
-        child: Row(
-          children: [
-            Padding(
+        child: Container(
+              width: double.infinity,
               padding: const EdgeInsets.all(16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,22 +59,14 @@ class CardAdminState extends State<CardAdmin> {
                           color: Theme.of(context).colorScheme.onPrimary,
                         ),
                       ),
-                      const SizedBox(width: 10,),
+                      const Spacer(),
                       const Icon(Icons.arrow_right_alt, color: Colors.white, size: 35)
                     ],
                   ),
                   const SizedBox(height: 5),
-                  // const Row(
-                  //   children: [
-                  //     SizedBox(width: 300,),
-                  //     Icon(Icons.arrow_right_alt, color: Colors.white, size: 40)
-                  //   ],
-                  // )
                 ],
               ),
             ),
-          ],
-        ),
       ),
     );
   }

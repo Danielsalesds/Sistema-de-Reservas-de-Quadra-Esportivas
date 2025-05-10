@@ -19,8 +19,8 @@ class HomeAdmin extends StatefulWidget{
 
 }
 class HomeAdminState extends State<HomeAdmin>{
-  final double padding_card_h = 14;
-  final double padding_card_v = 5;
+  final double paddingCardH = 14;
+  final double paddingCardV = 5;
 
   @override
   Widget build(BuildContext context) {
@@ -39,69 +39,49 @@ class HomeAdminState extends State<HomeAdmin>{
       body: Column(
         children: [
           const SizedBox(height: 5),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: padding_card_h, vertical: padding_card_v),
-            child: CardAdmin(
-              titulo: "Fechar quadras",
-              text1: "Feche quadras para manutenção.",
-              icon: Icons.lock_outline_rounded,
-              onTap: () {
-                // Exemplo de rota
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => ListarQuadras()), // ou outra tela
-                );
-              },
-            ),
+          buildCardAdmin(
+              context,
+              "Gerenciar quadras",
+              "Adicione, edite ou desative quadras.",
+              Icons.assignment,
+              ListarQuadras()
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: padding_card_h, vertical: padding_card_v),
-            child: CardAdmin(
-              titulo: "Gerenciar quadras",
-              text1: "Editar e criar novas quadras",
-              icon: Icons.lock_outline_rounded,
-              onTap: () {
-                // Exemplo de rota
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => GerenciarQuadra()), // ou outra tela
-                );
-              },
-            ),
+          buildCardAdmin(
+              context,
+              "Gerenciar associados",
+              "Adicione ou remova associados.",
+              Icons.person_add_outlined,
+              const ListarMembro()
           ),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: padding_card_h, vertical:padding_card_v),
-            child: CardAdmin(
-              titulo: "Gerenciar associados",
-              text1: "Adicione ou remova associados.",
-              icon: Icons.person_add_outlined,
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => const ListarMembro()),
-                );
-              },
-            ),
-          ),
-
-          Padding(
-              padding: EdgeInsets.symmetric(horizontal: padding_card_h,vertical:  padding_card_v),
-              child:CardAdmin(
-                titulo: "Fazer reserva",
-                text1: "Reserve quadras sem restrições.",
-                icon: Icons.sports_soccer_outlined,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
-                  );
-                },
-              ),
+          buildCardAdmin(
+              context,
+              "Fazer reserva",
+              "Reserve quadras sem restrições.",
+              Icons.sports_soccer_outlined,
+              const ReservaQuadraScreen()
           ),
         ],
       ),
 
     );
+  }
+
+  Padding buildCardAdmin(BuildContext context, String title, String text,IconData icon, Widget classe) {
+    return Padding(
+          padding: EdgeInsets.symmetric(horizontal: paddingCardH, vertical: paddingCardV),
+          child: CardAdmin(
+            titulo: title,
+            text1: text,
+            icon: icon,
+            onTap: () {
+              // Exemplo de rota
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => classe), // ou outra tela
+              );
+            },
+          ),
+        );
   }
 
 }

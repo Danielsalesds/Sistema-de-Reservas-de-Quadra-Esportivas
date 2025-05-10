@@ -41,12 +41,19 @@ class CadastroMembroPageState extends State<CadastroMembro>{
     setState(() {
       _isLoading = true;
     });
-
+    String createPass(){
+      String nome = nomeTextController.text;
+      for(int i=0;i<nome.length;i++){
+        if(nome[i]==' '){
+          return '${nome.substring(0,i)}@Aa123';
+        }
+      }
+      return '$nome@Aa123';
+    }
     try{
-       //final adminUid = FirebaseAuth.instance.currentUser!.uid; // <- Salva o UID do admin
-      //await authService.signUp(emailTextController.text, senhaTextController.text);
+          String senha = createPass();
           await firestore.createMembro(nomeTextController.text,
-          emailTextController.text, telefoneTextController.text, _selecionado, senhaTextController.text);
+          emailTextController.text, telefoneTextController.text, _selecionado,senha);
           AwesomeDialog(
             context: context,
             dialogType: DialogType.success,
@@ -89,18 +96,10 @@ class CadastroMembroPageState extends State<CadastroMembro>{
           color: Theme.of(context).colorScheme.tertiary,
         ),
       ).show();
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //     SnackBar(content: Text(e.toString()))
-      // );
     } finally {
       setState(() {
         _isLoading = false;
       });
-      // nomeTextController.clear();
-      // telefoneTextController.clear();
-      // emailTextController.clear();
-      // senhaTextController.clear();
-      // repSenhaTextController.clear();
     }
   }
 
@@ -153,33 +152,6 @@ class CadastroMembroPageState extends State<CadastroMembro>{
                     Expanded(child: CustomTextFormField(label: "Email", controller: emailTextController), ),
                   ],
                 ),
-                const SizedBox(height: 10,),
-                Row(
-                  children: [
-                    Expanded(child: CustomPasswordFormField(labelText: "Senha", controller:senhaTextController),),
-                  ],
-                ),
-                const SizedBox(height: 10,),
-
-                IconButton.filledTonal(
-                  onPressed: (){
-                    int tamanho = 8;
-                    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-                    final random = Random();
-                    String senha = List.generate(tamanho, (index) {
-                      return caracteres[random.nextInt(caracteres.length)];
-                    }).join();
-                    senhaTextController.text = senha;
-                  },
-                  color: Theme.of(context).colorScheme.primaryContainer,
-                  padding: EdgeInsets.all(10),
-                  icon: Icon(Icons.shuffle,size: 30,color: Theme.of(context).colorScheme.primary),
-                ),
-                // Row(
-                //   children: [
-                //     Expanded(child: CustomPasswordFormField(labelText: "Confirmar senha", controller: repSenhaTextController,),),
-                //   ],
-                // ),
                 const SizedBox(height: 10,),
                 Row(mainAxisAlignment: MainAxisAlignment.center,
                   children: [

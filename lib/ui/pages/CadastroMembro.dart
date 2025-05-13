@@ -1,17 +1,15 @@
 
-import 'dart:math';
-
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:clube/services/FirestoreService.dart';
+import 'package:clube/ui/widgets/ErroDialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/CustomAppBar.dart';
 import '../widgets/CustomButton.dart';
-import '../widgets/CustomPasswordFormField.dart';
 import '../widgets/CustomTelFormField.dart';
 import '../widgets/CustomTextFormField.dart';
+import '../widgets/SucessDialog.dart';
 
 class CadastroMembro extends StatefulWidget{
   
@@ -30,10 +28,17 @@ class CadastroMembroPageState extends State<CadastroMembro>{
   final telefoneTextController = TextEditingController();
 
   String _selecionado = 'Membro';
-  //função fazer login
+  String createPass(String nome){
+    for(int i=0;i<nome.length;i++){
+      if(nome[i]==' '){
+        return '${nome.substring(0,i)}@Aa123';
+      }
+    }
+    return '$nome@Aa123';
+  }
   void signUp() async{
     if (nomeTextController.text.isEmpty || emailTextController.text.isEmpty || telefoneTextController.text.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text("Preencha todos os campos.")));
+      showErrorDialog(context, 'Preencha todos os campos!');
       return;
     }
 
@@ -41,61 +46,15 @@ class CadastroMembroPageState extends State<CadastroMembro>{
     setState(() {
       _isLoading = true;
     });
-    String createPass(){
-      String nome = nomeTextController.text;
-      for(int i=0;i<nome.length;i++){
-        if(nome[i]==' '){
-          return '${nome.substring(0,i)}@Aa123';
-        }
-      }
-      return '$nome@Aa123';
-    }
     try{
-          String senha = createPass();
+          String senha = createPass(nomeTextController.text);
+          print(senha);
           await firestore.createMembro(nomeTextController.text,
           emailTextController.text, telefoneTextController.text, _selecionado,senha);
-          AwesomeDialog(
-            context: context,
-            dialogType: DialogType.success,
-            animType: AnimType.scale,
-            title: "Sucesso!",
-            desc:"O usuário ${nomeTextController.text} foi cadastrado com sucesso",
-            btnOkText: "Ok",
-            btnOkColor: Theme.of(context).colorScheme.primary,
-            btnOkOnPress: () {
-              Navigator.pop(context);
-            },
-            titleTextStyle: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
-                fontWeight: FontWeight.bold,
-                fontSize: 22
-            ),
-            descTextStyle: TextStyle(
-              fontSize: 16,
-              color: Theme.of(context).colorScheme.tertiary,
-            ),
-          ).show();
-    }catch(e){
-      AwesomeDialog(
-        context: context,
-        dialogType: DialogType.error,
-        animType: AnimType.scale,
-        title: "Erro!",
-        desc: e.toString(),
-        btnOkText: "Ok",
-        btnOkColor: Theme.of(context).colorScheme.primary,
-        btnOkOnPress: () {
-        },
-        titleTextStyle: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-            fontWeight: FontWeight.bold,
-            fontSize: 22
-        ),
-        descTextStyle: TextStyle(
-          fontSize: 16,
-          color: Theme.of(context).colorScheme.tertiary,
-        ),
-      ).show();
+          if (!mounted) return;
+          showSucessDialog(context,"O usuário ${nomeTextController.text} foi cadastrado com sucesso");
+    }catch (e){
+      showErrorDialog(context, e.toString());
     } finally {
       setState(() {
         _isLoading = false;
@@ -185,19 +144,6 @@ class CadastroMembroPageState extends State<CadastroMembro>{
                 const SizedBox(height: 30,),
                 CustomButton(height: 85, width: 250, text: "Cadastrar", onclick: signUp),
                 const SizedBox(height: 20,),
-                
-                // Align(
-                //   child:TextButton(
-                //     onPressed: (){Navigator.pop(context);},
-                //     child: Text("<< Voltar >>",
-                //       style: TextStyle(
-                //         fontSize: 16,
-                //         color: Theme.of(context).colorScheme.primary,
-                //         fontWeight: FontWeight.bold,
-                //       )
-                //       ,)
-                //     ,),
-                // ),
               ],
             ),
           )

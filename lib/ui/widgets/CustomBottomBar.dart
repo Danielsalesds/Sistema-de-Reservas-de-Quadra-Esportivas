@@ -2,28 +2,16 @@ import 'package:clube/ui/pages/ProfilePage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../pages/AuthChecker.dart';
-import '../pages/HomeMembro2.dart';
-import '../pages/ReservaQuadraScreen.dart';
-import '../pages/home_membro.dart';
+import '../../theme/AppColors.dart';
 
 class CustomBottomBar extends StatelessWidget{
   const CustomBottomBar({super.key});
 
   @override
   Widget build(BuildContext context) {
-    Color textColor = const Color(0xFF1A1A1A);//F5F5F5
-    Color descColor = const Color(0xFF3A3A3A);
-    Color baseColor = const Color(0xFF4A90E2);
-    Color cardColor2 = const Color(0xFF5A9BD4);
-    Color buttonColor = const Color(0xFF2F80ED);
-
-    Color backgroundTela = const Color(0xFFF5F7FA);
-    Color uberBlack = const Color(0xFF1C1C1E);
-    Color iconeColor = const Color(0xFF1A1A1A);
-    
+    final colors = Theme.of(context).extension<AppColors>()!;
     return BottomAppBar(
-      color: baseColor,
+      color: colors.cardColor,
       notchMargin: 6.0,
       shape: const AutomaticNotchedShape(
         RoundedRectangleBorder(
@@ -42,9 +30,9 @@ class CustomBottomBar extends StatelessWidget{
                 children: [
                   IconButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const AuthChecker()));
+                       Navigator.pushNamed(context, '/');
                       },
-                      icon: Icon(Icons.menu, color: iconeColor,)),
+                      icon: Icon(Icons.menu, color: colors.iconColor,)),
                   const SizedBox(
                     width: 10,
                   ),
@@ -52,7 +40,7 @@ class CustomBottomBar extends StatelessWidget{
                       onPressed: () {
 
                       },
-                      icon:  Icon(Icons.sports_soccer_outlined, color: iconeColor,)),
+                      icon:  Icon(Icons.sports_soccer_outlined, color: colors.iconColor,)),
                 ],
               ),
               Row(
@@ -61,7 +49,7 @@ class CustomBottomBar extends StatelessWidget{
                       onPressed: () {
 
                       },
-                      icon:  Icon(Icons.schedule_outlined, color: iconeColor,)),
+                      icon:  Icon(Icons.schedule_outlined, color: colors.iconColor,)),
                   const SizedBox(
                     width: 10,
                   ),
@@ -69,7 +57,7 @@ class CustomBottomBar extends StatelessWidget{
                       onPressed: () {
                         Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage()));
                       },
-                      icon:  Icon(Icons.person_outline, color: iconeColor,)),
+                      icon:  Icon(Icons.person_outline, color: colors.iconColor,)),
                 ],
               )
             ],

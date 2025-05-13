@@ -7,7 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/FirestoreService.dart';
-import '../widgets/AddMembroButton.dart';
+import '../../theme/AppColors.dart';
 import '../widgets/CustomBottomBar.dart';
 import '../widgets/CustomFAB.dart';
 import '../widgets/CustomAlert.dart';
@@ -22,6 +22,7 @@ class ListarQuadras extends StatefulWidget{
 
 class ListarQuadrasState extends State<ListarQuadras>{
   Map<String, String> tipos = {};
+  bool isReady =  false;
   @override
   void initState() {
 
@@ -33,23 +34,16 @@ class ListarQuadrasState extends State<ListarQuadras>{
     final Map<String, String> temp = await firestore.getAllTipoQuadraMap();
     setState(() {
       tipos = temp;
+      isReady = !isReady;
     });
   }
   @override
   Widget build(BuildContext context) {
     final firestore = Provider.of<FirestoreService>(context, listen: false);
-    Color textColor = const Color(0xFF1A1A1A);//F5F5F5
-    Color descColor = const Color(0xFF3A3A3A);
-    Color baseColor = const Color(0xFF4A90E2);
-    Color cardColor2 = const Color(0xFF5A9BD4);
-    Color buttonColor = const Color(0xFF2F80ED);
-
-    Color backgroundTela = const Color(0xFFF5F7FA);
-    Color uberBlack = const Color(0xFF1C1C1E);
-    Color iconeColor = const Color(0xFF1A1A1A);
+    final colors = Theme.of(context).extension<AppColors>()!;
 
     return Scaffold(
-      backgroundColor: backgroundTela,
+      backgroundColor: colors.backgroundColor,
       appBar: const CustomAppBar(title: 'Fechar quadras'),
       bottomNavigationBar: const CustomBottomBar(),
       floatingActionButton: CustomFAB(
@@ -62,17 +56,25 @@ class ListarQuadrasState extends State<ListarQuadras>{
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body:
+
         Stack(
           children: [
             StreamBuilder(
               stream: firestore.getQuadras(),
               builder: (context, snapshot) {
-                if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
+                if (!snapshot.hasData || !isReady) return const Center(child: CircularProgressIndicator());
 
                 final quadras = snapshot.data!.docs;
 
                 if (quadras.isEmpty) return const Center(child: Text('Nenhuma quadra cadastrada.'));
-
+                // Ordena a lista de quadras, primeiro pelo Status depois pelo tipo e por último pelo nome.
+                quadras.sort((a,b){
+                  int compareStatus = (b['status']? 1 : 0).compareTo(a['status'] ? 1 : 0);
+                  if (compareStatus != 0) return compareStatus;
+                  int compareTipo = tipos[a['tipoQuadraId']]!.toLowerCase().compareTo(tipos[a['tipoQuadraId']]!.toLowerCase());
+                  if (compareTipo != 0) return compareTipo;
+                  return a['nome'].toLowerCase().compareTo(b['nome'].toLowerCase());
+                });
                 return ListView.builder(
                   itemCount: quadras.length,
                   itemBuilder: (context, index) {
@@ -83,21 +85,25 @@ class ListarQuadrasState extends State<ListarQuadras>{
                     final nome = doc['nome'];
 
                     return Card(
-                      color: status ? Colors.green.shade100 : Colors.red.shade100,
+                      color: status ? colors.activeColor: colors.inactiveColor,
                       margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                       child: ListTile(
-                        title: Text(nome),
-                        subtitle: Text('Tipo: $nomeTipo'),
+                        title: Text(nome,
+                            style:TextStyle(
+                              color: colors.textColor
+                            ),
+                        ),
+                        subtitle: Text('Tipo: $nomeTipo',
+                          style: TextStyle(color: colors.descColor),),
                         trailing: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              icon: const Icon(Icons.edit, color: Colors.orange),
+                              icon: Icon(Icons.edit, color: colors.iconColor),
                               onPressed: () {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context)=>EditarQuadras(
                                       nome: nome ?? '',
-                                      localizacao: doc['localizacao'] ?? '',
                                       capacidade: doc['capacidade'] ?? '',
                                       status: status,
                                       tipoQuadra: doc['tipoQuadraId'] ?? '',
@@ -108,7 +114,7 @@ class ListarQuadrasState extends State<ListarQuadras>{
                               },
                             ),
                             IconButton(
-                              icon: Icon(status?Icons.block:Icons.check_circle, color: Colors.red),
+                              icon: Icon(status?Icons.block:Icons.check_circle, color: colors.iconColor),
                               onPressed: () async {
                                 String desc = status? 'Tem certeza que deseja desativar essa quadra?' : 'Tem certeza que deseja ativar essa quadra?';
                                 AwesomeDialog(
@@ -118,7 +124,7 @@ class ListarQuadrasState extends State<ListarQuadras>{
                                   title: "Alerta!",
                                   desc:desc,
                                   btnOkText: "Sim",
-                                  btnOkColor: Theme.of(context).colorScheme.primaryContainer,
+                                  btnOkColor: colors.okBtnColor,
                                   btnOkOnPress: () async {
                                     await firestore.setStatusQuadra(doc.id);
                                     String msg = status? 'Quadra desativada com sucesso!' : 'Quadra está ativa';
@@ -126,10 +132,10 @@ class ListarQuadrasState extends State<ListarQuadras>{
                                       context: context,
                                       mensagem: msg,
                                       cor: status? Colors.red : Colors.green,
-                                      alinhamento: Alignment.topCenter, // ou bottomCenter, center...
+                                      alinhamento: Alignment.topCenter,
                                     );
                                   },
-                                  btnCancelColor: Theme.of(context).colorScheme.errorContainer,
+                                  btnCancelColor: colors.cancelBtnColor,
                                   btnCancelText: "Não",
                                   btnCancelOnPress: (){
                                   },
@@ -159,10 +165,10 @@ class ListarQuadrasState extends State<ListarQuadras>{
               right: 16,
               child: FloatingActionButton(
                 onPressed:()=> Navigator.push(context, MaterialPageRoute(builder: (context)=>const CadastrarQuadra())),
-                backgroundColor: Theme.of(context).colorScheme.primaryContainer,
+                backgroundColor: colors.cardColor,
                 shape: const CircleBorder(),
                 elevation: 6,
-                child: const Icon(Icons.add, color: Color(0xFFEFF0F1)),
+                child: Icon(Icons.sports_volleyball, color: colors.textColor),
               )
             ),
           ],

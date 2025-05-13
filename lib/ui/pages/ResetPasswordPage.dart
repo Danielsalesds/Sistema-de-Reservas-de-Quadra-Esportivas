@@ -1,11 +1,13 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:clube/services/AuthService.dart';
 import 'package:clube/ui/widgets/CustomButton.dart';
 import 'package:clube/ui/widgets/CustomTextFormField.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:clube/ui/widgets/ErroDialog.dart';
+import 'package:clube/ui/widgets/SucessDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
+
+import '../../theme/AppColors.dart';
 
 class ResetPasswordPage extends StatefulWidget{
   const ResetPasswordPage({super.key});
@@ -23,41 +25,24 @@ class ResetPasswordPageState extends State<ResetPasswordPage> {
       final auth = Provider.of<AuthService>(context,listen:false);
       await auth.resetPassword(emailTextController.text);
       if(!mounted) return;
-      AwesomeDialog(
-        context: context,
-        dialogType: DialogType.success,
-        animType: AnimType.scale,
-        title: "Email enviado!",
-        desc:  "Acesse seu email para redefinir sua senha.",
-        btnOkText: "Entendi",
-        btnOkColor: Theme.of(context).colorScheme.primary,
-        btnOkOnPress: () {
-          Navigator.pop(context);
-        },
-        titleTextStyle: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-            fontWeight: FontWeight.bold,
-            fontSize: 22
-        ),
-        descTextStyle: TextStyle(
-          fontSize: 16,
-          color: Theme.of(context).colorScheme.tertiary,
-        ),
-      ).show();
+      showSucessDialog(context,"Acesse seu email para redefinir sua senha." );
     }catch(e){
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString()))
-      );
+      showErrorDialog(context, e.toString());
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
     return Scaffold(
+      appBar: AppBar(
+          backgroundColor: colors.cardColor,
+          elevation: 0,
+      ),
       body: SingleChildScrollView(child: Column(
         children: [
           Padding(padding: const EdgeInsets.symmetric(vertical: 70),
-            child: Flexible(child: Row(
+            child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
@@ -66,7 +51,6 @@ class ResetPasswordPageState extends State<ResetPasswordPage> {
                     ),child:SvgPicture.asset('assets/forgot-password.svg', width: 250,height: 200),
                   ),
                 ]
-            ),
             ),
           ),
           Text('Esqueceu a senha?',

@@ -1,11 +1,11 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:clube/services/FirestoreService.dart';
 import 'package:clube/ui/pages/ProfilePage.dart';
 import 'package:clube/ui/widgets/CustomAppBar.dart';
+import 'package:clube/ui/widgets/ErroDialog.dart';
+import 'package:clube/ui/widgets/SucessDialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../widgets/CustomBottomBar.dart';
 import '../widgets/CustomButton.dart';
 import '../widgets/CustomFAB.dart';
@@ -45,55 +45,20 @@ class EditProfilePageState extends State<EditProfilePage> {
       await firebase.updateProfile({'nome':nomeTextController.text,
         'email':emailTextController.text, 'telefone': telefoneTextController.text});
       if(!mounted) return;
-      AwesomeDialog(
-        context: context,
-        dialogType: DialogType.success,
-        animType: AnimType.scale,
-        title: "Sucesso!",
-        desc: "Suas informações foram atualizadas!",
-        btnOkText: "Ok",
-        btnOkColor: Theme.of(context).colorScheme.primary,
-        btnOkOnPress: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ProfilePage()),
-          );
-        },
-        titleTextStyle: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-            fontWeight: FontWeight.bold,
-            fontSize: 26
-        ),
-        descTextStyle: TextStyle(
-          fontSize: 16,
-          color: Theme.of(context).colorScheme.tertiary,
-        ),
-      ).show();
+      void func(){
+
+      }
+      showSucessDialog2(context, "Suas informações foram atualizadas!",(){
+      Navigator.push( context, MaterialPageRoute(builder: (context) => ProfilePage()),
+      );
+      });
     }catch(e){
-      AwesomeDialog(
-        context: context,
-        dialogType: DialogType.error,
-        animType: AnimType.scale,
-        title: "Erro!",
-        desc: e.toString(),
-        btnOkText: "Ok",
-        btnOkColor: Theme.of(context).colorScheme.primary,
-        btnOkOnPress: () {
-        },
-        titleTextStyle: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-            fontWeight: FontWeight.bold,
-            fontSize: 22
-        ),
-        descTextStyle: TextStyle(
-          fontSize: 16,
-          color: Theme.of(context).colorScheme.tertiary,
-        ),
-      ).show();
+      showErrorDialog(context, e.toString());
     }
   }
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: const CustomAppBar(title: 'Perfil'),
       bottomNavigationBar: const CustomBottomBar(),

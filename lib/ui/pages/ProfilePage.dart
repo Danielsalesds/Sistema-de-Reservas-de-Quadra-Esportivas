@@ -1,4 +1,3 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:clube/services/FirestoreService.dart';
 import 'package:clube/ui/pages/EditarSenha.dart';
 import 'package:clube/ui/widgets/CustomAppBar.dart';
@@ -7,11 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../theme/AppColors.dart';
 import '../widgets/CustomBottomBar.dart';
 import '../widgets/CustomButton.dart';
 import '../widgets/CustomFAB.dart';
-import '../widgets/CustomTelFormField.dart';
-import '../widgets/CustomTextFormField.dart';
 import 'EditProfilePage.dart';
 import 'ReservaQuadraScreen.dart';
 
@@ -54,18 +52,11 @@ class ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    Color textColor = const Color(0xFF1A1A1A);//F5F5F5
-    Color descColor = const Color(0xFF3A3A3A);
-    Color baseColor = const Color(0xFF4A90E2);
-    Color cardColor2 = const Color(0xFF5A9BD4);
-    Color buttonColor = const Color(0xFF2F80ED);
+    final colors = Theme.of(context).extension<AppColors>()!;
 
-    Color backgroundTela = const Color(0xFFF5F7FA);
-    Color uberBlack = const Color(0xFF1C1C1E);
-    Color iconeColor = const Color(0xFF1A1A1A);
     
     return Scaffold(
-      backgroundColor: backgroundTela,
+      backgroundColor: colors.backgroundColor,
       appBar: const CustomAppBar(title: 'Perfil'),
       bottomNavigationBar: const CustomBottomBar(),
       floatingActionButton: CustomFAB(
@@ -98,7 +89,7 @@ class ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
               Text(nome, style: TextStyle(
-                  color: Theme.of(context).colorScheme.primary,
+                  color: colors.baseColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 26,
                 ),

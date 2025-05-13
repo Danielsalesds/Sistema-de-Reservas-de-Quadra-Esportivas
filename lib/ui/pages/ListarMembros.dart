@@ -1,14 +1,13 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:clube/ui/pages/EditUser.dart';
 import 'package:clube/ui/widgets/AddMembroButton.dart';
-import 'package:clube/ui/widgets/AletMessage.dart';
 import 'package:clube/ui/widgets/CustomAppBar.dart';
 import 'package:clube/ui/widgets/CustomBottomBar.dart';
 import 'package:clube/ui/widgets/CustomAlert.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../services/FirestoreService.dart';
+import '../../theme/AppColors.dart';
 import '../widgets/CustomFAB.dart';
 import 'ReservaQuadraScreen.dart';
 
@@ -24,9 +23,7 @@ class _ListarMembroState extends State<ListarMembro> {
   @override
   Widget build(BuildContext context) {
     final firestore = Provider.of<FirestoreService>(context, listen: false);
-    final user = FirebaseAuth.instance.currentUser;
-    final uid = user?.uid;
-
+    final colors = Theme.of(context).extension<AppColors>()!;
     return Scaffold(
       appBar: const CustomAppBar(title: 'Gerenciar Membros',),
       bottomNavigationBar: const CustomBottomBar(),
@@ -45,8 +42,6 @@ class _ListarMembroState extends State<ListarMembro> {
           StreamBuilder(
             stream: firestore.getMembrosAtivos(),
             builder: (context, snapshot) {
-              // print("UID do admin logado: $uid");
-
               if (!snapshot.hasData) return const Center(child: CircularProgressIndicator());
 
               final membros = snapshot.data!.docs;
@@ -69,7 +64,7 @@ class _ListarMembroState extends State<ListarMembro> {
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             IconButton(
-                              icon: const Icon(Icons.edit, color: Colors.orange),
+                              icon: Icon(Icons.edit, color: colors.textColor),
                               onPressed: () {
                                 Navigator.push(context,
                                     MaterialPageRoute(builder: (context)=>EditUserPage(
@@ -84,7 +79,7 @@ class _ListarMembroState extends State<ListarMembro> {
                               },
                             ),
                             IconButton(
-                              icon: const Icon(Icons.delete, color: Colors.red),
+                              icon:Icon(Icons.delete, color: colors.textColor),
                               onPressed: () async {
                                 AwesomeDialog(
                                   context: context,
@@ -93,7 +88,7 @@ class _ListarMembroState extends State<ListarMembro> {
                                   title: "Alerta!",
                                   desc:"Tem certeza que deseja desativar este usuário?",
                                   btnOkText: "SIM",
-                                  btnOkColor: Theme.of(context).colorScheme.primaryContainer,
+                                  btnOkColor:colors.okBtnColor,
                                   btnOkOnPress: () async {
                                     await firestore.atualizarMembro(doc.id, {
                                       'ativo': false,
@@ -101,11 +96,11 @@ class _ListarMembroState extends State<ListarMembro> {
                                     AlertaFlutuante.mostrar(
                                       context: context,
                                       mensagem: 'Membro desativado com sucesso!',
-                                      cor: Colors.red,
+                                      cor: colors.cancelBtnColor,
                                       alinhamento: Alignment.topCenter, // ou bottomCenter, center...
                                     );
                                   },
-                                  btnCancelColor: Theme.of(context).colorScheme.errorContainer,
+                                  btnCancelColor: colors.cancelBtnColor,
                                   btnCancelText: "NÃO",
                                   btnCancelOnPress: (){
                                   },

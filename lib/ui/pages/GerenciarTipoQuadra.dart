@@ -1,4 +1,6 @@
 import 'package:clube/ui/widgets/CustomAppBar.dart';
+import 'package:clube/ui/widgets/ErroDialog.dart';
+import 'package:clube/ui/widgets/SucessDialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -21,8 +23,9 @@ class GerenciarTipoQuadraState extends State<GerenciarTipoQuadra>{
     final firestore = Provider.of<FirestoreService>(context, listen:false);
     try{
       firestore.createTipoQuadra(nomeTextController.text);
+      showSucessDialog(context, "Quadra criada com sucesso!");
     }catch (e){
-      throw Exception(e);
+      showErrorDialog(context, e.toString());
     }
   }
   @override

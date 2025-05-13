@@ -1,7 +1,8 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clube/ui/widgets/CustomAppBar.dart';
 import 'package:clube/ui/widgets/CustomBottomBar.dart';
+import 'package:clube/ui/widgets/ErroDialog.dart';
+import 'package:clube/ui/widgets/SucessDialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -13,12 +14,12 @@ import '../widgets/CustomTextFormField.dart';
 import 'ReservaQuadraScreen.dart';
 
 class EditarQuadras extends StatefulWidget{
-  final String nome, localizacao, tipoQuadra, id;
+  final String nome,tipoQuadra, id;
   final int capacidade;
   final bool status;
 
   const EditarQuadras({super.key, required this.nome,
-    required this.localizacao, required this.tipoQuadra, required this.capacidade, required this.status, required this.id});
+    required this.tipoQuadra, required this.capacidade, required this.status, required this.id});
   @override
   State<StatefulWidget> createState() => EditarQuadrasState();
 
@@ -26,7 +27,6 @@ class EditarQuadras extends StatefulWidget{
 
 class EditarQuadrasState extends State<EditarQuadras>{
   final nomeTextController = TextEditingController();
-  final localizacaoTextController = TextEditingController();
   final capacidadeTextController = TextEditingController();
   String? tipoQuadraId;
   bool status = false;
@@ -39,7 +39,6 @@ class EditarQuadrasState extends State<EditarQuadras>{
   void init(){
     setState(() {
       nomeTextController.text = widget.nome;
-      localizacaoTextController.text = widget.localizacao;
       capacidadeTextController.text = widget.capacidade.toString();
       status =  widget.status;
       tipoQuadraId = widget.tipoQuadra;
@@ -50,53 +49,13 @@ class EditarQuadrasState extends State<EditarQuadras>{
       final firestore = Provider.of<FirestoreService>(context, listen:false);
       firestore.editQuadra({
         'nome':nomeTextController.text,
-        'localizacao':localizacaoTextController.text,
         'capacidade':int.parse(capacidadeTextController.text),
         'tipoQuadraId':tipoQuadraId,
         'status':status,
       },widget.id);
-      AwesomeDialog(
-        context: context,
-        dialogType: DialogType.success,
-        animType: AnimType.scale,
-        title: "Sucesso!",
-        desc:"A quadra foi editada!",
-        btnOkText: "Ok",
-        btnOkColor: Theme.of(context).colorScheme.primary,
-        btnOkOnPress: () {
-          Navigator.pop(context);
-        },
-        titleTextStyle: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-            fontWeight: FontWeight.bold,
-            fontSize: 22
-        ),
-        descTextStyle: TextStyle(
-          fontSize: 16,
-          color: Theme.of(context).colorScheme.tertiary,
-        ),
-      ).show();
+      showSucessDialog(context,"A quadra foi editada!");
     }catch(e){
-      AwesomeDialog(
-        context: context,
-        dialogType: DialogType.error,
-        animType: AnimType.scale,
-        title: "Erro!",
-        desc: e.toString(),
-        btnOkText: "Ok",
-        btnOkColor: Theme.of(context).colorScheme.primary,
-        btnOkOnPress: () {
-        },
-        titleTextStyle: TextStyle(
-            color: Theme.of(context).colorScheme.primary,
-            fontWeight: FontWeight.bold,
-            fontSize: 22
-        ),
-        descTextStyle: TextStyle(
-          fontSize: 16,
-          color: Theme.of(context).colorScheme.tertiary,
-        ),
-      ).show();
+      showErrorDialog(context, e.toString());
     }
   }
   @override
@@ -147,12 +106,6 @@ class EditarQuadrasState extends State<EditarQuadras>{
             Row(
               children: [
                 Expanded(child: CustomTextFormField(label: "Nome", controller: nomeTextController,),),
-              ],
-            ),
-            const SizedBox(height: 10,),
-            Row(
-              children: [
-                Expanded(child: CustomTextFormField(label: "Localização", controller: localizacaoTextController,),),
               ],
             ),
             const SizedBox(height: 10,),

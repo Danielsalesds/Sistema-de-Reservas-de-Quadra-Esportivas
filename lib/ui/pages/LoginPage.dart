@@ -1,14 +1,14 @@
 import 'package:clube/services/AuthService.dart';
-import 'package:clube/ui/pages/HomeAdmin.dart';
 import 'package:clube/ui/pages/ResetPasswordPage.dart';
 import 'package:clube/ui/widgets/CustomButton.dart';
 import 'package:clube/ui/widgets/CustomPasswordFormField.dart';
 import 'package:clube/ui/widgets/CustomTextFormField.dart';
+import 'package:clube/ui/widgets/ErroDialog.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'RegisterPage.dart';
 
 class LoginPage extends StatefulWidget{
   const LoginPage({super.key, this.onTap});
@@ -26,10 +26,40 @@ class LoginPageState extends State<LoginPage>{
     final auth = Provider.of<AuthService>(context, listen: false);
     try{
       await auth.signIn(emailTextController.value.text, senhaTextController.value.text);
+    }on FirebaseAuthException catch (e) {
+      print("------ERROR: $e");
+      if(!mounted) return;
+      String error;
+      switch (e.code) {
+        case 'invalid-email':
+          error = 'O e-mail fornecido não é válido.';
+          break;
+        case 'user-disabled':
+          error = 'Esta conta foi desativada.';
+          break;
+        case 'user-not-found':
+          error = 'Nenhuma conta encontrada para este e-mail.';
+          break;
+        case 'wrong-password':
+          error = 'Senha incorreta. Tente novamente.';
+          break;
+        case 'too-many-requests':
+          error = 'Muitas tentativas falhas. Tente novamente mais tarde.';
+          break;
+        case 'network-request-failed':
+          error = 'Falha na conexão com a internet. Verifique sua rede.';
+          break;
+        case 'invalid-credential':
+          error = 'A credencial fornecida está incorreta ou expirada.';
+          break;
+        default:
+          error = 'Erro desconhecido. Tente novamente mais tarde.';
+          break;
+      }
+      showErrorDialog(context, error);
     }catch(e){
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text(e.toString()))
-      );
+      if (!mounted) return;
+      showErrorDialog(context, 'Erro desconhecido. Tente novamente mais tarde.');
     }
   }
   
@@ -83,24 +113,6 @@ class LoginPageState extends State<LoginPage>{
           const SizedBox(height: 10,),
           CustomButton(height: 85, width: 250, text: "Entrar", onclick: signIn),
           const SizedBox(height: 30,),
-          // Text("Não possui uma conta?",
-          //   style: TextStyle(
-          //     fontSize: 16,
-          //     color: Theme.of(context).colorScheme.tertiary,
-          //   ),
-          // ),
-          // Align(
-          //   child:TextButton(
-          //     onPressed: widget.onTap,
-          //     child: Text("Criar conta",
-          //       style: TextStyle(
-          //         fontSize: 16,
-          //         color: Theme.of(context).colorScheme.primary,
-          //         fontWeight: FontWeight.bold,
-          //       )
-          //       ,)
-          //     ,),
-          // ),
         ],
       )
     );

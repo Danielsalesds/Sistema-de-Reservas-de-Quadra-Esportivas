@@ -1,9 +1,11 @@
 import "package:flutter/material.dart";
 
+import "AppColors.dart";
+
 class MaterialTheme {
   final TextTheme textTheme;
 
-  const MaterialTheme(this.textTheme);
+  MaterialTheme(this.textTheme);
 
   static ColorScheme lightScheme() {
     return const ColorScheme(
@@ -173,9 +175,9 @@ class MaterialTheme {
   static ColorScheme darkScheme() {
     return const ColorScheme(
       brightness: Brightness.dark,
-      primary: Color(0xffc7e2ff),
+      primary: Color(0xFF4A90E2),
       surfaceTint: Color(0xffaacaea),
-      onPrimary: Color(0xff0f334d),
+      onPrimary: Color(0xFF1A1A1A),
       primaryContainer: Color(0xffa7c7e7),
       onPrimaryContainer: Color(0xff34536f),
       secondary: Color(0xffe9f3ff),
@@ -344,10 +346,44 @@ class MaterialTheme {
        bodyColor: colorScheme.onSurface,
        displayColor: colorScheme.onSurface,
      ),
-     scaffoldBackgroundColor: colorScheme.background,
+     scaffoldBackgroundColor: colorScheme.surface,
      canvasColor: colorScheme.surface,
-  );
+    extensions: [
+      // Adiciona aqui a extensão correta para esse esquema
+      if (colorScheme.brightness == Brightness.light)
+        const AppColors(
+          textColor: Color(0xFF1A1A1A),
+          descColor: Color(0xFF3A3A3A),
+          baseColor: Color(0xFF42617D),
+          cardColor: Color(0xffa7c7e7),
+          buttonColor: Color(0xFF42617D),
+          backgroundColor: Color(0xFFF5F7FA),
+          onBaseColor: Color(0xffffffff),
+          iconColor: Color(0xFF1A1A1A),
+          // azul/laranja
+          activeColor: Color(0xFFBBDEFB),
+          inactiveColor: Color(0xFFFFCCBC),
+          okBtnColor: Color(0xFF388E3C),
+          cancelBtnColor:Color(0xFFD32F2F),
+        )
+      else
+        const AppColors(
+          textColor: Color(0xFFF5F5F5),
+          descColor: Color(0xFFE0E0E0),
+          baseColor: Color(0xFF4A90E2),
+          cardColor: Color(0xFF4A90E2),
+          buttonColor: Color(0xFF2F80ED),
+          backgroundColor: Color(0xFF1C1C1E),
+          onBaseColor: Color(0xFF1C1C1E),
+          iconColor: Color(0xFFF5F5F5),
+          activeColor: Color(0xFF2196F3),
+          inactiveColor: Color(0xFFFFA000),
+          okBtnColor: Color(0xFF81C784)	,
+          cancelBtnColor:Color(0xFFEF9A9A),
 
+        ),
+    ],
+  );
 
   List<ExtendedColor> get extendedColors => [
   ];

@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
+import '../../theme/AppColors.dart';
+
 class CustomButton extends StatelessWidget{
   final double height;
   final double width;
@@ -9,6 +11,7 @@ class CustomButton extends StatelessWidget{
   const CustomButton({super.key, required this.height, required this.width, required this.text, this.onclick});
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
     return SizedBox(
       height: height,
       width: width,
@@ -17,15 +20,14 @@ class CustomButton extends StatelessWidget{
         child: FilledButton(
             onPressed: onclick,
             style: FilledButton.styleFrom(
-              backgroundColor: Theme.of(context).colorScheme.primary,
-              foregroundColor: Theme.of(context).colorScheme.onPrimary,
+              backgroundColor: colors.baseColor,
+              foregroundColor: colors.onBaseColor,
             ),
             child: Text(text,
               style:TextStyle(
-                color: Theme.of(context).colorScheme.onPrimary,
+                color: colors.onBaseColor,
                 fontWeight: FontWeight.bold,
                 fontSize: 20,
-
               ),),
         ),
       ),

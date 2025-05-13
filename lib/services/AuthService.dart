@@ -31,22 +31,14 @@ class AuthService{
     }
   }
   Future<UserCredential> signIn(String email, String senha) async{
-    // Essa função já deve criar o cadastro do usuário no Firestore tbm.
-    try{
-      UserCredential userCredential = await _auth.signInWithEmailAndPassword(
-          email: email, password: senha);
-      return userCredential;
-    }on FirebaseAuthException catch(e){
-      throw Exception(e.message);
-    }
+      return await _auth.signInWithEmailAndPassword(email: email, password: senha);
   }
 
   Future<void> resetPassword(String email) async{
     try{
       await _auth.sendPasswordResetEmail(email: email);
-      print("Email enviado!");
     }catch(e){
-      print("Exception $e");
+      throw Exception(e);
     }
   }
   Future<void> signOut() async{

@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
-
-import '../../services/AuthService.dart';
 import '../widgets/CustomAppBar.dart';
 import '../widgets/CustomBottomBar.dart';
 import '../widgets/CustomFAB.dart';

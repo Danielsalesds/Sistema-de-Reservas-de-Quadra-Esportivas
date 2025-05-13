@@ -30,13 +30,12 @@ class FirestoreService {
     });
   }
 
-  Future<void> createQuadra(String nome,String localizacao, bool status, int capacidade,String tipoQuadraId )async {
+  Future<void> createQuadra(String nome,bool status, int capacidade,String tipoQuadraId )async {
     try{
       final quadraDoc = _firestore.collection('quadras').doc();
       await quadraDoc.set({
         'nome':nome,
         'capacidade': capacidade,
-        'localizacao': localizacao,
         'status': status,
         'id': quadraDoc.id,
         'tipoQuadraId': tipoQuadraId
@@ -45,6 +44,7 @@ class FirestoreService {
       throw Exception(e);
     }
   }
+
   Future<void> createTipoQuadra(String nome)async {
     try{
       final tipoDoc = _firestore.collection('tipoQuadra').doc();
@@ -56,15 +56,20 @@ class FirestoreService {
       throw Exception(e);
     }
   }
+
   Stream<QuerySnapshot> geAllTipoQuadra() {
-    return FirebaseFirestore.instance.collection('tipoQuadra').snapshots();
+    return _firestore.collection('tipoQuadra')
+        .orderBy('nome')
+        .snapshots();
   }
+
   Future<String> getTipoQuadra(String id)async {
     final doc = await _firestore.collection('tipoQuadra').doc(id).get();
     return doc.get('nome');
   }
+
   Future<Map<String, String>> getAllTipoQuadraMap() async {
-    QuerySnapshot snapshot = await FirebaseFirestore.instance
+    QuerySnapshot snapshot = await _firestore
         .collection('tipoQuadra')
         .get();
 
@@ -74,9 +79,13 @@ class FirestoreService {
     }
     return tipos;
   }
+
   Stream<QuerySnapshot> getQuadras() {
-    return FirebaseFirestore.instance.collection('quadras').snapshots();
+    return _firestore
+        .collection('quadras')
+        .snapshots();
   }
+
   Future<void> editQuadra(Map<String, dynamic> updates, String id) async{
     await _firestore.collection('quadras').doc(id).update(updates);
   }
@@ -98,7 +107,6 @@ class FirestoreService {
       final admin = FirebaseAuth.instance.currentUser;
 
       if (admin == null) {
-        print("Admin não logado!");
         return;
       }
       final adminUid = admin.uid;
@@ -121,7 +129,6 @@ class FirestoreService {
       );
       final user = userCredential.user;
       if (user == null) {
-        print("Erro ao obter usuário criado.");
         return;
       }
       final membroUid = user.uid;
@@ -135,14 +142,32 @@ class FirestoreService {
         'ativo': true,
         'criadoEm': Timestamp.now(),
       });
-      print('Membro cadastrado com sucesso!');
       //encerrar a sessão secundaria e apagar o app secundario
       await secondaryAuth.signOut();
       await secondaryApp.delete();
-    } catch (e) {
-      throw Exception('Erro ao criar membro: $e');
+    } on FirebaseAuthException catch (e){
+      String error;
+      switch(e.code){
+        case 'email-already-in-use':
+          error = 'Este email já está em uso. Tente outro.';
+          break;
+        case 'weak-password':
+          error = 'A senha é muito fraca. Utilize pelo menos 6 caracteres.';
+          break;
+        case 'invalid-email':
+          error = 'O e-mail fornecido não é válido.';
+          break;
+        case 'network-request-failed':
+          error = 'Falha na conexão com a internet. Tente novamente.';
+          break;
+        default:
+          error = 'Erro desconhecido. Tente novamente mais tarde.';
+          break;
+      }
+      throw error;
     }
   }
+
     Future<String> getTipo() async {
       final userId = auth.getCurrentUser();
       final DocumentSnapshot userDoc =

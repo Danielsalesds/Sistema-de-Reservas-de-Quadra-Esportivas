@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../../theme/AppColors.dart';
 
 class CardAdmin extends StatefulWidget {
   final String titulo;
@@ -19,19 +20,13 @@ class CardAdmin extends StatefulWidget {
 }
 
 class _CardAdminState extends State<CardAdmin> {
-  static const Color textColor = Color(0xFF1A1A1A); // Branco suave
-  Color descColor = const Color.fromARGB(255, 58, 58, 58);
-  static const Color cardColor = Color(0xFF4A90E2); // Azul principal
-  Color backgroundTela = const Color(0xFFF5F7FA);
-  Color uberBlack = const Color(0xFF1C1C1E);
-  Color iconeColor = const Color(0xFF1A1A1A);
-
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
     return GestureDetector(
       onTap: widget.onTap,
       child: Card(
-        color: cardColor,
+        color: colors.cardColor,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -47,11 +42,12 @@ class _CardAdminState extends State<CardAdmin> {
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 20,
-                        color: uberBlack,
+                        color: colors.textColor,
                       ),
                     ),
                   ),
-                  Icon(widget.icon, color: const Color(0xFFF5F7FA), size: 30),
+                  //Color(0xFFF5F7FA)
+                  Icon(widget.icon, color: colors.iconColor, size: 30),
                 ],
               ),
               const SizedBox(height: 8),
@@ -63,11 +59,11 @@ class _CardAdminState extends State<CardAdmin> {
                       widget.text1,
                       style: TextStyle(
                         fontSize: 16,
-                        color: descColor,
+                        color: colors.descColor,
                       ),
                     ),
                   ),
-                  Icon(Icons.arrow_right_alt, color: iconeColor, size: 35),
+                  Icon(Icons.arrow_right_alt, color: colors.iconColor, size: 35),
                 ],
               ),
             ],

@@ -2,19 +2,15 @@ import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:clube/services/FirestoreService.dart';
 import 'package:clube/ui/pages/HomeAdmin.dart';
 import 'package:clube/ui/pages/LoginPage.dart';
-import 'package:clube/ui/pages/home_membro.dart';
-import 'package:clube/ui/widgets/AletMessage.dart';
+import 'package:clube/ui/pages/HomeMembro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'LoginOrRegisterPage.dart';
-import 'RegisterPage.dart';
-
 class AuthChecker extends StatefulWidget{
-  const AuthChecker({super.key});
+  final Function(bool) onThemeChanged;
 
+  const AuthChecker({super.key, required this.onThemeChanged});
   @override
   State<AuthChecker> createState() => _AuthCheckerState();
 }
@@ -69,7 +65,7 @@ class _AuthCheckerState extends State<AuthChecker> {
                       ),
                     );
                   }
-                  return tipo == 'Admin' ? HomeAdmin() : HomeMembro();
+                  return tipo == 'Admin' ? HomeAdmin(onThemeChanged: widget.onThemeChanged) : HomeMembro(onThemeChanged: widget.onThemeChanged,);
                 },
               );
             } else {

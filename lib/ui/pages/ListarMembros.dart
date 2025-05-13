@@ -87,7 +87,7 @@ class _ListarMembroState extends State<ListarMembro> {
                                   animType: AnimType.scale,
                                   title: "Alerta!",
                                   desc:"Tem certeza que deseja desativar este usuário?",
-                                  btnOkText: "SIM",
+                                  btnOkText: "Sim",
                                   btnOkColor:colors.okBtnColor,
                                   btnOkOnPress: () async {
                                     await firestore.atualizarMembro(doc.id, {
@@ -101,7 +101,7 @@ class _ListarMembroState extends State<ListarMembro> {
                                     );
                                   },
                                   btnCancelColor: colors.cancelBtnColor,
-                                  btnCancelText: "NÃO",
+                                  btnCancelText: "Não",
                                   btnCancelOnPress: (){
                                   },
                                   titleTextStyle: TextStyle(
@@ -113,6 +113,7 @@ class _ListarMembroState extends State<ListarMembro> {
                                     fontSize: 16,
                                     color: Theme.of(context).colorScheme.tertiary,
                                   ),
+                                  buttonsTextStyle: TextStyle(color: colors.backgroundColor),
                                 ).show();
                               },
                             ),

@@ -90,18 +90,18 @@ class EditarQuadrasState extends State<EditarQuadras>{
                 ],
               ),
             ),
-            // Padding(padding: const EdgeInsets.only(top: 5, left: 35),
-            //   child:Row( mainAxisAlignment: MainAxisAlignment.start,
-            //     children: [
-            //       Flexible(child: Text("Gerencie o perfil e configurações do usuário abaixo.",
-            //         style: TextStyle(
-            //           fontSize: 16,
-            //           color: Theme.of(context).colorScheme.primary,
-            //         ),
-            //       ),)
-            //     ],
-            //   ),
-            // ),
+            Padding(padding: const EdgeInsets.only(top: 5, left: 35),
+              child:Row( mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Flexible(child: Text("Altere as informações da quadra abaixo",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),)
+                ],
+              ),
+            ),
             const SizedBox(height: 50,),
             Row(
               children: [
@@ -115,43 +115,79 @@ class EditarQuadrasState extends State<EditarQuadras>{
               ],
             ),
             const SizedBox(height: 20,),
-            StreamBuilder<QuerySnapshot>(
-                stream: firestore.geAllTipoQuadra(),
-                builder:  (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return const Center(child: CircularProgressIndicator(),);
-                  }
-                  var tipos = snapshot.data!.docs;
-                  return DropdownButton<String>(
-                    value: tipoQuadraId,hint: Text('Selecione o tipo de quadra'),items: tipos.map((DocumentSnapshot doc) {
-                    String nome = doc['nome'];
-                    String id = doc['id'];
-                    return DropdownMenuItem<String>(
-                      value: id,child: Text(nome),);}).toList(),
-                    onChanged: (String? novoTipo) {
-                      setState(() {
-                        tipoQuadraId = novoTipo;
-                      });
-                    },);
-                }),
+            Row(children: [
+              Padding(padding: const EdgeInsets.symmetric(horizontal:  35),
+                child:StreamBuilder<QuerySnapshot>(
+                    stream: firestore.geAllTipoQuadra(),
+                    builder:  (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const Center(child: CircularProgressIndicator(),);
+                      }
+                      var tipos = snapshot.data!.docs;
+                      return SizedBox(width: 340,
+                          child: DropdownButton<String>(
+                            value: tipoQuadraId,
+                            hint: Padding(padding:const EdgeInsets.only(left:10,bottom: 15),
+                              child: Text('Selecione o tipo de quadra',
+                                  style: TextStyle(
+                                      color: Theme.of(context).colorScheme.primary,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500
+                                  )
+                              ),
+                            ),
+                            items: tipos.map((DocumentSnapshot doc) {
+                              String nome = doc['nome'];
+                              String id = doc['id'];
+                              return DropdownMenuItem<String>(
+                                  value: id,
+                                  child: Padding(padding: const EdgeInsets.only(left:10,bottom: 15),
+                                    child: Text(nome,
+                                      style: TextStyle(
+                                        fontSize: 16.0,
+                                        fontWeight: FontWeight.normal,
+                                        color: Theme.of(context).colorScheme.secondary,
+                                      ),
+                                    ),)
+                              );}).toList(),
+                            onChanged: (String? novoTipo) {
+                              setState(() {
+                                tipoQuadraId = novoTipo;
+                              });
+                            },
+                            isExpanded: true,
+                            underline: Container(
+                              height: 3,
+                              color: Theme.of(context).colorScheme.primary,
+                            ),
+
+                          )
+                      );
+                    }),
+              ),
+            ],),
             const SizedBox(height: 10,),
             Row(
-              children: [
-                Text('Status',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.primary,
-                    fontSize: 20,
+                children: [
+                  Padding(padding: const EdgeInsets.only(left: 45,),
+                    child: Text('Status',
+                      style: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                          fontSize: 18,
+                          fontWeight: FontWeight.w500
+                      ),
+                    ),
                   ),
-                ),
-                Switch(
-                  value: status,
-                  onChanged: (bool value) {
-                    setState(() {
-                      status = value;
-                    });
-                  },
-                )
-              ],
+                  const SizedBox(width: 5,),
+                  Switch(
+                    value: status,
+                    onChanged: (bool value) {
+                      setState(() {
+                        status = value;
+                      });
+                      },
+                  ),
+                ]
             ),
             const SizedBox(height: 30,),
             CustomButton(height: 85, width: 250, text: "Atualizar", onclick: edit),

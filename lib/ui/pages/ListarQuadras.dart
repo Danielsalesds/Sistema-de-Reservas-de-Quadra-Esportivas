@@ -114,7 +114,7 @@ class ListarQuadrasState extends State<ListarQuadras>{
                               },
                             ),
                             IconButton(
-                              icon: Icon(status?Icons.block:Icons.check_circle, color: colors.iconColor),
+                              icon: Icon(status?Icons.block:Icons.check, color: colors.iconColor),
                               onPressed: () async {
                                 String desc = status? 'Tem certeza que deseja desativar essa quadra?' : 'Tem certeza que deseja ativar essa quadra?';
                                 AwesomeDialog(
@@ -148,6 +148,7 @@ class ListarQuadrasState extends State<ListarQuadras>{
                                     fontSize: 16,
                                     color: Theme.of(context).colorScheme.tertiary,
                                   ),
+                                  buttonsTextStyle: TextStyle(color: colors.backgroundColor),
                                 ).show();
                               },
                             ),

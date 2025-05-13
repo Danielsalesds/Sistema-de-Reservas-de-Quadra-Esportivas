@@ -220,7 +220,9 @@ class CadastrarQuadraState extends State<CadastrarQuadra>{
                       },
                       btnCancelText: "Cancelar",
                       btnCancelColor: colors.cancelBtnColor,
-                      btnCancelOnPress:(){},
+                      btnCancelOnPress:(){
+                        tipoQuadraTextController.clear();
+                      },
                       titleTextStyle: TextStyle(
                           color: Theme.of(context).colorScheme.primary,
                           fontWeight: FontWeight.bold,

@@ -75,7 +75,8 @@ class ListarQuadrasState extends State<ListarQuadras>{
                   if (compareTipo != 0) return compareTipo;
                   return a['nome'].toLowerCase().compareTo(b['nome'].toLowerCase());
                 });
-                return ListView.builder(
+                return Padding(padding: const EdgeInsets.only(bottom: 40),
+                child: ListView.builder(
                   itemCount: quadras.length,
                   itemBuilder: (context, index) {
                     final doc = quadras[index];
@@ -157,6 +158,7 @@ class ListarQuadrasState extends State<ListarQuadras>{
                       ),
                     );
                   },
+                ),
                 );
               },
             ),

@@ -9,27 +9,18 @@ void showSucessDialog(BuildContext context, msg) {
     title: "Sucesso!",
     desc: msg,
     btnOkText: "Ok",
-    btnOkColor: Theme
-        .of(context)
-        .colorScheme
-        .primary,
+    btnOkColor: Theme.of(context).colorScheme.primary,
     btnOkOnPress: () {
       Navigator.pop(context);
     },
     titleTextStyle: TextStyle(
-        color: Theme
-            .of(context)
-            .colorScheme
-            .primary,
+        color: Theme.of(context).colorScheme.primary,
         fontWeight: FontWeight.bold,
         fontSize: 22
     ),
     descTextStyle: TextStyle(
       fontSize: 16,
-      color: Theme
-          .of(context)
-          .colorScheme
-          .tertiary,
+      color: Theme.of(context).colorScheme.tertiary,
     ),
   ).show();
 }
@@ -41,29 +32,20 @@ void showSucessDialog(BuildContext context, msg) {
       title: "Sucesso!",
       desc: msg,
       btnOkText: "Ok",
-      btnOkColor: Theme
-          .of(context)
-          .colorScheme
-          .primary,
+      btnOkColor: Theme.of(context).colorScheme.primary,
       btnOkOnPress: () {
         if (onclick != null) {
           onclick();
         }
       },
       titleTextStyle: TextStyle(
-          color: Theme
-              .of(context)
-              .colorScheme
-              .primary,
+          color: Theme.of(context).colorScheme.primary,
           fontWeight: FontWeight.bold,
           fontSize: 22
       ),
       descTextStyle: TextStyle(
         fontSize: 16,
-        color: Theme
-            .of(context)
-            .colorScheme
-            .tertiary,
+        color: Theme.of(context).colorScheme.tertiary,
       ),
     ).show();
 }

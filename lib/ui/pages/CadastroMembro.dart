@@ -3,13 +3,17 @@ import 'package:clube/services/FirestoreService.dart';
 import 'package:clube/ui/widgets/ErroDialog.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../widgets/CustomAppBar.dart';
+import '../widgets/CustomBottomBar.dart';
 import '../widgets/CustomButton.dart';
+import '../widgets/CustomFAB.dart';
 import '../widgets/CustomTelFormField.dart';
 import '../widgets/CustomTextFormField.dart';
 import '../widgets/SucessDialog.dart';
+import 'ReservaQuadraScreen.dart';
 
 class CadastroMembro extends StatefulWidget{
   
@@ -67,24 +71,33 @@ class CadastroMembroPageState extends State<CadastroMembro>{
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: const CustomAppBar(title: 'Cadastrar',),
+        bottomNavigationBar: const CustomBottomBar(),
+        floatingActionButton: CustomFAB(
+            onPressed: (){
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
+              );
+            }
+        ),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       resizeToAvoidBottomInset: true,
       body: _isLoading
           ? const Center(child: CircularProgressIndicator(),)
           : SingleChildScrollView(
             child: Column( mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                const SizedBox(height: 30,),
-                Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                        ),child:ClipOval(child:Image.asset('assets/basketball.png', width: 150,height: 150,fit: BoxFit.cover),),
-                      ),
-                    ]
-                ),
                 const SizedBox(height: 10,),
+                 Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Container(
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(100),
+                          ),child:ClipOval(child:Image.asset('assets/user-group.png',width: 250,height: 200,fit: BoxFit.cover),),
+                        ),
+                      ]
+                  ),
                 Text("Cadastrar Novo Membro",
                   style: TextStyle(
                       color: Theme.of(context).colorScheme.primary,
@@ -141,9 +154,8 @@ class CadastroMembroPageState extends State<CadastroMembro>{
                     ),
                   ],
                 ),
-                const SizedBox(height: 30,),
+                const SizedBox(height: 10,),
                 CustomButton(height: 85, width: 250, text: "Cadastrar", onclick: signUp),
-                const SizedBox(height: 20,),
               ],
             ),
           )

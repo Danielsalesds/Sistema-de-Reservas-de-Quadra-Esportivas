@@ -1,5 +1,7 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:clube/ui/widgets/ErroDialog.dart';
+import 'package:clube/ui/widgets/SucessDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -26,10 +28,16 @@ class CadastrarQuadraState extends State<CadastrarQuadra>{
   final tipoQuadraTextController = TextEditingController();
   String? tipoQuadraId;
   bool status = false;
-  void create(){
+  Future<void> create() async {
     final firestore = Provider.of<FirestoreService>(context, listen:false);
     try{
-      firestore.createQuadra(nomeTextController.text, status, int.parse(capacidadeTextController.text), tipoQuadraId!);
+      if(nomeTextController.text.isEmpty || capacidadeTextController.text.isEmpty || tipoQuadraId!.isEmpty){
+        showErrorDialog(context, "Preencha todos os campos!");
+        return;
+      }
+      await firestore.createQuadra(nomeTextController.text, status, int.parse(capacidadeTextController.text), tipoQuadraId!);
+      if(!mounted) return;
+      showSucessDialog(context, 'Nova quadra adicionada!');
     }catch (e){
       throw Exception(e);
     }
@@ -53,18 +61,17 @@ class CadastrarQuadraState extends State<CadastrarQuadra>{
       body: SingleChildScrollView(
         child: Column(
           children: [
+            const SizedBox(height: 10,),
             Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
-                    padding: const EdgeInsets.only(top: 30),
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(100),
-                    ),child:ClipOval(child:Image.asset('assets/basketball.png', width: 150,height: 150,fit: BoxFit.cover),),
+                    ),child:ClipOval(child:Image.asset('assets/tennis.png', width: 250,height: 200,fit: BoxFit.cover),),
                   ),
                 ]
             ),
-            const SizedBox(height: 10,),
             Text("Adicionar Nova Quadra",
               style: TextStyle(
                   color: Theme.of(context).colorScheme.primary,
@@ -161,7 +168,7 @@ class CadastrarQuadraState extends State<CadastrarQuadra>{
                 buildFilledButton(context, colors, firestore)
               ],
             ),
-            const SizedBox(height: 30,),
+            const SizedBox(height: 10,),
             CustomButton(height: 85, width: 250, text: "Cadastrar", onclick: create),
           ],
         ),
@@ -179,14 +186,24 @@ class CadastrarQuadraState extends State<CadastrarQuadra>{
                       body: Column(
                         children: [
                           Padding(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                            child: Text("Adicionar novo tipo de quadra",
+                            child: Text("Novo Tipo de Quadra",
                             textAlign: TextAlign.center,
                             style: TextStyle(
-                              color: Theme.of(context).colorScheme.primary,
-                              fontSize: 18,
-                              fontWeight: FontWeight.w500,
+                                color: Theme.of(context).colorScheme.primary,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 22
                             ),),
                           ),
+                          Padding(padding: const EdgeInsets.symmetric(horizontal: 10),
+                            child: Text('Cadastre um novo espaço para reservas no clube.',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                fontSize: 16,
+                                color: Theme.of(context).colorScheme.tertiary,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 10,),
                           CustomTextFormField(label: "Nome",controller: tipoQuadraTextController,),
                           const SizedBox(height: 30,),
                         ],

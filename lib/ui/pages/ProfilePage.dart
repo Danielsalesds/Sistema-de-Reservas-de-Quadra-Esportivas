@@ -71,18 +71,28 @@ class ProfilePageState extends State<ProfilePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            Padding(padding: const EdgeInsets.only(top: 30, bottom: 10),
-              child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        decoration: BoxDecoration(borderRadius: BorderRadius.circular(0),
-                        ),
-                        child:SvgPicture.asset('assets/profile.svg', width: 250,height: 200),
-                      ),
-                    ]
-                ),
-
+            // Padding(padding: const EdgeInsets.only(top: 30, bottom: 10),
+            //   child: Row(
+            //         mainAxisAlignment: MainAxisAlignment.center,
+            //         children: [
+            //           Container(
+            //             decoration: BoxDecoration(borderRadius: BorderRadius.circular(0),
+            //             ),
+            //             child:SvgPicture.asset('assets/profile.svg', width: 250,height: 200),
+            //           ),
+            //         ]
+            //     ),
+            //
+            // ),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                    ),child:ClipOval(child:Image.asset('assets/profiling.png',width: 200,fit: BoxFit.cover),),
+                  ),
+                ]
             ),
 
             Row(

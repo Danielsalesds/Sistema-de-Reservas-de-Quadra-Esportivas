@@ -74,7 +74,7 @@ class LoginPageState extends State<LoginPage>{
                 Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(100),
-                  ),child:ClipOval(child:Image.asset('assets/running.png', width: 150,height: 150,fit: BoxFit.cover),),
+                  ),child:ClipOval(child:Image.asset('assets/basketball2.png', width: 250,fit: BoxFit.cover),),
                 ),
               ]
             ),

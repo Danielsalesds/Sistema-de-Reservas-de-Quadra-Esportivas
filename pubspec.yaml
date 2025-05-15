@@ -80,6 +80,13 @@ flutter:
     - assets/basketball.png
     - assets/forgot-password.svg
     - assets/profile.svg
+    - assets/basketball2.png
+    - assets/football-team.png
+    - assets/personal-data.png
+    - assets/soccer.png
+    - assets/tennis.png
+    - assets/user-group.png
+    - assets/profiling.png
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
 

@@ -43,7 +43,7 @@ class EditUserPageState extends State<EditUserPage> {
     final firebase = Provider.of<FirestoreService>(context,listen:false);
     try{
       await firebase.updateUserProfile({'nome':nomeTextController.text,
-        'email':emailTextController.text, 'telefone': telefoneTextController.text}, widget.id);
+        'email':emailTextController.text, 'telefone': telefoneTextController.text,'tipo':_selecionado}, widget.id);
       if(!mounted) return;
       showSucessDialog(context, "As informações do usuário ${widget.nome} foram atualizadas!");
     }catch(e){

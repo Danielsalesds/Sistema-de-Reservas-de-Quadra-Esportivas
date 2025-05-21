@@ -1,12 +1,15 @@
+import 'package:clube/ui/pages/ListarReservasScreen.dart';
+import 'package:clube/ui/pages/ReservaQuadraScreen.dart';
+import 'package:clube/ui/widgets/CardAdmin.dart';
+import 'package:clube/ui/widgets/CustomBottomBar.dart';
+import 'package:clube/ui/widgets/CustomFAB.dart';
+import 'package:clube/ui/widgets/WelcomeCard.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../services/AuthService.dart';
 import '../../services/ThemeService.dart';
 import '../../theme/AppColors.dart';
-import '../widgets/CustomBottomBar.dart';
-import '../widgets/CustomFAB.dart';
-import 'ReservaQuadraScreen.dart';
 
 class HomeMembro extends StatefulWidget {
   final Function(bool) onThemeChanged;
@@ -18,6 +21,8 @@ class HomeMembro extends StatefulWidget {
 
 class HomeMembroState extends State<HomeMembro> {
   bool _isDarkMode = true;
+  final double paddingCardH = 14;
+  final double paddingCardV = 5;
 
   @override
   void initState() {
@@ -27,118 +32,96 @@ class HomeMembroState extends State<HomeMembro> {
 
   void _loadTheme() async {
     bool isDark = await ThemeService.getTheme();
-    setState(() {
-      _isDarkMode = isDark;
-    });
-  }
-  List<Map<String, dynamic>> quadras = [
-    {'nome': 'Quadra 1', 'reservado': false},
-    {'nome': 'Quadra 2', 'reservado': true},
-    {'nome': 'Quadra 3', 'reservado': false},
-    {'nome': 'Quadra 4', 'reservado': false},
-  ];
-
-  void _toggleReserva(int index) {
-    setState(() {
-      quadras[index]['reservado'] = !quadras[index]['reservado'];
-    });
+    setState(() => _isDarkMode = isDark);
   }
 
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
+
     return Scaffold(
+      backgroundColor: colors.backgroundColor,
       appBar: AppBar(
-          backgroundColor: colors.cardColor,
-          elevation: 0,
-          title: Text("Home",style: TextStyle(color:colors.textColor,),),
-          automaticallyImplyLeading: false,
-          actions: [
-            IconButton(
-                onPressed:(){
-                  setState(() {
-                    _isDarkMode = !_isDarkMode;
-                  });
-                  widget.onThemeChanged(_isDarkMode);
-                  ThemeService.saveTheme(_isDarkMode);
-                  },
-                icon: _isDarkMode ? const Icon(Icons.light_mode, color: Colors.white,) : const Icon(Icons.dark_mode)
-            ),
-            IconButton(
-                onPressed:() async {
-                  final auth = Provider.of<AuthService>(context,listen:false);
-                  try{
-                    await auth.signOut();
-                    // Navigator.push(context, MaterialPageRoute(builder: (context)=> const AuthChecker()));
-                  }catch(e){
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text(e.toString()))
-                    );
-                  }
-                },
-                icon: const Icon(Icons.logout),
-                color: colors.iconColor
-            )
-          ]
+        backgroundColor: colors.cardColor,
+        elevation: 0,
+        title: Text(
+          "Home",
+          style: TextStyle(color: colors.textColor),
+        ),
+        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: _isDarkMode
+                ? const Icon(Icons.light_mode, color: Colors.white)
+                : const Icon(Icons.dark_mode),
+            onPressed: () {
+              setState(() => _isDarkMode = !_isDarkMode);
+              widget.onThemeChanged(_isDarkMode);
+              ThemeService.saveTheme(_isDarkMode);
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.logout),
+            color: colors.iconColor,
+            onPressed: () async {
+              final auth = Provider.of<AuthService>(context, listen: false);
+              try {
+                await auth.signOut();
+              } catch (e) {
+                ScaffoldMessenger.of(context)
+                    .showSnackBar(SnackBar(content: Text(e.toString())));
+              }
+            },
+          ),
+        ],
       ),
-    bottomNavigationBar: const CustomBottomBar(),
+      bottomNavigationBar: const CustomBottomBar(),
       floatingActionButton: CustomFAB(
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
-            );
-          }
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const ReservaQuadraScreen()),
+          );
+        },
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text("Minhas Reservas", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 10),
-            _buildQuadraList(true),
-            const SizedBox(height: 20),
-            const Text("Quadras Disponíveis", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 10),
-            _buildQuadraList(false),
-          ],
-        ),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          const WelcomeCard(),
+          const SizedBox(height: 8),
+          buildCardMembro(
+            context,
+            title: "Minhas Reservas",
+            subtitle: "Confira todas as suas reservas",
+            icon: Icons.list_alt_outlined,
+            destination: const ListarReservasScreen(),
+          ),
+        ],
       ),
     );
   }
 
-  Widget _buildQuadraList(bool reservado) {
-    final colors = Theme.of(context).extension<AppColors>()!;
-    List<Map<String, dynamic>> filtradas =
-    quadras.where((quadra) => quadra['reservado'] == reservado).toList();
-    return filtradas.isEmpty
-        ? Center(child: Text(reservado ? "Nenhuma reserva encontrada" : "Nenhuma quadra disponível"))
-        : Expanded(
-      child: ListView.builder(
-        shrinkWrap: true,
-        itemCount: filtradas.length,
-        itemBuilder: (context, index) {
-          return Card(
-            elevation: 3,
-            margin: const EdgeInsets.symmetric(vertical: 8),
-            child: ListTile(
-              title: Text(
-                filtradas[index]['nome'],
-                style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              trailing: ElevatedButton(
-                onPressed: () => _toggleReserva(quadras.indexOf(filtradas[index])),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: reservado ? colors.cancelBtnColor : colors.okBtnColor,
-                ),
-                child: Text(
-                  reservado ? 'Cancelar' : 'Reservar',
-                  style: TextStyle(color: colors.backgroundColor),
-                ),
-              ),
-            ),
+  Padding buildCardMembro(
+    BuildContext context, {
+    required String title,
+    required String subtitle,
+    required IconData icon,
+    required Widget destination,
+  }) {
+    return Padding(
+      padding: EdgeInsets.symmetric(
+        horizontal: paddingCardH,
+        vertical: paddingCardV,
+      ),
+      child: CardAdmin(
+        titulo: title,
+        text1: subtitle,
+        icon: icon,
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => destination),
           );
         },
       ),

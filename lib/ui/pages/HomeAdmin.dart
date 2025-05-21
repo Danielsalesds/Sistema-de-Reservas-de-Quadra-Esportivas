@@ -1,3 +1,4 @@
+import 'package:clube/ui/pages/ListarReservasScreen.dart';
 import 'package:clube/ui/pages/ReservaQuadraScreen.dart';
 import 'package:clube/ui/pages/ListarMembros.dart';
 import 'package:clube/ui/widgets/CardAdmin.dart';
@@ -109,7 +110,7 @@ class HomeAdminState extends State<HomeAdmin>{
               "Fazer reserva",
               "Reserve quadras sem restrições.",
               Icons.sports_soccer_outlined,
-              const ReservaQuadraScreen()
+              const ListarReservasScreen()
           ),
         ],
       ),

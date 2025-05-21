@@ -86,6 +86,11 @@ class FirestoreService {
         .snapshots();
   }
 
+  Future<String> getQuadraNome(String quadraId) async {
+    final doc = await _firestore.collection('quadras').doc(quadraId).get();
+    return doc.get('nome') as String;
+  }
+
   Future<void> editQuadra(Map<String, dynamic> updates, String id) async{
     await _firestore.collection('quadras').doc(id).update(updates);
   }
@@ -232,4 +237,86 @@ class FirestoreService {
   Future<void> atualizarMembro(String id, Map<String, dynamic> data) async {
     await _firestore.collection('membros').doc(id).update(data);
   }
+
+  
+
+   Future<void> createReserva({
+    required String tipoQuadraId,
+    required DateTime dataHora,
+  }) async {
+    final uid = auth.getCurrentUser();
+    final agora = DateTime.now();
+
+    // RN5: não reservar para horário passado
+    if (dataHora.isBefore(agora)) {
+      throw Exception('Não é possível reservar para horário já passado.');
+    }
+
+    // RN4: verificar reserva do mesmo sócio no mesmo dia e tipo
+    final inicioDia = DateTime(dataHora.year, dataHora.month, dataHora.day);
+    final fimDia = inicioDia.add(Duration(days: 1));
+    final reservasCliente = await _firestore
+        .collection('reservas')
+        .where('idMembro', isEqualTo: uid)
+        .where('tipoQuadraId', isEqualTo: tipoQuadraId)
+        .where('dataHora', isGreaterThanOrEqualTo: Timestamp.fromDate(inicioDia))
+        .where('dataHora', isLessThan: Timestamp.fromDate(fimDia))
+        .where('status', isEqualTo: true)
+        .get();
+    if (reservasCliente.docs.isNotEmpty) {
+      throw Exception('Você já tem uma reserva deste tipo de quadra neste dia.');
+    }
+
+    // RN1: buscar quadras disponíveis (status=true e sem reserva no horário)
+    final quadras = await _firestore
+        .collection('quadras')
+        .where('tipoQuadraId', isEqualTo: tipoQuadraId)
+        .where('status', isEqualTo: true)
+        .get();
+
+    for (var q in quadras.docs) {
+      final idQuadra = q.id;
+      // verificar se há reserva neste horário exato
+      final inicioSlot = dataHora;
+      final fimSlot = dataHora.add(Duration(hours: 1)); // RN3
+      final conflito = await _firestore
+          .collection('reservas')
+          .where('idQuadra', isEqualTo: idQuadra)
+          .where('dataHora', isGreaterThanOrEqualTo: Timestamp.fromDate(inicioSlot))
+          .where('dataHora', isLessThan: Timestamp.fromDate(fimSlot))
+          .where('status', isEqualTo: true)
+          .get();
+      if (conflito.docs.isEmpty) {
+        // quadra livre, cria reserva
+        final doc = _firestore.collection('reservas').doc();
+        await doc.set({
+          'id': doc.id,
+          'idMembro': uid,
+          'tipoQuadraId': tipoQuadraId,
+          'idQuadra': idQuadra,
+          'dataHora': Timestamp.fromDate(dataHora),
+          'status': true,
+        });
+        return;
+      }
+    }
+
+    throw Exception('Não há quadras disponíveis neste horário para o tipo selecionado.');
+  }
+
+   /// Lista reservas do usuário autenticado
+  Stream<QuerySnapshot> getReservasDoUsuario(String userId) {
+    return _firestore
+        .collection('reservas')
+        .where('idMembro', isEqualTo: userId)
+        .orderBy('dataHora')
+        .snapshots();
+  }
+
+  Future<void> cancelarReserva(String id) async {
+  await FirebaseFirestore.instance.collection('reservas').doc(id).update({'status': false});
+}
+  Future<void> updateReserva(String id, Map<String, dynamic> dados) async {
+  await FirebaseFirestore.instance.collection('reservas').doc(id).update(dados);
+}
 }

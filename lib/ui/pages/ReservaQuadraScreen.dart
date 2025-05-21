@@ -1,202 +1,153 @@
-import 'package:clube/ui/widgets/CustomAppBar.dart';
 import 'package:flutter/material.dart';
-import '../../theme/AppColors.dart';
+import 'package:provider/provider.dart';
+import 'package:clube/services/FirestoreService.dart';
+import 'package:clube/ui/widgets/CustomAppBar.dart';
+import 'package:clube/ui/widgets/CustomBottomBar.dart';
+import 'package:clube/ui/widgets/CustomFAB.dart';
+import 'package:intl/intl.dart';
 
 class ReservaQuadraScreen extends StatefulWidget {
-  const ReservaQuadraScreen({super.key});
+  const ReservaQuadraScreen({Key? key}) : super(key: key);
 
   @override
-  State<ReservaQuadraScreen> createState() => _ReservaQuadraScreenState();
+  _ReservaQuadraScreenState createState() => _ReservaQuadraScreenState();
 }
 
 class _ReservaQuadraScreenState extends State<ReservaQuadraScreen> {
-  DateTime? _selectedDate;
-  int? _selectedQuadraIndex;
+  String? _selectedTipoQuadraId;
+  TimeOfDay? _selectedTime;
+  DateTime _selectedDate = DateTime.now();
+  bool _isSubmitting = false;
+  Map<String, String> _tipos = {};
+  bool _loaded = false;
 
-  Widget _buildStatusBadge(ThemeData theme, ColorScheme colors) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      decoration: BoxDecoration(
-        color: colors.secondaryContainer,
-        borderRadius: BorderRadius.circular(8),
-      ),
-      child: Text(
-        'Disponível',
-        style: theme.textTheme.labelSmall?.copyWith(
-          color: colors.onSecondaryContainer,
-        ),
-      ),
+  @override
+  void initState() {
+    super.initState();
+    _loadTipos();
+  }
+
+  Future<void> _loadTipos() async {
+    final service = Provider.of<FirestoreService>(context, listen: false);
+    final map = await service.getAllTipoQuadraMap();
+    setState(() {
+      _tipos = map;
+      _loaded = true;
+    });
+  }
+
+  Future<void> _pickDate() async {
+    final DateTime? date = await showDatePicker(
+      context: context,
+      initialDate: _selectedDate,
+      firstDate: DateTime.now(),
+      lastDate: DateTime.now().add(const Duration(days: 30)),
     );
+    if (date != null) setState(() => _selectedDate = date);
+  }
+
+  Future<void> _pickTime() async {
+    final TimeOfDay? time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay(hour: DateTime.now().hour, minute: 0),
+    );
+    if (time != null) setState(() => _selectedTime = time);
+  }
+
+  Future<void> _submit() async {
+    if (_selectedTipoQuadraId == null || _selectedTime == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Selecione tipo e horário.')),
+      );
+      return;
+    }
+
+    setState(() => _isSubmitting = true);
+    final service = Provider.of<FirestoreService>(context, listen: false);
+    final dt = DateTime(
+      _selectedDate.year,
+      _selectedDate.month,
+      _selectedDate.day,
+      _selectedTime!.hour,
+      _selectedTime!.minute,
+    );
+
+    try {
+      await service.createReserva(
+        tipoQuadraId: _selectedTipoQuadraId!,
+        dataHora: dt,
+      );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Reserva criada com sucesso!')),
+      );
+      Navigator.pop(context);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString())),
+      );
+    } finally {
+      setState(() => _isSubmitting = false);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final colorsTheme = Theme.of(context).extension<AppColors>()!;
-    final theme = Theme.of(context);
-    final colors = theme.colorScheme;
-
     return Scaffold(
-      backgroundColor: colorsTheme.backgroundColor,
       appBar: const CustomAppBar(title: 'Reservar Quadra'),
-
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildDateSelector(theme, context),
-            const SizedBox(height: 20),
-            Expanded(child: _buildQuadrasList(theme, colors)),
-            _buildReserveButton(theme, colors),
-          ],
-        ),
+      bottomNavigationBar: const CustomBottomBar(),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: CustomFAB(
+        onPressed: () => Navigator.pop(context),
       ),
-    );
-  }
-
-  Widget _buildAppBarGradient() {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          colors: [Color(0xFFA7C7E7), Color(0xFF6B9AC4)],
-          stops: [0, 1],
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-        ),
-      ),
-    );
-  }
-
-  Widget _buildLogoutButton(ColorScheme colors) {
-    return IconButton(
-      onPressed: () => Navigator.pop(context),
-      icon: const Icon(Icons.logout),
-      color: colors.onPrimary,
-    );
-  }
-
-  Widget _buildDateSelector(ThemeData theme, BuildContext context) {
-    return Row(
-      children: [
-        Icon(Icons.calendar_today, color: theme.colorScheme.primary),
-        const SizedBox(width: 10),
-        Text(
-          'Data selecionada:',
-          style: theme.textTheme.titleMedium,
-        ),
-        const SizedBox(width: 10),
-        Text(
-          _selectedDate != null
-              ? '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}'
-              : 'Nenhuma data',
-          style: theme.textTheme.bodyLarge,
-        ),
-        const Spacer(),
-        TextButton(
-          onPressed: () => _selectDate(context),
-          child: const Text('data'),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildQuadrasList(ThemeData theme, ColorScheme colors) {
-    return ListView.builder(
-      itemCount: 5,
-      itemBuilder: (context, index) => GestureDetector(
-        onTap: () => _selectQuadra(index),
-        child: Card(
-          color: _selectedQuadraIndex == index
-              ? colors.primaryContainer
-              : colors.surfaceContainerHighest,
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Icon(Icons.sports_tennis, color: colors.primary),
-                    const SizedBox(width: 10),
-                    Text(
-                      'Quadra ${index + 1}',
-                      style: theme.textTheme.titleLarge,
+      body: _loaded
+          ? Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text('Tipo de Quadra'),
+                  DropdownButtonFormField<String>(
+                    isExpanded: true,
+                    decoration: const InputDecoration(border: OutlineInputBorder()),
+                    items: _tipos.entries
+                        .map((e) => DropdownMenuItem(
+                              value: e.key,
+                              child: Text(e.value),
+                            ))
+                        .toList(),
+                    value: _selectedTipoQuadraId,
+                    onChanged: (v) => setState(() => _selectedTipoQuadraId = v),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text('Data'),
+                  InkWell(
+                    onTap: _pickDate,
+                    child: InputDecorator(
+                      decoration: const InputDecoration(border: OutlineInputBorder()),
+                      child: Text(DateFormat('dd/MM/yyyy').format(_selectedDate)),
                     ),
-                    const Spacer(),
-                    _buildStatusBadge(theme, colors),
-                  ],
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Tipo: Saibro • Capacidade: 4 pessoas',
-                  style: theme.textTheme.bodyMedium,
-                ),
-                const SizedBox(height: 8),
-                Text(
-                  'Localização: Setor ${index + 1}',
-                  style: theme.textTheme.bodyMedium,
-                ),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  void _selectQuadra(int index) {
-    setState(() {
-      _selectedQuadraIndex = index;
-    });
-  }
-
-  Future<void> _selectDate(BuildContext context) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime.now(),
-      lastDate: DateTime(DateTime.now().year + 1),
-    );
-
-    if (picked != null && picked != _selectedDate) {
-      setState(() {
-        _selectedDate = picked;
-        _selectedQuadraIndex = null;
-      });
-    }
-  }
-
-  Widget _buildReserveButton(ThemeData theme, ColorScheme colors) {
-    return SizedBox(
-      width: double.infinity,
-      child: FilledButton(
-        onPressed: _selectedDate != null && _selectedQuadraIndex != null
-            ? () => _confirmReservation()
-            : null,
-        style: FilledButton.styleFrom(
-          backgroundColor: colors.primary,
-          foregroundColor: colors.onPrimary,
-        ),
-        child: const Text('Confirmar Reserva'),
-      ),
-    );
-  }
-
-  void _confirmReservation() {
-
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Reserva Confirmada'),
-        content: Text('Quadra ${_selectedQuadraIndex! + 1} para '
-            '${_selectedDate!.day}/${_selectedDate!.month}/${_selectedDate!.year}'),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('OK'),
-          ),
-        ],
-      ),
+                  ),
+                  const SizedBox(height: 12),
+                  const Text('Horário (início)'),
+                  InkWell(
+                    onTap: _pickTime,
+                    child: InputDecorator(
+                      decoration: const InputDecoration(border: OutlineInputBorder()),
+                      child: Text(_selectedTime?.format(context) ?? 'Selecione o horário'),
+                    ),
+                  ),
+                  const Spacer(),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: _isSubmitting ? null : _submit,
+                      child: Text(_isSubmitting ? 'Aguarde...' : 'Reservar'),
+                    ),
+                  )
+                ],
+              ),
+            )
+          : const Center(child: CircularProgressIndicator()),
     );
   }
 }

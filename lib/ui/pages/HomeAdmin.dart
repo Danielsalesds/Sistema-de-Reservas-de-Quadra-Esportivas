@@ -77,7 +77,7 @@ class HomeAdminState extends State<HomeAdmin>{
             )
           ],
         ),
-      bottomNavigationBar: const CustomBottomBar(),
+      bottomNavigationBar: const CustomBottomBar(index:0),
       floatingActionButton: CustomFAB(
           onPressed: (){
             Navigator.push(

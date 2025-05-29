@@ -75,7 +75,7 @@ class HomeMembroState extends State<HomeMembro> {
           ),
         ],
       ),
-      bottomNavigationBar: const CustomBottomBar(),
+      bottomNavigationBar: const CustomBottomBar(index:0),
       floatingActionButton: CustomFAB(
         onPressed: () {
           Navigator.push(

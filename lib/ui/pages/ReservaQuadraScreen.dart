@@ -6,6 +6,8 @@ import 'package:clube/ui/widgets/CustomBottomBar.dart';
 import 'package:clube/ui/widgets/CustomFAB.dart';
 import 'package:intl/intl.dart';
 
+import '../../theme/AppColors.dart';
+
 class ReservaQuadraScreen extends StatefulWidget {
   const ReservaQuadraScreen({Key? key}) : super(key: key);
 
@@ -92,6 +94,7 @@ class _ReservaQuadraScreenState extends State<ReservaQuadraScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final colors = Theme.of(context).extension<AppColors>()!;
     return Scaffold(
       appBar: const CustomAppBar(title: 'Reservar Quadra'),
       bottomNavigationBar: const CustomBottomBar(),
@@ -137,13 +140,20 @@ class _ReservaQuadraScreenState extends State<ReservaQuadraScreen> {
                     ),
                   ),
                   const Spacer(),
-                  SizedBox(
-                    width: double.infinity,
-                    child: ElevatedButton(
-                      onPressed: _isSubmitting ? null : _submit,
-                      child: Text(_isSubmitting ? 'Aguarde...' : 'Reservar'),
-                    ),
+                  Padding(padding: const EdgeInsets.only(bottom: 15),
+                    child: SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: _isSubmitting ? null : _submit,
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: colors.baseColor,
+                          foregroundColor: colors.onBaseColor,
+                        ),
+                        child: Text(_isSubmitting ? 'Aguarde...' : 'Reservar'),
+                      ),
+                    )
                   )
+
                 ],
               ),
             )

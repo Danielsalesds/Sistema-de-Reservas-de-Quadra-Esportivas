@@ -22,10 +22,9 @@ class ListarReservasScreen extends StatelessWidget {
     final auth = Provider.of<AuthService>(context, listen: false);
     final userId = auth.getCurrentUser();
     final colors = Theme.of(context).extension<AppColors>()!;
-
     return Scaffold(
       appBar: const CustomAppBar(title: 'Minhas Reservas'),
-      bottomNavigationBar: const CustomBottomBar(),
+      bottomNavigationBar: const CustomBottomBar(index:2),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       floatingActionButton: CustomFAB(
         onPressed: () {
@@ -177,10 +176,10 @@ class ListarReservasScreen extends StatelessWidget {
                 context,
                 MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
               ),
-              backgroundColor: Theme.of(context).cardColor,
+              backgroundColor: colors.cardColor,
               shape: const CircleBorder(),
               elevation: 6,
-              child: Icon(Icons.sports_volleyball),
+              child: Icon(Icons.event, color: colors.textColor),
             ),
           ),
         ],

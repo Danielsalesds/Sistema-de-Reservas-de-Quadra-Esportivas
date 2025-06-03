@@ -72,14 +72,7 @@ class CadastroMembroPageState extends State<CadastroMembro>{
     return Scaffold(
         appBar: const CustomAppBar(title: 'Cadastrar',),
         bottomNavigationBar: const CustomBottomBar(),
-        floatingActionButton: CustomFAB(
-            onPressed: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
-              );
-            }
-        ),
+        floatingActionButton: CustomFAB(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       resizeToAvoidBottomInset: true,
       body: _isLoading

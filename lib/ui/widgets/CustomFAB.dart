@@ -2,14 +2,15 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme/AppColors.dart';
+import '../pages/ReservaQuadraScreen.dart';
 
 class CustomFAB extends StatelessWidget{
-  final VoidCallback onPressed;
+  // final VoidCallback onPressed;
   final String? heroTag;
 
   const CustomFAB({
     super.key,
-    required this.onPressed,
+    // required this.onPressed,
     this.heroTag,
   });
   @override
@@ -17,7 +18,12 @@ class CustomFAB extends StatelessWidget{
     final colors = Theme.of(context).extension<AppColors>()!;
       return FloatingActionButton(
         heroTag: null,
-        onPressed: onPressed,
+        onPressed: (){
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
+        );
+    },
         elevation: 6,
         backgroundColor: colors.cardColor,
         shape: ShapeBorder.lerp(

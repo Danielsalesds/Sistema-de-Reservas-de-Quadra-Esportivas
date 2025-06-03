@@ -33,24 +33,36 @@ class GerenciarTipoQuadraState extends State<GerenciarTipoQuadra>{
     return Scaffold(
       appBar: const CustomAppBar(title: 'Gerenciar Tipo Quadras'),
       bottomNavigationBar: const CustomBottomBar(),
-      floatingActionButton: CustomFAB(
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
-            );
-          }
-      ),
+      floatingActionButton: CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SingleChildScrollView(
         child: Column(
           children: [
+            const SizedBox(height: 10,),
+            Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(100),
+                    ),child:ClipOval(child:Image.asset('assets/tennis.png', width: 250,height: 200,fit: BoxFit.cover),),
+                  ),
+                ]
+            ),
+            Text("Adicionar Novo Tipo de Quadra",
+              style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20
+              ),
+            ),
+            const SizedBox(height: 50,),
             Row(
               children: [
                 Expanded(child: CustomTextFormField(label: "Nome:", controller: nomeTextController,),),
               ],
             ),
-            const SizedBox(height: 30,),
+            const SizedBox(height: 50,),
             CustomButton(height: 85, width: 250, text: "Cadastrar", onclick: create),
           ],
         ),

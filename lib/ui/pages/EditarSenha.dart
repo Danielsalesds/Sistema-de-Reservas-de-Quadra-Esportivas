@@ -77,15 +77,7 @@ class EditarSenhaState extends State<EditarSenha> {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Editar senha'),
       bottomNavigationBar: const CustomBottomBar(),
-      floatingActionButton: CustomFAB(
-          onPressed: () {
-            Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => const ReservaQuadraScreen()),
-            );
-          }
-      ),
+      floatingActionButton: CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SingleChildScrollView(
         child: Column(

@@ -64,14 +64,7 @@ class EditarQuadrasState extends State<EditarQuadras>{
     return Scaffold(
       appBar: const CustomAppBar(title: 'Editar quadras'),
       bottomNavigationBar: const CustomBottomBar(),
-        floatingActionButton: CustomFAB(
-            onPressed: (){
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
-              );
-            }
-        ),
+        floatingActionButton: CustomFAB(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body:
       SingleChildScrollView(
@@ -118,12 +111,15 @@ class EditarQuadrasState extends State<EditarQuadras>{
             Row(children: [
               Padding(padding: const EdgeInsets.symmetric(horizontal:  35),
                 child:StreamBuilder<QuerySnapshot>(
-                    stream: firestore.geAllTipoQuadra(),
+                    stream: tipoQuadraId=='vzyWsuwL9JZIkEdT2zRP'
+                        ? firestore.getAllTipoQuadra2()
+                        : firestore.getAllTipoQuadra(),
                     builder:  (context, snapshot) {
                       if (!snapshot.hasData) {
                         return const Center(child: CircularProgressIndicator(),);
                       }
                       var tipos = snapshot.data!.docs;
+
                       return SizedBox(width: 340,
                           child: DropdownButton<String>(
                             value: tipoQuadraId,
@@ -136,7 +132,8 @@ class EditarQuadrasState extends State<EditarQuadras>{
                                   )
                               ),
                             ),
-                            items: tipos.map((DocumentSnapshot doc) {
+                            items: tipos
+                                .map((DocumentSnapshot doc) {
                               String nome = doc['nome'];
                               String id = doc['id'];
                               return DropdownMenuItem<String>(

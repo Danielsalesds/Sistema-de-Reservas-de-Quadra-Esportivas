@@ -44,16 +44,9 @@ class ListarQuadrasState extends State<ListarQuadras>{
 
     return Scaffold(
       backgroundColor: colors.backgroundColor,
-      appBar: const CustomAppBar(title: 'Fechar quadras'),
-      bottomNavigationBar: const CustomBottomBar(),
-      floatingActionButton: CustomFAB(
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
-            );
-          }
-      ),
+      appBar: const CustomAppBar(title: 'Gerenciar quadras'),
+      bottomNavigationBar: const CustomBottomBar(index: 1,),
+      floatingActionButton: const CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body:
 
@@ -65,16 +58,29 @@ class ListarQuadrasState extends State<ListarQuadras>{
                 if (!snapshot.hasData || !isReady) return const Center(child: CircularProgressIndicator());
 
                 final quadras = snapshot.data!.docs;
-
                 if (quadras.isEmpty) return const Center(child: Text('Nenhuma quadra cadastrada.'));
-                // Ordena a lista de quadras, primeiro pelo Status depois pelo tipo e por último pelo nome.
-                quadras.sort((a,b){
-                  int compareStatus = (b['status']? 1 : 0).compareTo(a['status'] ? 1 : 0);
+                // quadras.sort((a,b){
+                //   int compareStatus = (b['status']? 1 : 0).compareTo(a['status'] ? 1 : 0);
+                //   if (compareStatus != 0) return compareStatus;
+                //   int compareTipo = tipos[a['tipoQuadraId']]!.toLowerCase().compareTo(tipos[b['tipoQuadraId']]!.toLowerCase());
+                //   if (compareTipo != 0) return compareTipo;
+                //   return a['nome'].toLowerCase().compareTo(b['nome'].toLowerCase());
+                // });
+                quadras.sort((a, b) {
+                  int compareStatus = ((b['status'] ?? false) ? 1 : 0)
+                      .compareTo((a['status'] ?? false) ? 1 : 0);
                   if (compareStatus != 0) return compareStatus;
-                  int compareTipo = tipos[a['tipoQuadraId']]!.toLowerCase().compareTo(tipos[a['tipoQuadraId']]!.toLowerCase());
+
+                  final tipoA = tipos[a['tipoQuadraId']] ?? '';
+                  final tipoB = tipos[b['tipoQuadraId']] ?? '';
+                  int compareTipo = tipoA.toLowerCase().compareTo(tipoB.toLowerCase());
                   if (compareTipo != 0) return compareTipo;
-                  return a['nome'].toLowerCase().compareTo(b['nome'].toLowerCase());
+
+                  final nomeA = a['nome'] ?? '';
+                  final nomeB = b['nome'] ?? '';
+                  return nomeA.toLowerCase().compareTo(nomeB.toLowerCase());
                 });
+
                 return Padding(padding: const EdgeInsets.only(bottom: 40),
                 child: ListView.builder(
                   itemCount: quadras.length,

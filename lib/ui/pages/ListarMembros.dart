@@ -27,14 +27,7 @@ class _ListarMembroState extends State<ListarMembro> {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Gerenciar Membros',),
       bottomNavigationBar: const CustomBottomBar(),
-      floatingActionButton: CustomFAB(
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
-            );
-          }
-      ),
+      floatingActionButton: CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
      body: Stack(
         children: [
@@ -47,7 +40,9 @@ class _ListarMembroState extends State<ListarMembro> {
               final membros = snapshot.data!.docs;
 
               if (membros.isEmpty) return const Center(child: Text('Nenhum membro cadastrado.'));
-
+              membros.sort((a,b){
+                return a['nome'].toLowerCase().compareTo(b['nome'].toLowerCase());
+              });
               return Padding(padding: const EdgeInsets.only(bottom: 40),
                 child: ListView.builder(
                   itemCount: membros.length,

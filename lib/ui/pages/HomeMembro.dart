@@ -76,14 +76,7 @@ class HomeMembroState extends State<HomeMembro> {
         ],
       ),
       bottomNavigationBar: const CustomBottomBar(index:0),
-      floatingActionButton: CustomFAB(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const ReservaQuadraScreen()),
-          );
-        },
-      ),
+      floatingActionButton: CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

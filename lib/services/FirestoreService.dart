@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:clube/services/AuthService.dart';
+import 'package:diacritic/diacritic.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 
@@ -33,7 +34,9 @@ class FirestoreService {
   Future<void> createQuadra(String nome,bool status, int capacidade,String tipoQuadraId )async {
     try{
       final quadraDoc = _firestore.collection('quadras').doc();
+      String nomeNormalizado = removeDiacritics(nome.trim().toLowerCase());
       await quadraDoc.set({
+        'nomeNormalizado':nomeNormalizado,
         'nome':nome,
         'capacidade': capacidade,
         'status': status,
@@ -50,27 +53,59 @@ class FirestoreService {
       final tipoDoc = _firestore.collection('tipoQuadra').doc();
       await tipoDoc.set({
         'nome': nome,
-        'id': tipoDoc.id
+        'id': tipoDoc.id,
+        'status': true
       });
     }catch(e){
       throw Exception(e);
     }
   }
+  Future<bool> isNomeDisponivel(String idTipo, String nome) async {
+    final nomeNormalizado = removeDiacritics(nome.trim().toLowerCase());
 
-  Stream<QuerySnapshot> geAllTipoQuadra() {
-    return _firestore.collection('tipoQuadra')
-        .orderBy('nome')
-        .snapshots();
+    final query = await _firestore.collection('quadras')
+        .where('tipoQuadraId', isEqualTo: idTipo)
+        .where('nomeNormalizado', isEqualTo: nomeNormalizado)
+        .get();
+
+    return query.docs.isEmpty;
   }
 
+  Future<bool> getNomeDisponivel(String idTipo, String nome) async {
+    QuerySnapshot snapshot = await _firestore.collection('quadras')
+        .where('tipoQuadraId', isEqualTo: idTipo)
+        .where('nome', isEqualTo: nome)
+        .get();
+    return snapshot.size==0;
+  }
+
+  Stream<QuerySnapshot> getAllTipoQuadra() {
+    return _firestore.collection('tipoQuadra')
+        .orderBy('nome')
+        .where('status',isEqualTo: true)
+        .where('id', isNotEqualTo: 'vzyWsuwL9JZIkEdT2zRP')
+        .snapshots();
+  }
+  Stream<QuerySnapshot> getAllTipoQuadra2() {
+    return _firestore.collection('tipoQuadra')
+        .orderBy('nome')
+        .where('status',isEqualTo: true)
+        .snapshots();
+  }
+  
   Future<String> getTipoQuadra(String id)async {
     final doc = await _firestore.collection('tipoQuadra').doc(id).get();
     return doc.get('nome');
   }
 
   Future<Map<String, String>> getAllTipoQuadraMap() async {
-    QuerySnapshot snapshot = await _firestore
-        .collection('tipoQuadra')
+    // QuerySnapshot snapshot = await _firestore
+    //     //     .collection('tipoQuadra')
+    //     //     .get();
+    QuerySnapshot snapshot = await _firestore.collection('tipoQuadra')
+        .orderBy('nome')
+        .where('status',isEqualTo: true)
+        .where('id', isNotEqualTo: 'vzyWsuwL9JZIkEdT2zRP')
         .get();
 
     Map<String, String> tipos = {};
@@ -86,15 +121,32 @@ class FirestoreService {
         .snapshots();
   }
 
+
   Future<String> getQuadraNome(String quadraId) async {
     final doc = await _firestore.collection('quadras').doc(quadraId).get();
     return doc.get('nome') as String;
   }
-
+  Future<void> deleteTipoQuadra(String id) async{
+    final query = await _firestore
+        .collection('quadras')
+        .where('tipoQuadraId', isEqualTo: id)
+        .get();
+    for (var doc in query.docs) {
+      await doc.reference.update({
+        'tipoQuadraId': 'vzyWsuwL9JZIkEdT2zRP',
+        'status':false
+      });
+    }
+    final doc = await _firestore.collection('tipoQuadra').doc(id).get();
+    final bool status = doc.get('status');
+    await _firestore.collection('tipoQuadra').doc(id).update({'status':!status});
+  }
   Future<void> editQuadra(Map<String, dynamic> updates, String id) async{
     await _firestore.collection('quadras').doc(id).update(updates);
   }
-
+  Future<void> editTipoQuadra(Map<String, dynamic> updates, String id) async{
+    await _firestore.collection('tipoQuadra').doc(id).update(updates);
+  }
 
   Future<void> setStatusQuadra(String id) async{
     bool status = await getStatusQuadra(id);
@@ -309,6 +361,7 @@ class FirestoreService {
     return _firestore
         .collection('reservas')
         .where('idMembro', isEqualTo: userId)
+        .orderBy('status',descending: true)
         .orderBy('dataHora')
         .snapshots();
   }

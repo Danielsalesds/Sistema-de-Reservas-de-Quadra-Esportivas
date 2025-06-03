@@ -150,14 +150,7 @@ class _EditarReservaScreenState extends State<EditarReservaScreen> {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Editar Reserva'),
       bottomNavigationBar: const CustomBottomBar(),
-      floatingActionButton: CustomFAB(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
-          );
-        },
-      ),
+      floatingActionButton: CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())

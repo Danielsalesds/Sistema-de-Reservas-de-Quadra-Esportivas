@@ -78,14 +78,7 @@ class HomeAdminState extends State<HomeAdmin>{
           ],
         ),
       bottomNavigationBar: const CustomBottomBar(index:0),
-      floatingActionButton: CustomFAB(
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
-            );
-          }
-      ),
+      floatingActionButton: CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Column(
         children: [

@@ -62,14 +62,7 @@ class EditProfilePageState extends State<EditProfilePage> {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Perfil'),
       bottomNavigationBar: const CustomBottomBar(),
-      floatingActionButton: CustomFAB(
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
-            );
-          }
-      ),
+      floatingActionButton: CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SingleChildScrollView(
         child: Column(

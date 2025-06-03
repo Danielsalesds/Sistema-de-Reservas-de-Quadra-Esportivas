@@ -1,5 +1,6 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:clube/ui/pages/GerenciarTipoQuadra.dart';
 import 'package:clube/ui/widgets/ErroDialog.dart';
 import 'package:clube/ui/widgets/SucessDialog.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import '../widgets/CustomBottomBar.dart';
 import '../widgets/CustomButton.dart';
 import '../widgets/CustomFAB.dart';
 import '../widgets/CustomTextFormField.dart';
+import 'ListarTipoQuadras.dart';
 import 'ReservaQuadraScreen.dart';
 
 class CadastrarQuadra extends StatefulWidget{
@@ -35,6 +37,15 @@ class CadastrarQuadraState extends State<CadastrarQuadra>{
         showErrorDialog(context, "Preencha todos os campos!");
         return;
       }
+      final t = await firestore.isNomeDisponivel(tipoQuadraId!, nomeTextController.text);
+
+      print('Query retornou ${t} documentos');
+      if(!t){
+        if(!mounted) return;
+        showErrorDialog(context,'Já existe quadra com esse nome. Adicione um nome diferente');
+        return;
+      }
+
       await firestore.createQuadra(nomeTextController.text, status, int.parse(capacidadeTextController.text), tipoQuadraId!);
       if(!mounted) return;
       showSucessDialog(context, 'Nova quadra adicionada!');
@@ -47,16 +58,9 @@ class CadastrarQuadraState extends State<CadastrarQuadra>{
     final firestore = Provider.of<FirestoreService>(context, listen:false);
     final colors = Theme.of(context).extension<AppColors>()!;
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Gerenciar quadras',),
+      appBar: const CustomAppBar(title: 'Criar quadras',),
       bottomNavigationBar: const CustomBottomBar(),
-      floatingActionButton: CustomFAB(
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
-            );
-          }
-      ),
+      floatingActionButton: const CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SingleChildScrollView(
         child: Column(
@@ -68,7 +72,7 @@ class CadastrarQuadraState extends State<CadastrarQuadra>{
                   Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(100),
-                    ),child:ClipOval(child:Image.asset('assets/tennis.png', width: 250,height: 200,fit: BoxFit.cover),),
+                    ),child:ClipOval(child:Image.asset('assets/soccer.png', width: 250,height: 200,fit: BoxFit.cover),),
                   ),
                 ]
             ),
@@ -95,7 +99,7 @@ class CadastrarQuadraState extends State<CadastrarQuadra>{
             Row(children: [
               Padding(padding: const EdgeInsets.symmetric(horizontal:  35),
                 child:StreamBuilder<QuerySnapshot>(
-                    stream: firestore.geAllTipoQuadra(),
+                    stream: firestore.getAllTipoQuadra(),
                     builder:  (context, snapshot) {
                       if (!snapshot.hasData) {
                         return const Center(child: CircularProgressIndicator(),);
@@ -179,78 +183,8 @@ class CadastrarQuadraState extends State<CadastrarQuadra>{
   FilledButton buildFilledButton(BuildContext context, AppColors colors, FirestoreService firestore) {
     return FilledButton.icon(
                   onPressed:(){
-                    AwesomeDialog(
-                      context: context,
-                      dialogType: DialogType.info,
-                      animType: AnimType.scale,
-                      body: Column(
-                        children: [
-                          Padding(padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
-                            child: Text("Novo Tipo de Quadra",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                                color: Theme.of(context).colorScheme.primary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 22
-                            ),),
-                          ),
-                          Padding(padding: const EdgeInsets.symmetric(horizontal: 10),
-                            child: Text('Cadastre um novo espaço para reservas no clube.',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Theme.of(context).colorScheme.tertiary,
-                              ),
-                            ),
-                          ),
-                          const SizedBox(height: 10,),
-                          CustomTextFormField(label: "Nome",controller: tipoQuadraTextController,),
-                          const SizedBox(height: 30,),
-                        ],
-                      ),
-                      btnOkText: "Salvar",
-                      btnOkColor: colors.okBtnColor,
-                      btnOkOnPress: () async {
-                        try{
-                          if(tipoQuadraTextController.text.isEmpty){
-                            AlertaFlutuante.mostrar(
-                              context: context,
-                              mensagem: 'Digite um nome válido!',
-                              cor: colors.cancelBtnColor,
-                              alinhamento: Alignment.topCenter,
-                            );
-                            return;
-                          }
-                          await firestore.createTipoQuadra(tipoQuadraTextController.text);
-
-                          AlertaFlutuante.mostrar(
-                            context: context,
-                            mensagem: 'Novo tipo de quadra criado!',
-                            cor: colors.okBtnColor,
-                            alinhamento: Alignment.topCenter,
-                          );
-
-                          tipoQuadraTextController.clear();
-                        }catch (e){
-                          throw Exception(e);
-                        }
-                      },
-                      btnCancelText: "Cancelar",
-                      btnCancelColor: colors.cancelBtnColor,
-                      btnCancelOnPress:(){
-                        tipoQuadraTextController.clear();
-                      },
-                      titleTextStyle: TextStyle(
-                          color: Theme.of(context).colorScheme.primary,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 22
-                      ),
-                      descTextStyle: TextStyle(
-                        fontSize: 16,
-                        color: Theme.of(context).colorScheme.tertiary,
-                      ),
-                    ).show();
-                  },
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=> const ListarTipoQuadras()));
+                    },
                   label: const Text("Tipo de Quadra"),
                   icon: const Icon(Icons.add),
               );

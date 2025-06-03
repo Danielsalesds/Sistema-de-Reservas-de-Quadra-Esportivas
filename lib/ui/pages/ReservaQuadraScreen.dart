@@ -99,9 +99,7 @@ class _ReservaQuadraScreenState extends State<ReservaQuadraScreen> {
       appBar: const CustomAppBar(title: 'Reservar Quadra'),
       bottomNavigationBar: const CustomBottomBar(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: CustomFAB(
-        onPressed: () => Navigator.pop(context),
-      ),
+      floatingActionButton: const CustomFAB(),
       body: _loaded
           ? Padding(
               padding: const EdgeInsets.all(16.0),

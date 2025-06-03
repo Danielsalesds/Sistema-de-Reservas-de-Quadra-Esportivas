@@ -59,14 +59,7 @@ class ProfilePageState extends State<ProfilePage> {
       backgroundColor: colors.backgroundColor,
       appBar: const CustomAppBar(title: 'Perfil'),
       bottomNavigationBar: const CustomBottomBar(index:3),
-      floatingActionButton: CustomFAB(
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
-            );
-          }
-      ),
+      floatingActionButton: CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SingleChildScrollView(
         child: Column(

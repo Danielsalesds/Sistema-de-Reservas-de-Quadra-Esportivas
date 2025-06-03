@@ -3,6 +3,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme/AppColors.dart';
+import '../pages/ListarQuadras.dart';
 import '../pages/ListarReservasScreen.dart';
 
 class CustomBottomBar extends StatelessWidget{
@@ -46,7 +47,7 @@ class CustomBottomBar extends StatelessWidget{
                   //1
                   IconButton(
                       onPressed: () {
-
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> ListarQuadras()));
                       },
                       icon: index==1 ? const Icon(Icons.sports_soccer_outlined, color: Colors.black26 ,)
                         : Icon(Icons.sports_soccer_outlined, color: colors.iconColor,)),

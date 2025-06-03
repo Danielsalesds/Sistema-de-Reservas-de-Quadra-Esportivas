@@ -23,14 +23,7 @@ class _HomeMembro2State extends State<HomeMembro2> {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Painel de Associado',),
       bottomNavigationBar: const CustomBottomBar(),
-      floatingActionButton: CustomFAB(
-          onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ReservaQuadraScreen()),
-            );
-          }
-      ),
+      floatingActionButton: CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Padding(
         padding: const EdgeInsets.all(16.0),

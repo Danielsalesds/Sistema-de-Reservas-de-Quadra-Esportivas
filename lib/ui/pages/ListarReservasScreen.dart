@@ -26,14 +26,7 @@ class ListarReservasScreen extends StatelessWidget {
       appBar: const CustomAppBar(title: 'Minhas Reservas'),
       bottomNavigationBar: const CustomBottomBar(index:2),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: CustomFAB(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const ReservaQuadraScreen()),
-          );
-        },
-      ),
+      floatingActionButton: CustomFAB(),
       body: Stack(
         children: [
           StreamBuilder<QuerySnapshot>(

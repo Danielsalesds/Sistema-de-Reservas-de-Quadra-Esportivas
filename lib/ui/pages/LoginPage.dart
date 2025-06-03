@@ -5,7 +5,6 @@ import 'package:clube/ui/widgets/CustomPasswordFormField.dart';
 import 'package:clube/ui/widgets/CustomTextFormField.dart';
 import 'package:clube/ui/widgets/ErroDialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 

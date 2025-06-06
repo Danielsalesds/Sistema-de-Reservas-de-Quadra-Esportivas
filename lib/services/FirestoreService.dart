@@ -9,6 +9,11 @@ class FirestoreService {
   final auth = AuthService();
   final FirebaseAuth _auth =  FirebaseAuth.instance;
 
+
+  // Constantes para horário de funcionamento
+  static const int _horaAbertura = 7; // 7:00
+  static const int _horaFechamento = 22; // 22:00
+
   Future<void> createUser(
     String nome,
     String email,
@@ -290,14 +295,57 @@ class FirestoreService {
     await _firestore.collection('membros').doc(id).update(data);
   }
 
+  // Método para validar horário de funcionamento
+  bool _isHorarioFuncionamento(DateTime dataHora) {
+    final hora = dataHora.hour;
+    return hora >= _horaAbertura && hora < _horaFechamento;
+  }
+
+  // Método para contar quadras ocupadas no horário
+  Future<int> _contarQuadrasOcupadas(String tipoQuadraId, DateTime dataHora) async {
+    final inicioSlot = dataHora;
+    final fimSlot = dataHora.add(Duration(hours: 1));
+    
+    final reservas = await _firestore
+        .collection('reservas')
+        .where('tipoQuadraId', isEqualTo: tipoQuadraId)
+        .where('dataHora', isGreaterThanOrEqualTo: Timestamp.fromDate(inicioSlot))
+        .where('dataHora', isLessThan: Timestamp.fromDate(fimSlot))
+        .where('status', isEqualTo: true)
+        .get();
+    
+    return reservas.docs.length;
+  }
+
+  // Método para contar total de quadras disponíveis do tipo
+  Future<int> _contarQuadrasDisponiveis(String tipoQuadraId) async {
+    final quadras = await _firestore
+        .collection('quadras')
+        .where('tipoQuadraId', isEqualTo: tipoQuadraId)
+        .where('status', isEqualTo: true)
+        .get();
+    
+    return quadras.docs.length;
+  }
+
   
 
-   Future<void> createReserva({
+  Future<void> createReserva({
     required String tipoQuadraId,
     required DateTime dataHora,
   }) async {
     final uid = auth.getCurrentUser();
     final agora = DateTime.now();
+
+    // Validar se a hora é em ponto (minutos = 0)
+    if (dataHora.minute != 0) {
+      throw Exception('Reservas só podem ser feitas em horários fechados (exemplo: 08:00, 09:00, etc.).');
+    }
+
+    // Validar horário de funcionamento
+    if (!_isHorarioFuncionamento(dataHora)) {
+      throw Exception('Reservas só podem ser feitas das $_horaAbertura:00 às $_horaFechamento:00.');
+    }
 
     // RN5: não reservar para horário passado
     if (dataHora.isBefore(agora)) {
@@ -315,8 +363,19 @@ class FirestoreService {
         .where('dataHora', isLessThan: Timestamp.fromDate(fimDia))
         .where('status', isEqualTo: true)
         .get();
+
     if (reservasCliente.docs.isNotEmpty) {
-      throw Exception('Você já tem uma reserva deste tipo de quadra neste dia.');
+      final tipoNome = await getTipoQuadra(tipoQuadraId);
+      throw Exception('Você já possui uma reserva de $tipoNome para este dia.');
+    }
+
+    // Verificar se há quadras disponíveis neste horário
+    final quadrasOcupadas = await _contarQuadrasOcupadas(tipoQuadraId, dataHora);
+    final totalQuadras = await _contarQuadrasDisponiveis(tipoQuadraId);
+
+    if (quadrasOcupadas >= totalQuadras) {
+      final tipoNome = await getTipoQuadra(tipoQuadraId);
+      throw Exception('Não há quadras de $tipoNome disponíveis neste horário.');
     }
 
     // RN1: buscar quadras disponíveis (status=true e sem reserva no horário)
@@ -353,7 +412,8 @@ class FirestoreService {
       }
     }
 
-    throw Exception('Não há quadras disponíveis neste horário para o tipo selecionado.');
+    final tipoNome = await getTipoQuadra(tipoQuadraId);
+    throw Exception('Não há quadras de $tipoNome disponíveis neste horário.');
   }
 
    /// Lista reservas do usuário autenticado
@@ -365,6 +425,20 @@ class FirestoreService {
         .orderBy('dataHora')
         .snapshots();
   }
+
+  Stream<QuerySnapshot> getReservasDoUsuarioHoje(String userId) {
+    final now = DateTime.now();
+    final inicioDia = DateTime(now.year, now.month, now.day);
+    final fimDia = inicioDia.add(Duration(days: 1));
+    return _firestore
+        .collection('reservas')
+        .where('idMembro', isEqualTo: userId)
+        .where('dataHora', isGreaterThanOrEqualTo: Timestamp.fromDate(inicioDia))
+        .where('dataHora', isLessThan: Timestamp.fromDate(fimDia))
+        .orderBy('dataHora')
+        .snapshots();
+  }
+
 
   Future<void> cancelarReserva(String id) async {
   await FirebaseFirestore.instance.collection('reservas').doc(id).update({'status': false});

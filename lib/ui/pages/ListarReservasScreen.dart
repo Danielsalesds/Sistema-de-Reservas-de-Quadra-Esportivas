@@ -10,7 +10,7 @@ import 'package:clube/ui/widgets/CustomFAB.dart';
 import 'package:clube/ui/widgets/CustomAlert.dart';
 import 'package:clube/theme/AppColors.dart';
 import 'ReservaQuadraScreen.dart';
-import 'EditarReservaScreen.dart'; // Você precisará criar esta tela
+import 'EditarReservaScreen.dart';
 import 'package:intl/intl.dart';
 
 class ListarReservasScreen extends StatelessWidget {
@@ -49,6 +49,7 @@ class ListarReservasScreen extends StatelessWidget {
                   final reservaId = doc.id;
                   final data = doc.data() as Map<String, dynamic>;
                   final quadraId = data['idQuadra'] ?? '';
+                  final membroId = data['idMembro'] ?? '';
                   final status = data['status'] ?? false;
                   final tipoQuadraId = data['tipoQuadraId'] ?? '';
 
@@ -60,13 +61,29 @@ class ListarReservasScreen extends StatelessWidget {
                     formattedDate = DateFormat('dd/MM/yyyy HH:mm').format(reservaDateTime);
                   } catch (_) {}
 
-                  return FutureBuilder<DocumentSnapshot>(
-                    future: FirebaseFirestore.instance.collection('quadras').doc(quadraId).get(),
+                  return FutureBuilder<List<DocumentSnapshot>>(
+                    future: Future.wait([
+                      FirebaseFirestore.instance.collection('quadras').doc(quadraId).get(),
+                      FirebaseFirestore.instance.collection('membros').doc(membroId).get(),
+                      FirebaseFirestore.instance.collection('tipoQuadra').doc(tipoQuadraId).get(),
+                    ]),
                     builder: (context, snapshot) {
                       String nomeQuadra = 'Carregando...';
+                      String nomeUsuario = 'Carregando...';
+                      String tipoQuadra = 'Carregando...';
+                      
                       if (snapshot.connectionState == ConnectionState.done && snapshot.hasData) {
-                        final quadraData = snapshot.data!.data() as Map<String, dynamic>?;
+                        // Dados da quadra
+                        final quadraData = snapshot.data![0].data() as Map<String, dynamic>?;
                         nomeQuadra = quadraData?['nome'] ?? 'Quadra não encontrada';
+                        
+                        // Dados do usuário
+                        final membroData = snapshot.data![1].data() as Map<String, dynamic>?;
+                        nomeUsuario = membroData?['nome'] ?? 'Usuário não encontrado';
+                        
+                        // Dados do tipo de quadra
+                        final tipoQuadraData = snapshot.data![2].data() as Map<String, dynamic>?;
+                        tipoQuadra = tipoQuadraData?['nome'] ?? 'Tipo não encontrado';
                       }
 
                       return Card(
@@ -76,6 +93,8 @@ class ListarReservasScreen extends StatelessWidget {
                           subtitle: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
+                              Text('Tipo: $tipoQuadra'),
+                              Text('Usuário: $nomeUsuario'),
                               Text('Data/Hora: $formattedDate'),
                               Text('Status: ${status ? "Confirmada" : "Cancelada"}',
                                 style: TextStyle(

@@ -3,11 +3,15 @@ import 'package:clube/ui/pages/ReservaQuadraScreen.dart';
 import 'package:clube/ui/widgets/CardAdmin.dart';
 import 'package:clube/ui/widgets/CustomBottomBar.dart';
 import 'package:clube/ui/widgets/CustomFAB.dart';
+import 'package:clube/ui/widgets/ReservaHojeWidget.dart';
 import 'package:clube/ui/widgets/WelcomeCard.dart';
+import 'package:clube/ui/widgets/ReservaHojeWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
 import '../../services/AuthService.dart';
+import '../../services/FirestoreService.dart';
 import '../../services/ThemeService.dart';
 import '../../theme/AppColors.dart';
 
@@ -75,7 +79,7 @@ class HomeMembroState extends State<HomeMembro> {
           ),
         ],
       ),
-      bottomNavigationBar: const CustomBottomBar(index:0),
+      bottomNavigationBar: const CustomBottomBar(index: 0),
       floatingActionButton: CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Column(
@@ -83,6 +87,8 @@ class HomeMembroState extends State<HomeMembro> {
         children: [
           const WelcomeCard(),
           const SizedBox(height: 8),
+          
+          
           buildCardMembro(
             context,
             title: "Minhas Reservas",
@@ -90,8 +96,103 @@ class HomeMembroState extends State<HomeMembro> {
             icon: Icons.list_alt_outlined,
             destination: const ListarReservasScreen(),
           ),
+          
+          const SizedBox(height: 16),
+          // Seção de reservas do dia atual
+          Padding(
+            padding: EdgeInsets.symmetric(horizontal: paddingCardH),
+            child: Text(
+              "Reservas de Hoje",
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+                color: colors.textColor,
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          
+          Expanded(
+            child: _buildReservasHoje(),
+          ),
+          
+          const SizedBox(height: 8),
         ],
       ),
+    );
+  }
+
+  Widget _buildReservasHoje() {
+    final firestore = Provider.of<FirestoreService>(context, listen: false);
+    final auth = Provider.of<AuthService>(context, listen: false);
+    final userId = auth.getCurrentUser();
+    final colors = Theme.of(context).extension<AppColors>()!;
+
+    return StreamBuilder<QuerySnapshot>(
+      stream: firestore.getReservasDoUsuarioHoje(userId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const Center(child: CircularProgressIndicator());
+        }
+
+        if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+          return Padding(
+            padding: EdgeInsets.symmetric(horizontal: paddingCardH),
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(24.0),
+                child: Column(
+                  children: [
+                    Icon(
+                      Icons.event_available,
+                      size: 64,
+                      color: colors.textColor.withOpacity(0.3),
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      'Nenhuma reserva para hoje',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w500,
+                        color: colors.textColor.withOpacity(0.7),
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Text(
+                      'Que tal fazer uma reserva?',
+                      style: TextStyle(
+                        fontSize: 14,
+                        color: colors.textColor.withOpacity(0.5),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+          );
+        }
+
+        final docs = snapshot.data!.docs;
+
+        return ListView.builder(
+          padding: EdgeInsets.symmetric(horizontal: paddingCardH),
+          itemCount: docs.length,
+          itemBuilder: (context, index) {
+            final doc = docs[index];
+            return ReservaHojeWidget(
+              reserva: doc,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const ListarReservasScreen(),
+                  ),
+                );
+              },
+            );
+          },
+        );
+      },
     );
   }
 

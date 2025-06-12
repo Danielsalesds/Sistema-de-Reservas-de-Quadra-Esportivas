@@ -39,7 +39,15 @@ class ListarReservasScreen extends StatelessWidget {
                 return const Center(child: Text('Nenhuma reserva encontrada.'));
               }
 
-              final docs = snapshot.data!.docs;
+              final docs = snapshot.data!.docs.where((doc) {
+                 final data = doc.data() as Map<String, dynamic>;
+                final timestamp = data['dataHora'];
+                if (timestamp is Timestamp) {
+                 final reservaDateTime = timestamp.toDate();
+                return reservaDateTime.isAfter(DateTime.now());
+                }
+               return false;
+                }).toList();
 
               return ListView.builder(
                 itemCount: docs.length,

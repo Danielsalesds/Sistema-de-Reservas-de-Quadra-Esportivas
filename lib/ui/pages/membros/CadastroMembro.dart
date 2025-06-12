@@ -1,19 +1,16 @@
 
 import 'package:clube/services/FirestoreService.dart';
 import 'package:clube/ui/widgets/ErroDialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import '../widgets/CustomAppBar.dart';
-import '../widgets/CustomBottomBar.dart';
-import '../widgets/CustomButton.dart';
-import '../widgets/CustomFAB.dart';
-import '../widgets/CustomTelFormField.dart';
-import '../widgets/CustomTextFormField.dart';
-import '../widgets/SucessDialog.dart';
-import 'ReservaQuadraScreen.dart';
+import '../../widgets/CustomAppBar.dart';
+import '../../widgets/CustomBottomBar.dart';
+import '../../widgets/CustomButton.dart';
+import '../../widgets/CustomFAB.dart';
+import '../../widgets/CustomTelFormField.dart';
+import '../../widgets/CustomTextFormField.dart';
+import '../../widgets/SucessDialog.dart';
 
 class CadastroMembro extends StatefulWidget{
   
@@ -52,7 +49,6 @@ class CadastroMembroPageState extends State<CadastroMembro>{
     });
     try{
           String senha = createPass(nomeTextController.text);
-          print(senha);
           await firestore.createMembro(nomeTextController.text,
           emailTextController.text, telefoneTextController.text, _selecionado,senha);
           if (!mounted) return;
@@ -72,7 +68,7 @@ class CadastroMembroPageState extends State<CadastroMembro>{
     return Scaffold(
         appBar: const CustomAppBar(title: 'Cadastrar',),
         bottomNavigationBar: const CustomBottomBar(),
-        floatingActionButton: CustomFAB(),
+        floatingActionButton: const CustomFAB(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       resizeToAvoidBottomInset: true,
       body: _isLoading

@@ -1,5 +1,5 @@
 import 'package:clube/services/AuthService.dart';
-import 'package:clube/ui/pages/ResetPasswordPage.dart';
+import 'package:clube/ui/pages/login/ResetPasswordPage.dart';
 import 'package:clube/ui/widgets/CustomButton.dart';
 import 'package:clube/ui/widgets/CustomPasswordFormField.dart';
 import 'package:clube/ui/widgets/CustomTextFormField.dart';
@@ -26,7 +26,6 @@ class LoginPageState extends State<LoginPage>{
     try{
       await auth.signIn(emailTextController.value.text, senhaTextController.value.text);
     }on FirebaseAuthException catch (e) {
-      print("------ERROR: $e");
       if(!mounted) return;
       String error;
       switch (e.code) {
@@ -104,7 +103,7 @@ class LoginPageState extends State<LoginPage>{
               alignment: Alignment.centerRight,
               child: TextButton(
                   onPressed:(){
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>ResetPasswordPage()));
+                    Navigator.push(context, MaterialPageRoute(builder: (context)=>const ResetPasswordPage()));
                   },
                   child: const Text("Esqueceu a senha?", style: TextStyle(fontSize: 16,),),),
             ),

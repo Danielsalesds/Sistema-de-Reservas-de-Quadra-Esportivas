@@ -9,7 +9,6 @@ import 'package:clube/ui/widgets/ErroDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
-import 'ReservaQuadraScreen.dart';
 
 class EditarReservaScreen extends StatefulWidget {
   final String reservaId;
@@ -18,12 +17,12 @@ class EditarReservaScreen extends StatefulWidget {
   final String quadraId;
 
   const EditarReservaScreen({
-    Key? key,
+    super.key,
     required this.reservaId,
     required this.dataHora,
     required this.tipoQuadraId,
     required this.quadraId,
-  }) : super(key: key);
+  });
 
   @override
   State<EditarReservaScreen> createState() => _EditarReservaScreenState();
@@ -150,7 +149,7 @@ class _EditarReservaScreenState extends State<EditarReservaScreen> {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Editar Reserva'),
       bottomNavigationBar: const CustomBottomBar(),
-      floatingActionButton: CustomFAB(),
+      floatingActionButton: const CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())

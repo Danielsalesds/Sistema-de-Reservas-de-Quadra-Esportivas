@@ -1,15 +1,14 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:clube/ui/pages/EditUser.dart';
+import 'package:clube/ui/pages/membros/EditUser.dart';
 import 'package:clube/ui/widgets/AddMembroButton.dart';
 import 'package:clube/ui/widgets/CustomAppBar.dart';
 import 'package:clube/ui/widgets/CustomBottomBar.dart';
 import 'package:clube/ui/widgets/CustomAlert.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../services/FirestoreService.dart';
-import '../../theme/AppColors.dart';
-import '../widgets/CustomFAB.dart';
-import 'ReservaQuadraScreen.dart';
+import '../../../services/FirestoreService.dart';
+import '../../../theme/AppColors.dart';
+import '../../widgets/CustomFAB.dart';
 
 class ListarMembro extends StatefulWidget {
   const ListarMembro({super.key});
@@ -27,7 +26,7 @@ class _ListarMembroState extends State<ListarMembro> {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Gerenciar Membros',),
       bottomNavigationBar: const CustomBottomBar(),
-      floatingActionButton: CustomFAB(),
+      floatingActionButton: const CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
      body: Stack(
         children: [

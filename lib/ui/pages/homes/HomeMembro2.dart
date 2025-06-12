@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
-import '../widgets/CustomAppBar.dart';
-import '../widgets/CustomBottomBar.dart';
-import '../widgets/CustomFAB.dart';
-import 'ReservaQuadraScreen.dart';
+import '../../widgets/CustomAppBar.dart';
+import '../../widgets/CustomBottomBar.dart';
+import '../../widgets/CustomFAB.dart';
 
 class HomeMembro2 extends StatefulWidget {
+  const HomeMembro2({super.key});
+
   @override
-  _HomeMembro2State createState() => _HomeMembro2State();
+  HomeMembro2State createState() => HomeMembro2State();
 }
 
-class _HomeMembro2State extends State<HomeMembro2> {
+class HomeMembro2State extends State<HomeMembro2> {
   void _navegarParaMinhasReservas() {
     // Navegar para a tela de Minhas Reservas
   }
@@ -23,14 +24,14 @@ class _HomeMembro2State extends State<HomeMembro2> {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Painel de Associado',),
       bottomNavigationBar: const CustomBottomBar(),
-      floatingActionButton: CustomFAB(),
+      floatingActionButton: const CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
             _buildCard("Minhas Reservas", "Veja e gerencie suas reservas.", _navegarParaMinhasReservas),
-            SizedBox(height: 16),
+            const SizedBox(height: 16),
             _buildCard("Reservar Quadras", "Confira e reserve uma quadra disponível.", _navegarParaReservarQuadras),
           ],
         ),
@@ -42,7 +43,7 @@ class _HomeMembro2State extends State<HomeMembro2> {
     return GestureDetector(
       onTap: onTap,
       child: Card(
-        color: Color(0xFFA7C7E7),
+        color: const Color(0xFFA7C7E7),
         elevation: 4,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -54,14 +55,14 @@ class _HomeMembro2State extends State<HomeMembro2> {
             children: [
               Text(
                 title,
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
+                style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.white),
               ),
-              SizedBox(height: 8),
+              const SizedBox(height: 8),
               Text(
                 description,
-                style: TextStyle(fontSize: 16, color: Colors.white70),
+                style: const TextStyle(fontSize: 16, color: Colors.white70),
               ),
-              Align(
+              const Align(
                 alignment: Alignment.bottomRight,
                 child: Icon(Icons.arrow_right_alt, color: Colors.white, size: 28),
               ),

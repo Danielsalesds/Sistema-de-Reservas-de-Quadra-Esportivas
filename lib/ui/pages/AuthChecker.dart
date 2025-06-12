@@ -1,8 +1,8 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:clube/services/FirestoreService.dart';
-import 'package:clube/ui/pages/HomeAdmin.dart';
-import 'package:clube/ui/pages/LoginPage.dart';
-import 'package:clube/ui/pages/HomeMembro.dart';
+import 'package:clube/ui/pages/homes/HomeAdmin.dart';
+import 'package:clube/ui/pages/login/LoginPage.dart';
+import 'package:clube/ui/pages/homes/HomeMembro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';

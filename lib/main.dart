@@ -2,7 +2,7 @@ import 'package:clube/firebase_options.dart';
 import 'package:clube/services/ThemeService.dart';
 import 'package:clube/theme/theme.dart';
 import 'package:clube/ui/pages/AuthChecker.dart';
-import 'package:clube/ui/pages/CadastroMembro.dart';
+import 'package:clube/ui/pages/membros/CadastroMembro.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';

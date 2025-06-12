@@ -2,15 +2,15 @@ import 'package:clube/ui/widgets/CustomPasswordFormField.dart';
 import 'package:clube/ui/widgets/ErroDialog.dart';
 import 'package:clube/ui/widgets/SucessDialog.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import '../widgets/CustomAppBar.dart';
-import '../widgets/CustomBottomBar.dart';
-import '../widgets/CustomButton.dart';
-import '../widgets/CustomFAB.dart';
-import 'ReservaQuadraScreen.dart';
+import '../../widgets/CustomAppBar.dart';
+import '../../widgets/CustomBottomBar.dart';
+import '../../widgets/CustomButton.dart';
+import '../../widgets/CustomFAB.dart';
 
 class EditarSenha extends StatefulWidget{
+  const EditarSenha({super.key});
+
   @override
   State<StatefulWidget> createState() => EditarSenhaState();
 
@@ -69,6 +69,7 @@ class EditarSenhaState extends State<EditarSenha> {
 
         await user.reauthenticateWithCredential(credential);
         await FirebaseAuth.instance.currentUser?.updatePassword(novaTextController.text);
+
         showSucessDialog(context, "Sua senha foi alterada!" );
       }catch(e){
         showErrorDialog(context, e.toString());
@@ -77,7 +78,7 @@ class EditarSenhaState extends State<EditarSenha> {
     return Scaffold(
       appBar: const CustomAppBar(title: 'Editar senha'),
       bottomNavigationBar: const CustomBottomBar(),
-      floatingActionButton: CustomFAB(),
+      floatingActionButton: const CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SingleChildScrollView(
         child: Column(

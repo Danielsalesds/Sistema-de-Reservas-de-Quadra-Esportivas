@@ -1,15 +1,15 @@
 import 'package:clube/ui/widgets/CustomAppBar.dart';
 import 'package:clube/ui/widgets/CustomBottomBar.dart';
 import 'package:clube/ui/widgets/CustomFAB.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/FirestoreService.dart';
-import '../widgets/CustomButton.dart';
-import '../widgets/CustomTextFormField.dart';
-import '../widgets/ErroDialog.dart';
-import '../widgets/SucessDialog.dart';
+import '../../../services/FirestoreService.dart';
+import '../../widgets/CustomButton.dart';
+import '../../widgets/CustomTextFormField.dart';
+import '../../widgets/ErroDialog.dart';
+import '../../widgets/SucessDialog.dart';
 
 class EditarTipoQuadra extends StatefulWidget{
   final String nome, id;
@@ -37,12 +37,21 @@ class EditarTipoQuadraState extends State<EditarTipoQuadra> {
     });
   }
 
-  void edit() {
+  void edit() async{
     try {
       final firestore = Provider.of<FirestoreService>(context, listen: false);
+      String nomeNormalizado = removeDiacritics(nomeTextController.text.trim().toLowerCase());
+      final t = await firestore.isNomeDisponivelTipo(nomeTextController.text);
+      if(!t){
+        if(!mounted) return;
+        showErrorDialog(context,'Já existe quadra com esse nome. Adicione um nome diferente');
+        return;
+      }
       firestore.editTipoQuadra({
         'nome': nomeTextController.text,
+        'nomeNormalizado': nomeNormalizado
       }, widget.id);
+      if(!mounted) return;
       showSucessDialog(context, "O tipo de quadra foi editado!");
     } catch (e) {
       showErrorDialog(context, e.toString());

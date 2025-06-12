@@ -13,7 +13,7 @@ class CustomTelFormField extends StatelessWidget{
 
   @override
   Widget build(BuildContext context) {
-    var maskFormatter = new MaskTextInputFormatter(
+    var maskFormatter = MaskTextInputFormatter(
         mask: '(##) #####-####',
         filter: { "#": RegExp(r'[0-9]') },
         type: MaskAutoCompletionType.lazy

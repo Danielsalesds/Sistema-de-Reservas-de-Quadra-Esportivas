@@ -1,28 +1,35 @@
 import 'package:clube/ui/widgets/CustomAppBar.dart';
 import 'package:clube/ui/widgets/ErroDialog.dart';
 import 'package:clube/ui/widgets/SucessDialog.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/FirestoreService.dart';
-import '../widgets/CustomBottomBar.dart';
-import '../widgets/CustomButton.dart';
-import '../widgets/CustomFAB.dart';
-import '../widgets/CustomTextFormField.dart';
-import 'ReservaQuadraScreen.dart';
+import '../../../services/FirestoreService.dart';
+import '../../widgets/CustomBottomBar.dart';
+import '../../widgets/CustomButton.dart';
+import '../../widgets/CustomFAB.dart';
+import '../../widgets/CustomTextFormField.dart';
 
 class GerenciarTipoQuadra extends StatefulWidget{
+  const GerenciarTipoQuadra({super.key});
+
   @override
   State<StatefulWidget> createState() => GerenciarTipoQuadraState();
 }
 
 class GerenciarTipoQuadraState extends State<GerenciarTipoQuadra>{
   final nomeTextController = TextEditingController();
-  void create(){
+  void create() async{
     final firestore = Provider.of<FirestoreService>(context, listen:false);
     try{
+      final t = await firestore.isNomeDisponivelTipo(nomeTextController.text);
+      if(!t){
+        if(!mounted) return;
+        showErrorDialog(context,'Já existe um tipo de quadra com esse nome. Adicione um nome diferente');
+        return;
+      }
       firestore.createTipoQuadra(nomeTextController.text);
+      if(!mounted) return;
       showSucessDialog(context, "Quadra criada com sucesso!");
     }catch (e){
       showErrorDialog(context, e.toString());
@@ -33,7 +40,7 @@ class GerenciarTipoQuadraState extends State<GerenciarTipoQuadra>{
     return Scaffold(
       appBar: const CustomAppBar(title: 'Gerenciar Tipo Quadras'),
       bottomNavigationBar: const CustomBottomBar(),
-      floatingActionButton: CustomFAB(),
+      floatingActionButton: const CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SingleChildScrollView(
         child: Column(

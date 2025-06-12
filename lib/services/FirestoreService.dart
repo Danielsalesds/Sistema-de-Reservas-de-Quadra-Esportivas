@@ -56,7 +56,9 @@ class FirestoreService {
   Future<void> createTipoQuadra(String nome)async {
     try{
       final tipoDoc = _firestore.collection('tipoQuadra').doc();
+      String nomeNormalizado = removeDiacritics(nome.trim().toLowerCase());
       await tipoDoc.set({
+        'nomeNormalizado': nomeNormalizado,
         'nome': nome,
         'id': tipoDoc.id,
         'status': true
@@ -67,7 +69,6 @@ class FirestoreService {
   }
   Future<bool> isNomeDisponivel(String idTipo, String nome) async {
     final nomeNormalizado = removeDiacritics(nome.trim().toLowerCase());
-
     final query = await _firestore.collection('quadras')
         .where('tipoQuadraId', isEqualTo: idTipo)
         .where('nomeNormalizado', isEqualTo: nomeNormalizado)
@@ -75,14 +76,21 @@ class FirestoreService {
 
     return query.docs.isEmpty;
   }
-
-  Future<bool> getNomeDisponivel(String idTipo, String nome) async {
-    QuerySnapshot snapshot = await _firestore.collection('quadras')
-        .where('tipoQuadraId', isEqualTo: idTipo)
-        .where('nome', isEqualTo: nome)
+  Future<bool> isNomeDisponivelTipo(String nome) async {
+    final nomeNormalizado = removeDiacritics(nome.trim().toLowerCase());
+    final query = await _firestore.collection('tipoQuadra')
+        .where('nomeNormalizado', isEqualTo: nomeNormalizado)
         .get();
-    return snapshot.size==0;
+    return query.docs.isEmpty;
   }
+  //
+  // Future<bool> getNomeDisponivel(String idTipo, String nome) async {
+  //   QuerySnapshot snapshot = await _firestore.collection('quadras')
+  //       .where('tipoQuadraId', isEqualTo: idTipo)
+  //       .where('nome', isEqualTo: nome)
+  //       .get();
+  //   return snapshot.size==0;
+  // }
 
   Stream<QuerySnapshot> getAllTipoQuadra() {
     return _firestore.collection('tipoQuadra')
@@ -110,7 +118,6 @@ class FirestoreService {
     QuerySnapshot snapshot = await _firestore.collection('tipoQuadra')
         .orderBy('nome')
         .where('status',isEqualTo: true)
-        .where('id', isNotEqualTo: 'vzyWsuwL9JZIkEdT2zRP')
         .get();
 
     Map<String, String> tipos = {};
@@ -138,7 +145,6 @@ class FirestoreService {
         .get();
     for (var doc in query.docs) {
       await doc.reference.update({
-        'tipoQuadraId': 'vzyWsuwL9JZIkEdT2zRP',
         'status':false
       });
     }
@@ -304,7 +310,7 @@ class FirestoreService {
   // Método para contar quadras ocupadas no horário
   Future<int> _contarQuadrasOcupadas(String tipoQuadraId, DateTime dataHora) async {
     final inicioSlot = dataHora;
-    final fimSlot = dataHora.add(Duration(hours: 1));
+    final fimSlot = dataHora.add(const Duration(hours: 1));
     
     final reservas = await _firestore
         .collection('reservas')
@@ -354,7 +360,7 @@ class FirestoreService {
 
     // RN4: verificar reserva do mesmo sócio no mesmo dia e tipo
     final inicioDia = DateTime(dataHora.year, dataHora.month, dataHora.day);
-    final fimDia = inicioDia.add(Duration(days: 1));
+    final fimDia = inicioDia.add(const Duration(days: 1));
     final reservasCliente = await _firestore
         .collection('reservas')
         .where('idMembro', isEqualTo: uid)
@@ -389,7 +395,7 @@ class FirestoreService {
       final idQuadra = q.id;
       // verificar se há reserva neste horário exato
       final inicioSlot = dataHora;
-      final fimSlot = dataHora.add(Duration(hours: 1)); // RN3
+      final fimSlot = dataHora.add(const Duration(hours: 1)); // RN3
       final conflito = await _firestore
           .collection('reservas')
           .where('idQuadra', isEqualTo: idQuadra)
@@ -429,7 +435,7 @@ class FirestoreService {
   Stream<QuerySnapshot> getReservasDoUsuarioHoje(String userId) {
     final now = DateTime.now();
     final inicioDia = DateTime(now.year, now.month, now.day);
-    final fimDia = inicioDia.add(Duration(days: 1));
+    final fimDia = inicioDia.add(const Duration(days: 1));
     return _firestore
         .collection('reservas')
         .where('idMembro', isEqualTo: userId)

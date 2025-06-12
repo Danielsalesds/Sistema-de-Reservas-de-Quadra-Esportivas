@@ -1,8 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme/AppColors.dart';
-import '../pages/ReservaQuadraScreen.dart';
+import '../pages/reservas/ReservaQuadraScreen.dart';
 
 class CustomFAB extends StatelessWidget{
   // final VoidCallback onPressed;

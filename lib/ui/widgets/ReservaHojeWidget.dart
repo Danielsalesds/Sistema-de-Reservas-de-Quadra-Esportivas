@@ -8,10 +8,10 @@ class ReservaHojeWidget extends StatelessWidget {
   final VoidCallback? onTap;
 
   const ReservaHojeWidget({
-    Key? key,
+    super.key,
     required this.reserva,
     this.onTap,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

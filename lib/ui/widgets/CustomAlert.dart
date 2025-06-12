@@ -21,7 +21,7 @@ class AlertaFlutuante {
                 borderRadius: BorderRadius.circular(12),
                 color: Colors.transparent,
                 child: AnimatedContainer(
-                  duration: Duration(milliseconds: 300),
+                  duration: const Duration(milliseconds: 300),
                   padding: const EdgeInsets.symmetric(
                       vertical: 14, horizontal: 20),
                   decoration: BoxDecoration(

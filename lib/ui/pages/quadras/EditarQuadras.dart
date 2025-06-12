@@ -3,15 +3,14 @@ import 'package:clube/ui/widgets/CustomAppBar.dart';
 import 'package:clube/ui/widgets/CustomBottomBar.dart';
 import 'package:clube/ui/widgets/ErroDialog.dart';
 import 'package:clube/ui/widgets/SucessDialog.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:diacritic/diacritic.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/FirestoreService.dart';
-import '../widgets/CustomButton.dart';
-import '../widgets/CustomFAB.dart';
-import '../widgets/CustomTextFormField.dart';
-import 'ReservaQuadraScreen.dart';
+import '../../../services/FirestoreService.dart';
+import '../../widgets/CustomButton.dart';
+import '../../widgets/CustomFAB.dart';
+import '../../widgets/CustomTextFormField.dart';
 
 class EditarQuadras extends StatefulWidget{
   final String nome,tipoQuadra, id;
@@ -32,7 +31,6 @@ class EditarQuadrasState extends State<EditarQuadras>{
   bool status = false;
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     init();
   }
@@ -44,17 +42,28 @@ class EditarQuadrasState extends State<EditarQuadras>{
       tipoQuadraId = widget.tipoQuadra;
     });
   }
-  void edit(){
+  void edit() async{
     try{
       final firestore = Provider.of<FirestoreService>(context, listen:false);
-      firestore.editQuadra({
+      String nomeNormalizado = removeDiacritics(nomeTextController.text.trim().toLowerCase());
+      final t = await firestore.isNomeDisponivel(tipoQuadraId!, nomeTextController.text);
+      if(!t){
+        if(!mounted) return;
+        showErrorDialog(context,'Já existe quadra com esse nome. Adicione um nome diferente');
+        return;
+      }
+
+      await firestore.editQuadra({
+        'nomeNormalizado': nomeNormalizado,
         'nome':nomeTextController.text,
         'capacidade':int.parse(capacidadeTextController.text),
         'tipoQuadraId':tipoQuadraId,
         'status':status,
       },widget.id);
+      if(!mounted) return;
       showSucessDialog(context,"A quadra foi editada!");
     }catch(e){
+      if(!mounted) return;
       showErrorDialog(context, e.toString());
     }
   }
@@ -64,7 +73,7 @@ class EditarQuadrasState extends State<EditarQuadras>{
     return Scaffold(
       appBar: const CustomAppBar(title: 'Editar quadras'),
       bottomNavigationBar: const CustomBottomBar(),
-        floatingActionButton: CustomFAB(),
+        floatingActionButton: const CustomFAB(),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body:
       SingleChildScrollView(
@@ -111,15 +120,18 @@ class EditarQuadrasState extends State<EditarQuadras>{
             Row(children: [
               Padding(padding: const EdgeInsets.symmetric(horizontal:  35),
                 child:StreamBuilder<QuerySnapshot>(
-                    stream: tipoQuadraId=='vzyWsuwL9JZIkEdT2zRP'
-                        ? firestore.getAllTipoQuadra2()
-                        : firestore.getAllTipoQuadra(),
+                    stream:
+                        firestore.getAllTipoQuadra2(),
+                        //firestore.getAllTipoQuadra(),
                     builder:  (context, snapshot) {
                       if (!snapshot.hasData) {
                         return const Center(child: CircularProgressIndicator(),);
                       }
                       var tipos = snapshot.data!.docs;
-
+                      List<String> idsAtivos = tipos.map((doc) => doc['id'] as String).toList();
+                      if (tipoQuadraId != null && !idsAtivos.contains(tipoQuadraId)) {
+                        tipoQuadraId = null;
+                      }
                       return SizedBox(width: 340,
                           child: DropdownButton<String>(
                             value: tipoQuadraId,

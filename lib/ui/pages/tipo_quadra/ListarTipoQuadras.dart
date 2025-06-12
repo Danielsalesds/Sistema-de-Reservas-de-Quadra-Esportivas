@@ -1,14 +1,14 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:clube/services/FirestoreService.dart';
-import 'package:clube/ui/pages/GerenciarTipoQuadra.dart';
+import 'package:clube/ui/pages/tipo_quadra/GerenciarTipoQuadra.dart';
 import 'package:clube/ui/widgets/CustomAppBar.dart';
 import 'package:clube/ui/widgets/CustomBottomBar.dart';
 import 'package:clube/ui/widgets/CustomFAB.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../theme/AppColors.dart';
-import '../widgets/CustomAlert.dart';
+import '../../../theme/AppColors.dart';
+import '../../widgets/CustomAlert.dart';
 import 'EditarTipoQuadra.dart';
 
 class ListarTipoQuadras extends StatefulWidget{
@@ -127,7 +127,7 @@ class ListarTipoQuadrasState extends State<ListarTipoQuadras> {
           child: FloatingActionButton(
             onPressed: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) =>GerenciarTipoQuadra()),
+              MaterialPageRoute(builder: (context) =>const GerenciarTipoQuadra()),
             ),
             backgroundColor: colors.cardColor,
             shape: const CircleBorder(),

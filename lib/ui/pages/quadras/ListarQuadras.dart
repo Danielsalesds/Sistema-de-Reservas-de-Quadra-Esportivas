@@ -1,20 +1,18 @@
 import 'package:awesome_dialog/awesome_dialog.dart';
-import 'package:clube/ui/pages/EditarQuadras.dart';
-import 'package:clube/ui/pages/GerenciarQuadra.dart';
+import 'package:clube/ui/pages/quadras/EditarQuadras.dart';
+import 'package:clube/ui/pages/quadras/GerenciarQuadra.dart';
 import 'package:clube/ui/widgets/CustomAppBar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../../services/FirestoreService.dart';
+import '../../../theme/AppColors.dart';
+import '../../widgets/CustomBottomBar.dart';
+import '../../widgets/CustomFAB.dart';
+import '../../widgets/CustomAlert.dart';
 
-import '../../services/FirestoreService.dart';
-import '../../theme/AppColors.dart';
-import '../widgets/CustomBottomBar.dart';
-import '../widgets/CustomFAB.dart';
-import '../widgets/CustomAlert.dart';
-import 'ReservaQuadraScreen.dart';
 
 class ListarQuadras extends StatefulWidget{
-
+  const ListarQuadras({super.key});
   @override
   State<StatefulWidget> createState() => ListarQuadrasState();
 
@@ -59,13 +57,6 @@ class ListarQuadrasState extends State<ListarQuadras>{
 
                 final quadras = snapshot.data!.docs;
                 if (quadras.isEmpty) return const Center(child: Text('Nenhuma quadra cadastrada.'));
-                // quadras.sort((a,b){
-                //   int compareStatus = (b['status']? 1 : 0).compareTo(a['status'] ? 1 : 0);
-                //   if (compareStatus != 0) return compareStatus;
-                //   int compareTipo = tipos[a['tipoQuadraId']]!.toLowerCase().compareTo(tipos[b['tipoQuadraId']]!.toLowerCase());
-                //   if (compareTipo != 0) return compareTipo;
-                //   return a['nome'].toLowerCase().compareTo(b['nome'].toLowerCase());
-                // });
                 quadras.sort((a, b) {
                   int compareStatus = ((b['status'] ?? false) ? 1 : 0)
                       .compareTo((a['status'] ?? false) ? 1 : 0);

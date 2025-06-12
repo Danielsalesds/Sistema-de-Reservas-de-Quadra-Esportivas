@@ -1,10 +1,9 @@
-import 'package:clube/ui/pages/ProfilePage.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:clube/ui/pages/perfil/ProfilePage.dart';
 import 'package:flutter/material.dart';
 
 import '../../theme/AppColors.dart';
-import '../pages/ListarQuadras.dart';
-import '../pages/ListarReservasScreen.dart';
+import '../pages/quadras/ListarQuadras.dart';
+import '../pages/reservas/ListarReservasScreen.dart';
 
 class CustomBottomBar extends StatelessWidget{
   final int ?index;
@@ -47,7 +46,7 @@ class CustomBottomBar extends StatelessWidget{
                   //1
                   IconButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> ListarQuadras()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> const ListarQuadras()));
                       },
                       icon: index==1 ? const Icon(Icons.sports_soccer_outlined, color: Colors.black26 ,)
                         : Icon(Icons.sports_soccer_outlined, color: colors.iconColor,)),
@@ -69,7 +68,7 @@ class CustomBottomBar extends StatelessWidget{
                   //3
                   IconButton(
                       onPressed: () {
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=>ProfilePage()));
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=>const ProfilePage()));
                       },
                       icon: index==3 ? const Icon(Icons.person_outline, color: Colors.black26,)
                         : Icon(Icons.person_outline, color: colors.iconColor,)),

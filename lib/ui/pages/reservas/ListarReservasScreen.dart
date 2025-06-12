@@ -14,7 +14,7 @@ import 'EditarReservaScreen.dart';
 import 'package:intl/intl.dart';
 
 class ListarReservasScreen extends StatelessWidget {
-  const ListarReservasScreen({Key? key}) : super(key: key);
+  const ListarReservasScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +26,7 @@ class ListarReservasScreen extends StatelessWidget {
       appBar: const CustomAppBar(title: 'Minhas Reservas'),
       bottomNavigationBar: const CustomBottomBar(index:2),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      floatingActionButton: CustomFAB(),
+      floatingActionButton: const CustomFAB(),
       body: Stack(
         children: [
           StreamBuilder<QuerySnapshot>(

@@ -1,17 +1,15 @@
-import 'package:clube/ui/pages/ListarReservasScreen.dart';
-import 'package:clube/ui/pages/ReservaQuadraScreen.dart';
-import 'package:clube/ui/pages/ListarMembros.dart';
+import 'package:clube/ui/pages/reservas/ListarReservasScreen.dart';
+import 'package:clube/ui/pages/membros/ListarMembros.dart';
 import 'package:clube/ui/widgets/CardAdmin.dart';
 import 'package:clube/ui/widgets/CustomBottomBar.dart';
 import 'package:clube/ui/widgets/CustomFAB.dart';
 import 'package:clube/ui/widgets/WelcomeCard.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../services/AuthService.dart';
-import '../../services/ThemeService.dart';
-import '../../theme/AppColors.dart';
-import 'ListarQuadras.dart';
+import '../../../services/AuthService.dart';
+import '../../../services/ThemeService.dart';
+import '../../../theme/AppColors.dart';
+import '../quadras/ListarQuadras.dart';
 
 class HomeAdmin extends StatefulWidget{
   final Function(bool) onThemeChanged;
@@ -36,8 +34,8 @@ class HomeAdminState extends State<HomeAdmin>{
     });
   }
 
-  final double padding_card_h = 14;
-  final double padding_card_v = 5;
+  final double paddingCardH = 14;
+  final double paddingCardV = 5;
   @override
   Widget build(BuildContext context) {
     final colors = Theme.of(context).extension<AppColors>()!;
@@ -78,7 +76,7 @@ class HomeAdminState extends State<HomeAdmin>{
           ],
         ),
       bottomNavigationBar: const CustomBottomBar(index:0),
-      floatingActionButton: CustomFAB(),
+      floatingActionButton: const CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Column(
         children: [
@@ -89,7 +87,7 @@ class HomeAdminState extends State<HomeAdmin>{
               "Gerenciar quadras",
               "Adicione, edite ou desative quadras.",
               Icons.assignment,
-              ListarQuadras()
+              const ListarQuadras()
           ),
           buildCardAdmin(
               context,
@@ -113,7 +111,7 @@ class HomeAdminState extends State<HomeAdmin>{
 
   Padding buildCardAdmin(BuildContext context, String title, String text,IconData icon, Widget classe) {
     return Padding(
-          padding: EdgeInsets.symmetric(horizontal: padding_card_h, vertical: padding_card_v),
+          padding: EdgeInsets.symmetric(horizontal: paddingCardH, vertical: paddingCardV),
           child: CardAdmin(
             titulo: title,
             text1: text,

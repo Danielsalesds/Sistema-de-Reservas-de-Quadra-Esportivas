@@ -6,16 +6,16 @@ import 'package:clube/ui/widgets/CustomBottomBar.dart';
 import 'package:clube/ui/widgets/CustomFAB.dart';
 import 'package:intl/intl.dart';
 
-import '../../theme/AppColors.dart';
+import '../../../theme/AppColors.dart';
 
 class ReservaQuadraScreen extends StatefulWidget {
-  const ReservaQuadraScreen({Key? key}) : super(key: key);
+  const ReservaQuadraScreen({super.key});
 
   @override
-  _ReservaQuadraScreenState createState() => _ReservaQuadraScreenState();
+  ReservaQuadraScreenState createState() => ReservaQuadraScreenState();
 }
 
-class _ReservaQuadraScreenState extends State<ReservaQuadraScreen> {
+class ReservaQuadraScreenState extends State<ReservaQuadraScreen> {
   String? _selectedTipoQuadraId;
   TimeOfDay? _selectedTime;
   DateTime _selectedDate = DateTime.now();

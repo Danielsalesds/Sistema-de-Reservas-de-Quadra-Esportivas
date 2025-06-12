@@ -1,5 +1,4 @@
 import 'package:clube/services/AuthService.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../theme/AppColors.dart';

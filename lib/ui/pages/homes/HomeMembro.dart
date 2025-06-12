@@ -1,19 +1,17 @@
-import 'package:clube/ui/pages/ListarReservasScreen.dart';
-import 'package:clube/ui/pages/ReservaQuadraScreen.dart';
+import 'package:clube/ui/pages/reservas/ListarReservasScreen.dart';
 import 'package:clube/ui/widgets/CardAdmin.dart';
 import 'package:clube/ui/widgets/CustomBottomBar.dart';
 import 'package:clube/ui/widgets/CustomFAB.dart';
 import 'package:clube/ui/widgets/ReservaHojeWidget.dart';
 import 'package:clube/ui/widgets/WelcomeCard.dart';
-import 'package:clube/ui/widgets/ReservaHojeWidget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-import '../../services/AuthService.dart';
-import '../../services/FirestoreService.dart';
-import '../../services/ThemeService.dart';
-import '../../theme/AppColors.dart';
+import '../../../services/AuthService.dart';
+import '../../../services/FirestoreService.dart';
+import '../../../services/ThemeService.dart';
+import '../../../theme/AppColors.dart';
 
 class HomeMembro extends StatefulWidget {
   final Function(bool) onThemeChanged;
@@ -72,6 +70,7 @@ class HomeMembroState extends State<HomeMembro> {
               try {
                 await auth.signOut();
               } catch (e) {
+
                 ScaffoldMessenger.of(context)
                     .showSnackBar(SnackBar(content: Text(e.toString())));
               }
@@ -80,7 +79,7 @@ class HomeMembroState extends State<HomeMembro> {
         ],
       ),
       bottomNavigationBar: const CustomBottomBar(index: 0),
-      floatingActionButton: CustomFAB(),
+      floatingActionButton: const CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,

@@ -1,19 +1,18 @@
 import 'package:clube/services/FirestoreService.dart';
-import 'package:clube/ui/pages/EditarSenha.dart';
+import 'package:clube/ui/pages/perfil/EditarSenha.dart';
 import 'package:clube/ui/widgets/CustomAppBar.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
-import '../../theme/AppColors.dart';
-import '../widgets/CustomBottomBar.dart';
-import '../widgets/CustomButton.dart';
-import '../widgets/CustomFAB.dart';
+import '../../../theme/AppColors.dart';
+import '../../widgets/CustomBottomBar.dart';
+import '../../widgets/CustomButton.dart';
+import '../../widgets/CustomFAB.dart';
 import 'EditProfilePage.dart';
-import 'ReservaQuadraScreen.dart';
 
 class ProfilePage extends StatefulWidget{
+  const ProfilePage({super.key});
+
   @override
   State<StatefulWidget> createState() => ProfilePageState();
 
@@ -40,13 +39,13 @@ class ProfilePageState extends State<ProfilePage> {
   void pushEditar(){
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => EditProfilePage()),
+      MaterialPageRoute(builder: (context) => const EditProfilePage()),
     );
   }
   void pushSenha(){
     Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => EditarSenha()),
+      MaterialPageRoute(builder: (context) => const EditarSenha()),
     );
   }
 
@@ -59,7 +58,7 @@ class ProfilePageState extends State<ProfilePage> {
       backgroundColor: colors.backgroundColor,
       appBar: const CustomAppBar(title: 'Perfil'),
       bottomNavigationBar: const CustomBottomBar(index:3),
-      floatingActionButton: CustomFAB(),
+      floatingActionButton: const CustomFAB(),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: SingleChildScrollView(
         child: Column(

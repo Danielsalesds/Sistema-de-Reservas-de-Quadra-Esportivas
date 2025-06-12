@@ -1,21 +1,17 @@
-import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:clube/ui/pages/GerenciarTipoQuadra.dart';
 import 'package:clube/ui/widgets/ErroDialog.dart';
 import 'package:clube/ui/widgets/SucessDialog.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../services/FirestoreService.dart';
-import '../../theme/AppColors.dart';
-import '../widgets/CustomAlert.dart';
-import '../widgets/CustomAppBar.dart';
-import '../widgets/CustomBottomBar.dart';
-import '../widgets/CustomButton.dart';
-import '../widgets/CustomFAB.dart';
-import '../widgets/CustomTextFormField.dart';
-import 'ListarTipoQuadras.dart';
-import 'ReservaQuadraScreen.dart';
+import '../../../services/FirestoreService.dart';
+import '../../../theme/AppColors.dart';
+import '../../widgets/CustomAppBar.dart';
+import '../../widgets/CustomBottomBar.dart';
+import '../../widgets/CustomButton.dart';
+import '../../widgets/CustomFAB.dart';
+import '../../widgets/CustomTextFormField.dart';
+import '../tipo_quadra/ListarTipoQuadras.dart';
 
 class CadastrarQuadra extends StatefulWidget{
   const CadastrarQuadra({super.key});
@@ -39,7 +35,6 @@ class CadastrarQuadraState extends State<CadastrarQuadra>{
       }
       final t = await firestore.isNomeDisponivel(tipoQuadraId!, nomeTextController.text);
 
-      print('Query retornou ${t} documentos');
       if(!t){
         if(!mounted) return;
         showErrorDialog(context,'Já existe quadra com esse nome. Adicione um nome diferente');
